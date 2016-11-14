@@ -1,0 +1,257 @@
+////////////////////////////////////////////////////////
+// ANNIE materials
+//
+// Author: V. Fischer <vfischer@ucdavis.edu>
+//
+////////////////////////////////////////////////////////
+
+
+// Different LABs from SNO+ and THEIA
+{
+name: "MATERIAL",
+index: "C15H24_lab",
+valid_begin : [0, 0],
+valid_end : [0, 0],
+density: 0.867,
+nelements: 2,
+nmaterials: 0,
+elements: ["Carbon","Hydrogen"],
+elemprop: [0.8815, 0.1185,],
+formula: "AROMATIC",
+}
+
+{
+name: "MATERIAL",
+index: "C16H26_lab",
+valid_begin : [0, 0],
+valid_end : [0, 0],
+density: 0.867,
+nelements: 2,
+nmaterials: 0,
+elements: ["Carbon","Hydrogen"],
+elemprop: [0.8799, 0.1201,],
+formula: "AROMATIC",
+}
+
+{
+name: "MATERIAL",
+index: "C17H28_lab",
+valid_begin : [0, 0],
+valid_end : [0, 0],
+density: 0.867,
+nelements: 2,
+nmaterials: 0,
+elements: ["Carbon","Hydrogen"],
+elemprop: [0.8785, 0.1215,],
+formula: "AROMATIC",
+}
+
+{
+name: "MATERIAL",
+index: "C18H30_lab",
+valid_begin : [0, 0],
+valid_end : [0, 0],
+density: 0.867,
+nelements: 2,
+nmaterials: 0,
+elements: ["Carbon","Hydrogen"],
+elemprop: [0.8772, 0.1228,],
+formula: "AROMATIC",
+}
+
+{
+name: "MATERIAL",
+index: "C19H32_lab",
+valid_begin : [0, 0],
+valid_end : [0, 0],
+density: 0.867,
+nelements: 2,
+nmaterials: 0,
+elements: ["Carbon","Hydrogen"],
+elemprop: [0.8761, 0.1239,],
+formula: "AROMATIC",
+}
+
+{
+name: "MATERIAL",
+index: "lab",
+valid_begin : [0, 0],
+valid_end : [0, 0],
+density: 0.867,
+nelements: 0,
+nmaterials: 5,
+materials: ["C15H24_lab","C16H26_lab","C17H28_lab","C18H30_lab","C19H32_lab"],
+matprop: [0.012, 0.204, 0.432, 0.334, 0.018,],
+}
+
+
+// Water-based LS from THEIA
+{
+name: "MATERIAL",
+index: "wbls_5pct",
+valid_begin : [0, 0],
+valid_end : [0, 0],
+density: 1.0,
+nelements: 0,
+nmaterials: 3,
+materials: ["lab", "ppo", "water"],
+matprop: [0.049835, 0.000165, 0.950000],
+}
+
+{
+name: "MATERIAL",
+index: "wbls_10pct",
+valid_begin : [0, 0],
+valid_end : [0, 0],
+density: 1.0,
+nelements: 0,
+nmaterials: 3,
+materials: ["lab", "ppo", "water"],
+matprop: [0.099670, 0.000330, 0.900000],
+}
+
+// Gadolinium as a material
+{
+name: "MATERIAL",
+index: "gadolinium",
+valid_begin : [0, 0],
+valid_end : [0, 0],
+density: 7.90,
+nelements: 1,
+nmaterials: 0,
+elements: ["Gadolinium"],
+elemprop: [1.0],
+}
+
+// Gadolinium sulfate
+{
+name: "MATERIAL",
+index: "gadolinium_sulfate",
+valid_begin : [0, 0],
+valid_end : [0, 0],
+density: 4.00, //estimate, since iron sulfate is 3.65 g/cm3
+nelements: 3,
+nmaterials: 0,
+elements: ["Gadolinium","Oxygen","Sulphur"],
+elemprop: [0.5161, 0.3231, 0.1608],
+}
+
+// Gadolinium chloride
+{
+name: "MATERIAL",
+index: "gadolinium_chloride",
+valid_begin : [0, 0],
+valid_end : [0, 0],
+density: 4.52,
+nelements: 2,
+nmaterials: 0,
+elements: ["Gadolinium","Chlorine"],
+elemprop: [0.5919, 0.4081],
+}
+
+// NCV liquid
+// Exact proportions are unknown, some infos taken from Nucifer's Geant4
+// Eljen told me: about 45% of PC, 45% of mineral oil and that's it. The rest is probably made of some other fluors
+{
+name: "MATERIAL",
+index: "ej335",
+valid_begin : [0, 0],
+valid_end : [0, 0],
+density: 0.89,
+nelements: 0,
+nmaterials: 4,
+materials: ["gadolinium","mineral_oil","pseudocumene", "ppo",],
+matprop: [0.0025, 0.495, 0.495, 0.0075],
+}
+
+// Gd-loaded water (pure Gd), 0.1% in mass
+{
+name: "MATERIAL",
+index: "water_gd_0p1",
+valid_begin : [0, 0],
+valid_end : [0, 0],
+density: 1.0,
+nelements: 0,
+nmaterials: 2,
+materials: ["water","gadolinium"],
+matprop: [0.999, 0.001],
+}
+
+// Gd-loaded water (with Gd sulfated), 0.1% in mass of sulfate and about 1 % in mass of Gd
+{
+name: "MATERIAL",
+index: "water_gdS_0p2",
+valid_begin : [0, 0],
+valid_end : [0, 0],
+density: 1.0,
+nelements: 0,
+nmaterials: 2,
+materials: ["water","gadolinium_sulfate"],
+matprop: [0.998, 0.002],
+}
+
+// Gd-loaded water (pure Gd), 0.2% in mass
+{
+name: "MATERIAL",
+index: "water_gd_0p2",
+valid_begin : [0, 0],
+valid_end : [0, 0],
+density: 1.0,
+nelements: 0,
+nmaterials: 2,
+materials: ["water","gadolinium"],
+matprop: [0.998, 0.002],
+}
+
+// Gd-loaded water (pure Gd), 0.5% in mass
+{
+name: "MATERIAL",
+index: "water_gd_0p5",
+valid_begin : [0, 0],
+valid_end : [0, 0],
+density: 1.0,
+nelements: 0,
+nmaterials: 2,
+materials: ["water","gadolinium"],
+matprop: [0.995, 0.005],
+}
+
+//// photocathode material copied from all the other (they're all the same)
+{
+name: "MATERIAL",
+index: "photocathode_b76d01",
+valid_begin : [0, 0],
+valid_end : [0, 0],
+density: 5.0,
+nelements: 1,
+nmaterials: 0,
+elements: ["Potassium"],
+elemprop: [1.0],
+}
+
+//// photocathode material copied from all the other (they're all the same)
+{
+name: "MATERIAL",
+index: "photocathode_d784kflb",
+valid_begin : [0, 0],
+valid_end : [0, 0],
+density: 5.0,
+nelements: 1,
+nmaterials: 0,
+elements: ["Potassium"],
+elemprop: [1.0],
+}
+
+// polystyrene for the veto and MRD plastic scintillator (info from WChSandBox)
+{
+name: "MATERIAL",
+index: "plastic_scint",
+valid_begin : [0, 0],
+valid_end : [0, 0],
+density: 1.021,
+nelements: 2,
+nmaterials: 0,
+elements: ["Carbon","Hydrogen"],
+elemprop: [0.5, 0.5],
+}
+
