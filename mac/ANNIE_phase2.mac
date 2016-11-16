@@ -1,0 +1,72 @@
+/glg4debug/glg4param omit_muon_processes  1.0
+/glg4debug/glg4param omit_hadronic_processes  1.0
+
+/tracking/verbose 0
+/event/verbose 0
+
+/tracking/storeTrajectory 0
+/tracking/discardParticleTrajectory opticalphoton
+
+/rat/db/set DETECTOR experiment "ANNIE"
+/rat/db/set DETECTOR geo_file "ANNIE/ANNIE_run2_config2.geo"
+
+/run/initialize
+/process/inactivate Cerenkov
+/glg4scint/off
+#/glg4scint/reemission on
+
+#/generator/event_window 1e3
+
+#/process/activate NeutronDiffusionAndCapture
+/process/inactivate DeferTrackProc all
+/process/activate DeferTrackProc gamma
+/process/activate DeferTrackProc e+
+/process/activate DeferTrackProc e-
+
+#initialize the visualizer
+/vis/open OGLIQt
+/vis/scene/create
+
+/vis/scene/add/volume
+/vis/scene/add/trajectories
+/vis/viewer/reset
+/vis/viewer/set/style surface
+/vis/viewer/set/upVector 1 0 0
+/vis/drawVolume
+
+#/vis/viewer/set/viewpointThetaPhi 20 20
+/vis/viewer/set/viewpointVector 1.0 0.1 -0.2
+/vis/viewer/zoom 1.5
+/vis/viewer/set/upVector 0 0 1
+
+#####################
+# BEGIN EVENT LOOP
+
+/rat/proc simpledaq
+/rat/proc count
+/rat/procset update 10
+/rat/proc fitcentroid
+/rat/proc prune
+/rat/procset prune "mc.track:opticalphoton"
+
+# Use IO.default_output_filename
+/rat/proclast outroot
+
+/generator/add cf 252:point
+/generator/pos/set 0.0 0.0 -133.3
+
+#/generator/add combo gun:point:poisson
+#/generator/vtx/set neutron 0 0 0 1
+#/generator/pos/set 0.0 0.0 -133.3
+#/generator/rate/set 1
+
+/run/beamOn 1
+
+#END EVENT LOOP
+#####################
+
+/vis/viewer/refresh
+/vis/viewer/flush
+
+
+
