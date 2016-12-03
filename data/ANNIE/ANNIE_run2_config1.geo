@@ -9,6 +9,7 @@
 //
 // Revisions:
 //  2016-09-13 : Only the tank is present so far (no veto nor MRD)
+//  12-02-2016: Geometry NOT UPDATED ANYMORE (pmt height or inner structure not updated or not present)
 ////////////////////////////////////////////////////////
 
 {

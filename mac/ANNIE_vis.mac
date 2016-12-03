@@ -32,7 +32,7 @@
 /vis/drawVolume
 
 #/vis/viewer/set/viewpointThetaPhi 20 20
-/vis/viewer/set/viewpointVector 1.0 1.0 -0.2
+/vis/viewer/set/viewpointVector 0 0.0001 0.1
 /vis/viewer/zoom 1.4
 /vis/viewer/pan -500 -2000 1000 mm
 /vis/viewer/set/upVector 0 0 1
