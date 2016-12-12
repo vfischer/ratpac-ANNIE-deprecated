@@ -11,8 +11,8 @@
 
 /run/initialize
 
-/process/inactivate Cerenkov
-/glg4scint/off
+/process/activate Cerenkov
+/glg4scint/on
 #/glg4scint/reemission on
 
 /process/inactivate DeferTrackProc all
@@ -22,20 +22,20 @@
 #/process/inactivate nCapture 
 
 #initialize the visualizer
-/vis/open OGLIQt
-/vis/scene/create
+#/vis/open OGLIQt
+#/vis/scene/create
 
-/vis/scene/add/volume
-/vis/scene/add/trajectories
-/vis/viewer/reset
-/vis/viewer/set/style surface
-/vis/viewer/set/upVector 1 0 0
-/vis/drawVolume
+#/vis/scene/add/volume
+#/vis/scene/add/trajectories
+#/vis/viewer/reset
+#/vis/viewer/set/style surface
+#/vis/viewer/set/upVector 1 0 0
+#/vis/drawVolume
 
-#/vis/viewer/set/viewpointThetaPhi 20 20
-/vis/viewer/set/viewpointVector 0.05 1.0 -0.0
-/vis/viewer/zoom 1.5
-/vis/viewer/set/upVector 0 0 1
+##/vis/viewer/set/viewpointThetaPhi 20 20
+#/vis/viewer/set/viewpointVector 0.05 1.0 -0.0
+#/vis/viewer/zoom 1.5
+#/vis/viewer/set/upVector 0 0 1
 
 #####################
 # BEGIN EVENT LOOP

@@ -20,20 +20,20 @@
 /process/activate DeferTrackProc e-
 
 #initialize the visualizer
-/vis/open OGLIQt
-/vis/scene/create
+#/vis/open OGLIQt
+#/vis/scene/create
 
-/vis/scene/add/volume
-/vis/scene/add/trajectories
-/vis/viewer/reset
-/vis/viewer/set/style surface
-/vis/viewer/set/upVector 1 0 0
-/vis/drawVolume
+#/vis/scene/add/volume
+#/vis/scene/add/trajectories
+#/vis/viewer/reset
+#/vis/viewer/set/style surface
+#/vis/viewer/set/upVector 1 0 0
+#/vis/drawVolume
 
-#/vis/viewer/set/viewpointThetaPhi 20 20
-/vis/viewer/set/viewpointVector 0.0001 0.0001 -1.0
-/vis/viewer/zoom 1.5
-/vis/viewer/set/upVector 0 0 1
+##/vis/viewer/set/viewpointThetaPhi 20 20
+#/vis/viewer/set/viewpointVector 0.0001 0.0001 -1.0
+#/vis/viewer/zoom 1.5
+#/vis/viewer/set/upVector 0 0 1
 
 #####################
 # BEGIN EVENT LOOP
@@ -48,15 +48,9 @@
 # Use IO.default_output_filename
 /rat/proclast outroot
 
-/generator/add combo gun:point
-/generator/vtx/set geantino 0 0 -1 1
-#/generator/pos/set ncv_.* 
-/generator/pos/set 0.0 100.0 0.0
-#/generator/pos/set 793.7 0.0 1470.0
-#/generator/vtx/set neutron 0 0 0 1
-#/generator/pos/set 1000 0 1377.2
-#/generator/pos/set 100 100 0
-#/generator/pos/set NCVliquid
+/generator/add combo gun:regexfill
+/generator/vtx/set neutron 0 0 0 50
+/generator/pos/set ncv_.*
 
 /run/beamOn 1
 
