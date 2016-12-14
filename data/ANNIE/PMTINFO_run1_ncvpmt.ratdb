@@ -1,9 +1,23 @@
 {
-name: "PMTINFO_run1_ncvpmt",
+name: "PMTINFO_run1_ncvpmt_1",
 valid_begin: [0, 0],
 valid_end: [0, 0],
 //These positions are relative to the GLOBAL origin
 x: [893.7, ],
+y: [0.0000, ],
+z: [1761.82, ], //top position is 1761.82, bot is −457.58
+dir_x: [0.0, ],
+dir_y: [0.0, ],
+dir_z: [-1.0, ],
+type: [1, ],
+}
+
+{
+name: "PMTINFO_run1_ncvpmt_2",
+valid_begin: [0, 0],
+valid_end: [0, 0],
+//These positions are relative to the GLOBAL origin
+x: [693.7, ],
 y: [0.0000, ],
 z: [1761.82, ], //top position is 1761.82, bot is −457.58
 dir_x: [0.0, ],

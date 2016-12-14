@@ -37,7 +37,9 @@ color: [0.5, 1.0, 0.0, 0.1],
 material: "air",
 }
 
-///////////////////////// Tank volumes //////////////////////////////
+/////////////////////////////////////////////////////////////////////
+///////////////********** Tank volumes ***********///////////////////
+/////////////////////////////////////////////////////////////////////
 {
 name: "GEO",
 index: "tank",
@@ -107,16 +109,153 @@ mother: "detector",
 type: "tube",
 r_max: 1200.0,
 size_z: 1500.0,
-position: [0.0, 0.0, 0.0],
+position: [0.0, 0.0, 306.0],
 material: "water_gdS_0p2",
 color: [0.1, 0.4, 0.6, 0.9],
 drawstyle: "solid"
 }
+/////////////////////////////////////////////////////////////////////
+///////////********** End of tank volumes ***********////////////////
+/////////////////////////////////////////////////////////////////////
 
+/////////////////////////////////////////////////////////////////////
+/////////////********** Inner structure ***********//////////////////
+/////////////////////////////////////////////////////////////////////
 
-///////////////////////// PMT arrays //////////////////////////////
+{
+name: "GEO",
+index: "inner_structure_verticalrod_1",
+valid_begin: [0, 0],
+valid_end: [0, 0],
+mother: "detector",
+type: "cut_tube",
+r_max: 38.1, //3" OD SS tube
+r_hole: 34.9, //1/8" thickness probably ?
+size_z: 1678.0,
+position: [517.54, -1249.45, 436.5],
+material: "stainless_steel",
+color: [1.0, 0.0, 0.0, 0.1],
+drawstyle: "solid"
+}
 
+{
+name: "GEO",
+index: "inner_structure_verticalrod_2",
+valid_begin: [0, 0],
+valid_end: [0, 0],
+mother: "detector",
+type: "cut_tube",
+r_max: 38.1, //3" OD SS tube
+r_hole: 34.9, //1/8" thickness probably ?
+size_z: 1678.0,
+position: [1249.45, -517.54, 436.5],
+material: "stainless_steel",
+color: [1.0, 0.0, 0.0, 0.1],
+drawstyle: "solid"
+}
 
+{
+name: "GEO",
+index: "inner_structure_verticalrod_3",
+valid_begin: [0, 0],
+valid_end: [0, 0],
+mother: "detector",
+type: "cut_tube",
+r_max: 38.1, //3" OD SS tube
+r_hole: 34.9, //1/8" thickness probably ?
+size_z: 1678.0,
+position: [1249.45, 517.54, 436.5],
+material: "stainless_steel",
+color: [1.0, 0.0, 0.0, 0.1],
+drawstyle: "solid"
+}
+
+{
+name: "GEO",
+index: "inner_structure_verticalrod_4",
+valid_begin: [0, 0],
+valid_end: [0, 0],
+mother: "detector",
+type: "cut_tube",
+r_max: 38.1, //3" OD SS tube
+r_hole: 34.9, //1/8" thickness probably ?
+size_z: 1678.0,
+position: [517.54, 1249.45, 436.5],
+material: "stainless_steel",
+color: [1.0, 0.0, 0.0, 0.1],
+drawstyle: "solid"
+}
+
+{
+name: "GEO",
+index: "inner_structure_verticalrod_5",
+valid_begin: [0, 0],
+valid_end: [0, 0],
+mother: "detector",
+type: "cut_tube",
+r_max: 38.1, //3" OD SS tube
+r_hole: 34.9, //1/8" thickness probably ?
+size_z: 1678.0,
+position: [-517.54, 1249.45, 436.5],
+material: "stainless_steel",
+color: [1.0, 0.0, 0.0, 0.1],
+drawstyle: "solid"
+}
+
+{
+name: "GEO",
+index: "inner_structure_verticalrod_6",
+valid_begin: [0, 0],
+valid_end: [0, 0],
+mother: "detector",
+type: "cut_tube",
+r_max: 38.1, //3" OD SS tube
+r_hole: 34.9, //1/8" thickness probably ?
+size_z: 1678.0,
+position: [-517.54, -1249.45, 436.5],
+material: "stainless_steel",
+color: [1.0, 0.0, 0.0, 0.1],
+drawstyle: "solid"
+}
+
+{
+name: "GEO",
+index: "inner_structure_verticalrod_7",
+valid_begin: [0, 0],
+valid_end: [0, 0],
+mother: "detector",
+type: "cut_tube",
+r_max: 38.1, //3" OD SS tube
+r_hole: 34.9, //1/8" thickness probably ?
+size_z: 1678.0,
+position: [-1249.45, -517.54, 436.5],
+material: "stainless_steel",
+color: [1.0, 0.0, 0.0, 0.1],
+drawstyle: "solid"
+}
+
+{
+name: "GEO",
+index: "inner_structure_verticalrod_8",
+valid_begin: [0, 0],
+valid_end: [0, 0],
+mother: "detector",
+type: "cut_tube",
+r_max: 38.1, //3" OD SS tube
+r_hole: 34.9, //1/8" thickness probably ?
+size_z: 1678.0,
+position: [-1249.45, 517.54, 436.5],
+material: "stainless_steel",
+color: [1.0, 0.0, 0.0, 0.1],
+drawstyle: "solid"
+}
+/////////////////////////////////////////////////////////////////////
+//////////********** End of inner structure ***********//////////////
+/////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////
+///////////////********** PMT arrays ***********/////////////////////
+/////////////////////////////////////////////////////////////////////
 { 
 name: "GEO", 
 index: "bottom_pmts", 
@@ -170,7 +309,7 @@ pos_table: "PMTINFO_config3_side_ring_1", //generated on the fly
 // start_idx: 60, //index of first inner pmt
 // end_idx: 69, //index of last inner pmt
 orientation: "point",
-orient_point: [0.0, 0.0, -1211.5],
+orient_point: [0.0, 0.0, -1069.4],
 // orient_point: [0.0, 0.0, -133.3], 
 } 
 
@@ -191,7 +330,7 @@ pos_table: "PMTINFO_config3_side_ring_2", //generated on the fly
 // start_idx: 70, //index of first inner pmt
 // end_idx: 79, //index of last inner pmt
 orientation: "point",
-orient_point: [0.0, 0.0, -875.3],
+orient_point: [0.0, 0.0, -763.8],
 // orient_point: [0.0, 0.0, -133.3], 
 } 
 
@@ -212,7 +351,7 @@ pos_table: "PMTINFO_config3_side_ring_3", //generated on the fly
 // start_idx: 80, //index of first inner pmt
 // end_idx: 89, //index of last inner pmt
 orientation: "point",
-orient_point: [0.0, 0.0, -539.1],
+orient_point: [0.0, 0.0, -458.2],
 // orient_point: [0.0, 0.0, -133.3],   
 } 
 
@@ -233,7 +372,7 @@ pos_table: "PMTINFO_config3_side_ring_4", //generated on the fly
 // start_idx: 90, //index of first inner pmt
 // end_idx: 99, //index of last inner pmt
 orientation: "point",
-orient_point: [0.0, 0.0, -202.9],
+orient_point: [0.0, 0.0, -152.6],
 // orient_point: [0.0, 0.0, -133.3],  
 } 
 
@@ -254,7 +393,7 @@ pos_table: "PMTINFO_config3_side_ring_5", //generated on the fly
 // start_idx: 100, //index of first inner pmt
 // end_idx: 109, //index of last inner pmt
 orientation: "point",
-orient_point: [0.0, 0.0, 133.3],
+orient_point: [0.0, 0.0, 153.0],
 // orient_point: [0.0, 0.0, -133.3],  
 } 
 
@@ -275,7 +414,7 @@ pos_table: "PMTINFO_config3_side_ring_6", //generated on the fly
 // start_idx: 100, //index of first inner pmt
 // end_idx: 109, //index of last inner pmt
 orientation: "point",
-orient_point: [0.0, 0.0, 469.5],
+orient_point: [0.0, 0.0, 458.6],
 // orient_point: [0.0, 0.0, -133.3],  
 } 
 
@@ -296,7 +435,7 @@ pos_table: "PMTINFO_config3_side_ring_7", //generated on the fly
 // start_idx: 100, //index of first inner pmt
 // end_idx: 109, //index of last inner pmt
 orientation: "point",
-orient_point: [0.0, 0.0, 805.7],
+orient_point: [0.0, 0.0, 764.2],
 // orient_point: [0.0, 0.0, -133.3],  
 } 
 
@@ -317,7 +456,7 @@ pos_table: "PMTINFO_config3_side_ring_8", //generated on the fly
 // start_idx: 100, //index of first inner pmt
 // end_idx: 109, //index of last inner pmt
 orientation: "point",
-orient_point: [0.0, 0.0, 1141.9],
+orient_point: [0.0, 0.0, 1069.8],
 // orient_point: [0.0, 0.0, -133.3],  
 } 
 
@@ -338,6 +477,9 @@ pos_table: "PMTINFO_config3_side_ring_9", //generated on the fly
 // start_idx: 100, //index of first inner pmt
 // end_idx: 109, //index of last inner pmt
 orientation: "point",
-orient_point: [0.0, 0.0, 1478.11],
+orient_point: [0.0, 0.0, 1375.4],
 // orient_point: [0.0, 0.0, -133.3],  
 } 
+/////////////////////////////////////////////////////////////////////
+///////////********** End of PMT arrays ***********//////////////////
+/////////////////////////////////////////////////////////////////////

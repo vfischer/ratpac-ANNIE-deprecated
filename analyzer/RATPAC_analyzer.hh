@@ -177,6 +177,7 @@ private:
   TH1F *hCharge_perPMT_run2[NbPMT_run2];
   TH1F *hNumPE;
   TH1F *hNHit; // number of photons hits 
+  TH1F *hNbPMThit; // number of PMTs hit per events
   TH2F *hCharge_XZ;
   
   // Time and distance histos

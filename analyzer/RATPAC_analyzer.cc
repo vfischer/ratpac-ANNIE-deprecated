@@ -57,6 +57,12 @@ void Analyzer::Initialization(){
   // Energy infos
   hNumPE  = new TH1F("hNumPE","Num of PE (PMT summed)",1000,0,1000);
   hNHit = new TH1F("hNHit","Num of hits (summed)", 1000,0,1000);
+  if (job_run1) {
+    hNbPMThit = new TH1F("hNbPMThit","Number of PMTs hit per events",100,0,100);
+  }
+  if (job_run2) {
+    hNbPMThit = new TH1F("hNbPMThit","Number of PMTs hit per events",200,0,200);
+  }
   hScintEdep  = new TH1F("hScintEdep","Scintillation deposited energy",1000,0,100);
   hScintEdepQuen  = new TH1F("hScintEdepQuen","Scintillation deposited energy (quenched)",1000,0,100);
   hScintEdep_x  = new TH1F("hScintEdep_x","Scintillation deposited energy - X position",4000,-2000,2000);
@@ -162,6 +168,7 @@ void Analyzer::Loop() {
       }   
     }
     
+    hNbPMThit->Fill(ds->GetMC()->GetMCPMTCount());
     hNumPE->Fill(ds->GetMC()->GetNumPE());
     
     hCharge_tot->Fill(charge_tot);

@@ -35,7 +35,9 @@ color: [0.5, 1.0, 0.0, 0.1],
 material: "air",
 }
 
-///////////////////////// Tank volumes //////////////////////////////
+/////////////////////////////////////////////////////////////////////
+///////////////********** Tank volumes ***********///////////////////
+/////////////////////////////////////////////////////////////////////
 {
 name: "GEO",
 index: "tank",
@@ -95,8 +97,13 @@ material: "water",
 color: [0.4, 0.4, 0.6, 0.3],
 drawstyle: "solid"
 }
+/////////////////////////////////////////////////////////////////////
+///////////********** End of tank volumes ***********////////////////
+/////////////////////////////////////////////////////////////////////
 
-///////////////////////// Inner structure (vertical) //////////////////////////////
+/////////////////////////////////////////////////////////////////////
+/////////////********** Inner structure ***********//////////////////
+/////////////////////////////////////////////////////////////////////
 {
 name: "GEO",
 index: "inner_structure_verticalrod_1",
@@ -224,8 +231,13 @@ material: "stainless_steel",
 color: [1.0, 0.0, 0.0, 0.1],
 drawstyle: "solid"
 }
+/////////////////////////////////////////////////////////////////////
+//////////********** End of inner structure ***********//////////////
+/////////////////////////////////////////////////////////////////////
 
-///////////////////////// NCV volumes //////////////////////////////
+/////////////////////////////////////////////////////////////////////
+///////////////********** NCV volumes ***********////////////////////
+/////////////////////////////////////////////////////////////////////
 {
 name: "GEO",
 index: "ncv_vessel",
@@ -291,9 +303,10 @@ color: [0.2, 0.1, 0.4, 0.3],
 drawstyle: "solid"
 }
 
+// First NCV PMT
 {
 name: "GEO",
-index: "ncv_pmt_vessel",
+index: "ncv_pmt_vessel_1",
 valid_begin: [0, 0],
 valid_end: [0, 0],
 mother: "ncv_detector",
@@ -308,7 +321,7 @@ drawstyle: "solid"
 
 {
 name: "GEO",
-index: "ncv_pmt_vessel_blacksheet",
+index: "ncv_pmt_vessel_blacksheet_1",
 valid_begin: [0, 0],
 valid_end: [0, 0],
 mother: "ncv_detector",
@@ -327,10 +340,60 @@ drawstyle: "solid"
 
 {
 name: "GEO",
-index: "ncv_pmt_vessel_air",
+index: "ncv_pmt_vessel_air_1",
 valid_begin: [0, 0],
 valid_end: [0, 0],
-mother: "ncv_pmt_vessel",
+mother: "ncv_pmt_vessel_1",
+type: "tube",
+r_max: 38.2,
+size_z: 148.0,
+position: [0.0, 0.0, 0.0],
+material: "air",
+color: [0.2, 0.1, 0.4, 0.3],
+drawstyle: "solid"
+}
+
+// Second NCV PMT
+{
+name: "GEO",
+index: "ncv_pmt_vessel_2",
+valid_begin: [0, 0],
+valid_end: [0, 0],
+mother: "ncv_detector",
+type: "tube",
+r_max: 38.7,
+size_z: 150.0,
+position: [693.7, 0.0, 2039.1],
+material: "acrylic_uva_McMaster",
+color: [0.1, 0.4, 0.6, 0.3],
+drawstyle: "solid"
+}
+
+{
+name: "GEO",
+index: "ncv_pmt_vessel_blacksheet_2",
+valid_begin: [0, 0],
+valid_end: [0, 0],
+mother: "ncv_detector",
+type: "tube",
+size_z: 150.0,
+r_max: 38.71, // 10 microns thick (about right)
+r_min: 38.7,
+// low_norm: [0.0, 0.0, -1.0],
+// high_norm: [0.0, 0.0, 1.0],
+//position: [0.0, 0.0, 0.0],
+position: [693.7, 0.0, 2039.1],
+material: "acrylic_black", //not true but black 
+color: [1.0, 0.2, 0.6, 1.0],
+drawstyle: "solid"
+}
+
+{
+name: "GEO",
+index: "ncv_pmt_vessel_air_2",
+valid_begin: [0, 0],
+valid_end: [0, 0],
+mother: "ncv_pmt_vessel_2",
 type: "tube",
 r_max: 38.2,
 size_z: 148.0,
@@ -557,9 +620,14 @@ material: "stainless_steel",
 color: [0.1, 0.4, 0.1, 0.8],
 drawstyle: "solid",
 }
+/////////////////////////////////////////////////////////////////////
+////////////********** End of NCV volumes ***********////////////////
+/////////////////////////////////////////////////////////////////////
 
 
-///////////////////////// PMT arrays //////////////////////////////
+/////////////////////////////////////////////////////////////////////
+///////////////********** PMT arrays ***********/////////////////////
+/////////////////////////////////////////////////////////////////////
 { 
 name: "GEO", 
 index: "inner_pmts", 
@@ -580,22 +648,42 @@ orientation: "manual",
 
 { 
 name: "GEO", 
-index: "ncv_pmt", 
+index: "ncv_pmt_1", 
 enable: 1,
 valid_begin: [0, 0], 
 valid_end: [0, 0], 
-mother: "ncv_pmt_vessel_air", 
+mother: "ncv_pmt_vessel_air_1", 
 type: "pmtarray", 
 pmt_model: "b76d01",
 pmt_detector_type: "idpmt",
 sensitive_detector: "/mydet/pmt/inner", 
 efficiency_correction: 1.000,  
-pos_table: "PMTINFO_run1_ncvpmt", //generated on the fly
+pos_table: "PMTINFO_run1_ncvpmt_1", //generated on the fly
 // start_idx: 60, //index of first inner pmt
 // end_idx: 1, //index of last inner pmt
 orientation: "manual",
 } 
 
+{ 
+name: "GEO", 
+index: "ncv_pmt_2", 
+enable: 1,
+valid_begin: [0, 0], 
+valid_end: [0, 0], 
+mother: "ncv_pmt_vessel_air_2", 
+type: "pmtarray", 
+pmt_model: "b76d01",
+pmt_detector_type: "idpmt",
+sensitive_detector: "/mydet/pmt/inner", 
+efficiency_correction: 1.000,  
+pos_table: "PMTINFO_run1_ncvpmt_2", //generated on the fly
+// start_idx: 60, //index of first inner pmt
+// end_idx: 1, //index of last inner pmt
+orientation: "manual",
+} 
+/////////////////////////////////////////////////////////////////////
+///////////********** End of PMT arrays ***********//////////////////
+/////////////////////////////////////////////////////////////////////
 
 ///////////////////////// "Fake" volume for neutron generation //////////////////////////////
 
