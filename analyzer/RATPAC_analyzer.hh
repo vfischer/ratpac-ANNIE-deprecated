@@ -157,7 +157,7 @@ private:
   Bool_t job_simu, job_run1, job_run2;
   
   // PMT number for run 1 and 2
-  const static Int_t NbPMT_run1 = 61;
+  const static Int_t NbPMT_run1 = 62;
   const static Int_t NbPMT_run2 = 200;
   
   // booleans and counters

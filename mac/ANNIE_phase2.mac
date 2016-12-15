@@ -61,8 +61,8 @@
 #END EVENT LOOP
 #####################
 
-/vis/viewer/refresh
-/vis/viewer/flush
+#/vis/viewer/refresh
+#/vis/viewer/flush
 
 
 

@@ -143,7 +143,7 @@ void Analyzer::Loop() {
     //PMT loop
     for( size_t iPMT = 0; iPMT < ds->GetMC()->GetMCPMTCount(); iPMT++ ){
       if (!binary_search(broken_pmt_vec.begin(), broken_pmt_vec.end(), ds->GetMC()->GetMCPMT(iPMT)->GetID()+1)){
-	if (job_run1 && ds->GetMC()->GetMCPMT(iPMT)->GetID()+1 == 61) { continue;}
+	if (job_run1 && ds->GetMC()->GetMCPMT(iPMT)->GetID()+1 == 61 && ds->GetMC()->GetMCPMT(iPMT)->GetID()+1 == 62) { continue;}
 	
 	hPMTID->Fill(ds->GetMC()->GetMCPMT(iPMT)->GetID()+1);
 	
