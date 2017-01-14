@@ -1,13 +1,13 @@
 /glg4debug/glg4param omit_muon_processes  1.0
 /glg4debug/glg4param omit_hadronic_processes  1.0
 
-/tracking/verbose 1
+/tracking/verbose 0
 
 /tracking/storeTrajectory 1
 /tracking/discardParticleTrajectory opticalphoton
 
 /rat/db/set DETECTOR experiment "ANNIE"
-/rat/db/set DETECTOR geo_file "ANNIE/ANNIE_run1.geo"
+/rat/db/set DETECTOR geo_file "ANNIE/ANNIE_run2_config3.geo"
 
 /run/initialize
 /process/activate Cerenkov
@@ -48,12 +48,12 @@
 # Use IO.default_output_filename
 /rat/proclast outroot
 
-/generator/add combo gun:point
-/generator/vtx/set geantino 0 0 1 10
+/generator/add combo gun:regexfill
+/generator/vtx/set neutron 0 0 0 2.5e-8
+/generator/pos/set ncv_liquid.*
 #/generator/pos/set 0 0 -133.3
-/generator/pos/set 793.7 0.0 1470.0
 
-/run/beamOn 1
+/run/beamOn 50000
 
 #END EVENT LOOP
 #####################
