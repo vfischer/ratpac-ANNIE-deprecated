@@ -864,6 +864,69 @@ drawstyle: "solid",
 ////////////********** End of NCV volumes ***********////////////////
 /////////////////////////////////////////////////////////////////////
 
+/////////////////////////////////////////////////////////////////////
+///////////////********** Hefty run ***********//////////////////////
+/////////////////////////////////////////////////////////////////////
+{
+name: "GEO",
+index: "ncv_hefty_bottom_reflective_mylar",
+valid_begin: [0, 0],
+valid_end: [0, 0],
+mother: "ncv_detector",
+type: "box",
+size: [254.0, 254.0, 0.1], // mm
+//position: [0.0, 0.0, 0.0],
+position: [793.7, 0.0, 1292.2],
+material: "aluminum",
+color: [0.1, 0.4, 0.6, 0.3],
+drawstyle: "solid"
+}
+
+{
+name: "GEO",
+index: "ncv_hefty_side_reflective_tyvek",
+valid_begin: [0, 0],
+valid_end: [0, 0],
+mother: "ncv_detector",
+type: "tube",
+size_z: 254.0,
+r_max: 254.1,
+r_min: 254.0,
+// low_norm: [0.0, 0.0, -1.0],
+// high_norm: [0.0, 0.0, 1.0],
+//position: [0.0, 0.0, 0.0],
+position: [793.7, 0.0, 1609.7],
+material: "tyvek",
+color: [0.1, 0.4, 0.6, 0.3],
+drawstyle: "solid"
+}
+/////////////////////////////////////////////////////////////////////
+/////////********** End of Hefty run volumes ***********/////////////
+/////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////
+///////////////********** NCV factory ***********/////////////////////
+/////////////////////////////////////////////////////////////////////
+{
+name: "GEO",
+index: "NCV",
+enable: 1,
+valid_begin: [0, 0],
+valid_end: [0, 0],
+mother: "ncv_detector",
+ncv_center: [0.0, 0.0, 0.0],
+// frame_material: "stainless_steel",
+// ncv_material: "acrylic_uva_McMaster",
+// liquid_material: "ej335",
+// transparent_surface: "glass",
+// opaque_surface: "acrylic_opaque",
+// reflective_surface: "tyvek",
+// metal_surface: "stainless_steel",
+type: "annieNCV", //see the geo factory
+}
+/////////////////////////////////////////////////////////////////////
+/////////********** End of NCV factory ***********/////////////
+/////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////////
 ///////////////********** PMT arrays ***********/////////////////////
