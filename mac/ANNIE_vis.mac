@@ -51,8 +51,8 @@
 /rat/proclast outroot
 
 /generator/add combo gun:point
-/generator/vtx/set geantino 0 0 1 10
-/generator/pos/set -100 0 0
+/generator/vtx/set geantino 0 0 -1 10
+/generator/pos/set 482.55 -63.5 2402.3
 #/generator/vtx/set neutron 0 0 0 1
 #/generator/pos/set 1000 0 1377.2
 #/generator/pos/set 100 100 0

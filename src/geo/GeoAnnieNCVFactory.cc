@@ -106,7 +106,7 @@ G4VPhysicalVolume *GeoAnnieNCVFactory::Construct(DBLinkPtr table) {
     
     G4double zpos_hefty_bottom_reflective_mylar = ncv_center_z - 317.5;
     
-    
+    // Fills vector of one element..
     vector<G4double> xpos_ncv_pmt_1; xpos_ncv_pmt_1.clear(); xpos_ncv_pmt_1.push_back(xpos_pmtcase_1);
     vector<G4double> ypos_ncv_pmt_1; ypos_ncv_pmt_1.clear(); ypos_ncv_pmt_1.push_back(ncv_center_y);
     vector<G4double> zpos_ncv_pmt_1; zpos_ncv_pmt_1.clear(); zpos_ncv_pmt_1.push_back(zpos_ncvpmt);
@@ -250,10 +250,11 @@ G4VPhysicalVolume *GeoAnnieNCVFactory::Construct(DBLinkPtr table) {
     new G4LogicalBorderSurface("border", motherPhys, ncv_pmt_vessel_blacksheet_2_phys, opaque_surf);
     */
     
-    vector<double> volume_position(3);
-    
+    // The part where the info in the .geo file is overriden
     info << "Override default NCV information...\n";
     DB *db = DB::Get();
+    vector<double> volume_position(3);
+    // NCV vessel
     volume_position[0] = ncv_center_x; volume_position[1] = ncv_center_y; volume_position[2] = ncv_center_z;
     db->SetDArray("GEO","ncv_vessel","position",volume_position);
     volume_position[2] = zpos_topcap;
@@ -263,6 +264,7 @@ G4VPhysicalVolume *GeoAnnieNCVFactory::Construct(DBLinkPtr table) {
     volume_position[2] = ncv_center_z;
     db->SetDArray("GEO","ncv_liquid","position",volume_position);
     
+    // Basket components
     volume_position[0] = ncv_center_x; volume_position[1] = ypos_metalplate_1; volume_position[2] = zpos_metalplate_bot;
     db->SetDArray("GEO","ncv_basket_metalplate_bot1","position",volume_position);
     volume_position[1] = ypos_metalplate_2; volume_position[2] = zpos_metalplate_bot;
@@ -294,6 +296,7 @@ G4VPhysicalVolume *GeoAnnieNCVFactory::Construct(DBLinkPtr table) {
     volume_position[0] = ncv_center_x-rotation_radius_bridalbar*cos(CLHEP::pi/4.); volume_position[1] = ncv_center_y-rotation_radius_bridalbar*sin(CLHEP::pi/4.); volume_position[2] = ncv_center_z;
     db->SetDArray("GEO","ncv_bridal_bar4","position",volume_position);
 
+    // NCV PMT positions
     volume_position[0] = xpos_pmtcase_1; volume_position[1] = ncv_center_y; volume_position[2] = zpos_pmtcase;
     db->SetDArray("GEO","ncv_pmt_vessel_1","position",volume_position);
     volume_position[0] = 0.0; volume_position[1] = 0.0; volume_position[2] = 0.0;
@@ -314,6 +317,7 @@ G4VPhysicalVolume *GeoAnnieNCVFactory::Construct(DBLinkPtr table) {
     db->SetDArray("PMTINFO_run1_ncvpmt_2","y",ypos_ncv_pmt_2);
     db->SetDArray("PMTINFO_run1_ncvpmt_2","z",zpos_ncv_pmt_2);
     
+    // Hefty mode information
     volume_position[0] = ncv_center_x; volume_position[1] = ncv_center_y; volume_position[2] = zpos_hefty_bottom_reflective_mylar;
     db->SetDArray("GEO","ncv_hefty_bottom_reflective_mylar","position",volume_position);
     volume_position[0] = ncv_center_x; volume_position[1] = ncv_center_y; volume_position[2] = ncv_center_z;
