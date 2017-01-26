@@ -154,7 +154,7 @@ private:
   
   // job booleans
   TString job;
-  Bool_t job_simu, job_run1, job_run2;
+  Bool_t job_simu, job_run1, job_run1_hefty, job_run2;
   
   // PMT number for run 1 and 2
   const static Int_t NbPMT_run1 = 62;
@@ -210,6 +210,7 @@ private:
   int pmt_channel_array_run1[NbPMT_run1];
   int pmt_channel_array_run2[NbPMT_run2];
   std::vector<int> broken_pmt_vec; // in terms of pmtid (starting at 1)
+  std::vector<int> ncv_pmt_vec; // in terms of pmtid (starting at 1)
   
   // TTrees, TChains and all that ROOT stuff
   TTree *nutri;

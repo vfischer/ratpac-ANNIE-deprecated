@@ -84,7 +84,7 @@ void Analyzer::Initialization(){
   }
   
   // Initialization time   
-  broken_pmt_vec.clear();
+  broken_pmt_vec.clear(); ncv_pmt_vec.clear();
   Nneutrons = 0, Ncaptures = 0, Ncaptures_h = 0, Ncaptures_gd = 0;
   
 }
@@ -103,7 +103,8 @@ void Analyzer::Loop() {
     int pmt_channel_array_run1[] = {0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3};
   
   if (job_run1){ 
-    broken_pmt_vec.push_back(6); broken_pmt_vec.push_back(19);
+    broken_pmt_vec.push_back(6); broken_pmt_vec.push_back(19);broken_pmt_vec.push_back(37); broken_pmt_vec.push_back(49);
+    ncv_pmt_vec.push_back(6); ncv_pmt_vec.push_back(49);
   }
   
   TH1::SetDefaultSumw2(kTRUE);
@@ -390,6 +391,8 @@ InputFiles(InFiles), job(jobtype), output_dir(outputdir)
   
   if ( job == "run1" ){
     job_run1 = true; 
+  } else  if ( job == "run1_hefty" ){
+    job_run1_hefty = true;
   } else if ( job == "run2" ){
       job_run2 = true; 
     } else {

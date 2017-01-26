@@ -32,6 +32,7 @@ G4VPhysicalVolume *GeoAnnieNCVFactory::Construct(DBLinkPtr table) {
     // Get NCV information
     DBLinkPtr NCVinfo = DB::Get()->GetLink("GEO","NCV");
     vector<G4double> ncv_center = NCVinfo->GetDArray("ncv_center"); // NCV center
+    G4int enable_ncv = NCVinfo->GetI("enable_ncv"); // NCV center
     G4double ncv_center_x = ncv_center[0]; 
     G4double ncv_center_y = ncv_center[1];
     G4double ncv_center_z = ncv_center[2];
@@ -257,62 +258,92 @@ G4VPhysicalVolume *GeoAnnieNCVFactory::Construct(DBLinkPtr table) {
     // NCV vessel
     volume_position[0] = ncv_center_x; volume_position[1] = ncv_center_y; volume_position[2] = ncv_center_z;
     db->SetDArray("GEO","ncv_vessel","position",volume_position);
+    db->SetI("GEO","ncv_vessel","enable",enable_ncv);
     volume_position[2] = zpos_topcap;
     db->SetDArray("GEO","ncv_vessel_topcap","position",volume_position);
+    db->SetI("GEO","ncv_vessel_topcap","enable",enable_ncv);
     volume_position[2] = zpos_botcap;
     db->SetDArray("GEO","ncv_vessel_botcap","position",volume_position);
+    db->SetI("GEO","ncv_vessel_botcap","enable",enable_ncv);
     volume_position[2] = ncv_center_z;
     db->SetDArray("GEO","ncv_liquid","position",volume_position);
+    db->SetI("GEO","ncv_liquid","enable",enable_ncv);
     
     // Basket components
     volume_position[0] = ncv_center_x; volume_position[1] = ypos_metalplate_1; volume_position[2] = zpos_metalplate_bot;
     db->SetDArray("GEO","ncv_basket_metalplate_bot1","position",volume_position);
+    db->SetI("GEO","ncv_basket_metalplate_bot1","enable",enable_ncv);
     volume_position[1] = ypos_metalplate_2; volume_position[2] = zpos_metalplate_bot;
     db->SetDArray("GEO","ncv_basket_metalplate_bot2","position",volume_position);
+    db->SetI("GEO","ncv_basket_metalplate_bot2","enable",enable_ncv);
     volume_position[1] = ypos_metalplate_3; volume_position[2] = zpos_metalplate_bot;
     db->SetDArray("GEO","ncv_basket_metalplate_bot3","position",volume_position);
+    db->SetI("GEO","ncv_basket_metalplate_bot3","enable",enable_ncv);
     volume_position[1] = ypos_metalplate_4; volume_position[2] = zpos_metalplate_bot;
     db->SetDArray("GEO","ncv_basket_metalplate_bot4","position",volume_position);
+    db->SetI("GEO","ncv_basket_metalplate_bot4","enable",enable_ncv);
     volume_position[1] = ypos_metalplate_1; volume_position[2] = zpos_metalplate_top;
     db->SetDArray("GEO","ncv_basket_metalplate_top1","position",volume_position);
+    db->SetI("GEO","ncv_basket_metalplate_top1","enable",enable_ncv);
     volume_position[1] = ypos_metalplate_2; volume_position[2] = zpos_metalplate_top;
     db->SetDArray("GEO","ncv_basket_metalplate_top2","position",volume_position);
+    db->SetI("GEO","ncv_basket_metalplate_top2","enable",enable_ncv);
     volume_position[1] = ypos_metalplate_3; volume_position[2] = zpos_metalplate_top;
     db->SetDArray("GEO","ncv_basket_metalplate_top3","position",volume_position);
+    db->SetI("GEO","ncv_basket_metalplate_top3","enable",enable_ncv);
     volume_position[1] = ypos_metalplate_4; volume_position[2] = zpos_metalplate_top;
     db->SetDArray("GEO","ncv_basket_metalplate_top4","position",volume_position);
+    db->SetI("GEO","ncv_basket_metalplate_top4","enable",enable_ncv);
     volume_position[1] = ncv_center_y; volume_position[2] = zpos_metalplate_topcenter;
     db->SetDArray("GEO","ncv_basket_metalplate_topcenter","position",volume_position);
+    db->SetI("GEO","ncv_basket_metalplate_topcenter","enable",enable_ncv);
     volume_position[0] = xpos_ballast_1; volume_position[1] = ncv_center_y; volume_position[2] = zpos_metalplate_bot;
     db->SetDArray("GEO","ncv_basket_ballast1","position",volume_position);
+    db->SetI("GEO","ncv_basket_ballast1","enable",enable_ncv);
     volume_position[0] = xpos_ballast_2; volume_position[1] = ncv_center_y; volume_position[2] = zpos_metalplate_bot;
     db->SetDArray("GEO","ncv_basket_ballast2","position",volume_position);
+    db->SetI("GEO","ncv_basket_ballast2","enable",enable_ncv);
     volume_position[0] = ncv_center_x+rotation_radius_bridalbar*cos(CLHEP::pi/4.); volume_position[1] = ncv_center_y+rotation_radius_bridalbar*sin(CLHEP::pi/4.); volume_position[2] = ncv_center_z;
     db->SetDArray("GEO","ncv_bridal_bar1","position",volume_position);
+    db->SetI("GEO","ncv_bridal_bar1","enable",enable_ncv);
     volume_position[0] = ncv_center_x-rotation_radius_bridalbar*cos(CLHEP::pi/4.); volume_position[1] = ncv_center_y+rotation_radius_bridalbar*sin(CLHEP::pi/4.); volume_position[2] = ncv_center_z;
     db->SetDArray("GEO","ncv_bridal_bar2","position",volume_position);
+    db->SetI("GEO","ncv_bridal_bar2","enable",enable_ncv);
     volume_position[0] = ncv_center_x+rotation_radius_bridalbar*cos(CLHEP::pi/4.); volume_position[1] = ncv_center_y-rotation_radius_bridalbar*sin(CLHEP::pi/4.); volume_position[2] = ncv_center_z;
     db->SetDArray("GEO","ncv_bridal_bar3","position",volume_position);
+    db->SetI("GEO","ncv_bridal_bar3","enable",enable_ncv);
     volume_position[0] = ncv_center_x-rotation_radius_bridalbar*cos(CLHEP::pi/4.); volume_position[1] = ncv_center_y-rotation_radius_bridalbar*sin(CLHEP::pi/4.); volume_position[2] = ncv_center_z;
     db->SetDArray("GEO","ncv_bridal_bar4","position",volume_position);
+    db->SetI("GEO","ncv_bridal_bar4","enable",enable_ncv);
 
     // NCV PMT positions
     volume_position[0] = xpos_pmtcase_1; volume_position[1] = ncv_center_y; volume_position[2] = zpos_pmtcase;
     db->SetDArray("GEO","ncv_pmt_vessel_1","position",volume_position);
+    db->SetI("GEO","ncv_pmt_vessel_1","enable",enable_ncv);
     volume_position[0] = 0.0; volume_position[1] = 0.0; volume_position[2] = 0.0;
     db->SetDArray("GEO","ncv_pmt_vessel_air_1","position",volume_position);
+    db->SetI("GEO","ncv_pmt_vessel_air_1","enable",enable_ncv);
     volume_position[0] = xpos_pmtcase_1; volume_position[1] = ncv_center_y; volume_position[2] = zpos_pmtcase;
     db->SetDArray("GEO","ncv_pmt_vessel_blacksheet_1","position",volume_position);
+    db->SetI("GEO","ncv_pmt_vessel_blacksheet_1","enable",enable_ncv);
     volume_position[0] = xpos_pmtcase_2; volume_position[1] = ncv_center_y; volume_position[2] = zpos_pmtcase;
     db->SetDArray("GEO","ncv_pmt_vessel_2","position",volume_position);
+    db->SetI("GEO","ncv_pmt_vessel_2","enable",enable_ncv);
     volume_position[0] = 0.0; volume_position[1] = 0.0; volume_position[2] = 0.0;
     db->SetDArray("GEO","ncv_pmt_vessel_air_2","position",volume_position);
+    db->SetI("GEO","ncv_pmt_vessel_air_2","enable",enable_ncv);
     volume_position[0] = xpos_pmtcase_2; volume_position[1] = ncv_center_y; volume_position[2] = zpos_pmtcase;
     db->SetDArray("GEO","ncv_pmt_vessel_blacksheet_2","position",volume_position);
+    db->SetI("GEO","ncv_pmt_vessel_blacksheet_2","enable",enable_ncv);
     
+    db->SetI("GEO","ncv_pmt_1","enable",enable_ncv);
+    db->SetI("GEO","ncv_pmt_2","enable",enable_ncv);
+    
+    db->SetI("GEO","PMTINFO_run1_ncvpmt_1","enable",enable_ncv);
     db->SetDArray("PMTINFO_run1_ncvpmt_1","x",xpos_ncv_pmt_1);
     db->SetDArray("PMTINFO_run1_ncvpmt_1","y",ypos_ncv_pmt_1);
     db->SetDArray("PMTINFO_run1_ncvpmt_1","z",zpos_ncv_pmt_1);
+    db->SetI("GEO","PMTINFO_run1_ncvpmt_2","enable",enable_ncv);
     db->SetDArray("PMTINFO_run1_ncvpmt_2","x",xpos_ncv_pmt_2);
     db->SetDArray("PMTINFO_run1_ncvpmt_2","y",ypos_ncv_pmt_2);
     db->SetDArray("PMTINFO_run1_ncvpmt_2","z",zpos_ncv_pmt_2);
@@ -320,8 +351,10 @@ G4VPhysicalVolume *GeoAnnieNCVFactory::Construct(DBLinkPtr table) {
     // Hefty mode information
     volume_position[0] = ncv_center_x; volume_position[1] = ncv_center_y; volume_position[2] = zpos_hefty_bottom_reflective_mylar;
     db->SetDArray("GEO","ncv_hefty_bottom_reflective_mylar","position",volume_position);
+    db->SetI("GEO","ncv_hefty_bottom_reflective_mylar","enable",enable_ncv);
     volume_position[0] = ncv_center_x; volume_position[1] = ncv_center_y; volume_position[2] = ncv_center_z;
     db->SetDArray("GEO","ncv_hefty_side_reflective_tyvek","position",volume_position);
+    db->SetI("GEO","ncv_hefty_side_reflective_tyvek","enable",enable_ncv);
     
     return NULL; //Unsure about returning NULL here but it seems not to break anything.
 }

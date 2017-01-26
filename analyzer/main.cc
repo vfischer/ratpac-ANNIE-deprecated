@@ -30,7 +30,7 @@ Int_t main(Int_t argc, Char_t** argv)
   {
     std::cerr << "Hey! You need to set options, dude..\n\n"
     << "  MANDATORY:\n"
-    << "-t [type]  : type of analysis: phase1, phase2 \n"
+    << "-t [type]  : type of analysis: run1, run1_hefty, run2 \n"
     << "   OPTIONAL:\n"
     << "-i [inpath]: path to the input (not implemented yet)\n"
     << "-p [outpath]: path to the output\n"
@@ -95,6 +95,13 @@ Int_t main(Int_t argc, Char_t** argv)
     
     if ( type == "run1" ) {
       Ana = new Analyzer(InputFiles, "run1", *outdir);
+	Ana->Initialization();
+	Ana->Loop();
+	Ana->Finalize();  
+    } else 
+      
+    if ( type == "run1_hefty" ) {
+      Ana = new Analyzer(InputFiles, "run1_hefty", *outdir);
 	Ana->Initialization();
 	Ana->Loop();
 	Ana->Finalize();  

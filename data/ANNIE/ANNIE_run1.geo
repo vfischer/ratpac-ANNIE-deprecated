@@ -110,9 +110,9 @@ index: "inner_structure_verticalrod_1",
 valid_begin: [0, 0],
 valid_end: [0, 0],
 mother: "ncv_detector",
-type: "cut_tube",
+type: "tube",
 r_max: 38.1, //3" OD SS tube
-r_hole: 34.9, //1/8" thickness probably ?
+r_min: 34.9, //1/8" thickness probably ?
 size_z: 1920.9,
 position: [517.54, -1249.45, 133.3],
 material: "stainless_steel",
@@ -126,9 +126,9 @@ index: "inner_structure_verticalrod_2",
 valid_begin: [0, 0],
 valid_end: [0, 0],
 mother: "ncv_detector",
-type: "cut_tube",
+type: "tube",
 r_max: 38.1, //3" OD SS tube
-r_hole: 34.9, //1/8" thickness probably ?
+r_min: 34.9, //1/8" thickness probably ?
 size_z: 1920.9,
 position: [1249.45, -517.54, 133.3],
 material: "stainless_steel",
@@ -142,9 +142,9 @@ index: "inner_structure_verticalrod_3",
 valid_begin: [0, 0],
 valid_end: [0, 0],
 mother: "ncv_detector",
-type: "cut_tube",
+type: "tube",
 r_max: 38.1, //3" OD SS tube
-r_hole: 34.9, //1/8" thickness probably ?
+r_min: 34.9, //1/8" thickness probably ?
 size_z: 1920.9,
 position: [1249.45, 517.54, 133.3],
 material: "stainless_steel",
@@ -158,9 +158,9 @@ index: "inner_structure_verticalrod_4",
 valid_begin: [0, 0],
 valid_end: [0, 0],
 mother: "ncv_detector",
-type: "cut_tube",
+type: "tube",
 r_max: 38.1, //3" OD SS tube
-r_hole: 34.9, //1/8" thickness probably ?
+r_min: 34.9, //1/8" thickness probably ?
 size_z: 1920.9,
 position: [517.54, 1249.45, 133.3],
 material: "stainless_steel",
@@ -174,9 +174,9 @@ index: "inner_structure_verticalrod_5",
 valid_begin: [0, 0],
 valid_end: [0, 0],
 mother: "ncv_detector",
-type: "cut_tube",
+type: "tube",
 r_max: 38.1, //3" OD SS tube
-r_hole: 34.9, //1/8" thickness probably ?
+r_min: 34.9, //1/8" thickness probably ?
 size_z: 1920.9,
 position: [-517.54, 1249.45, 133.3],
 material: "stainless_steel",
@@ -190,9 +190,9 @@ index: "inner_structure_verticalrod_6",
 valid_begin: [0, 0],
 valid_end: [0, 0],
 mother: "ncv_detector",
-type: "cut_tube",
+type: "tube",
 r_max: 38.1, //3" OD SS tube
-r_hole: 34.9, //1/8" thickness probably ?
+r_min: 34.9, //1/8" thickness probably ?
 size_z: 1920.9,
 position: [-517.54, -1249.45, 133.3],
 material: "stainless_steel",
@@ -206,9 +206,9 @@ index: "inner_structure_verticalrod_7",
 valid_begin: [0, 0],
 valid_end: [0, 0],
 mother: "ncv_detector",
-type: "cut_tube",
+type: "tube",
 r_max: 38.1, //3" OD SS tube
-r_hole: 34.9, //1/8" thickness probably ?
+r_min: 34.9, //1/8" thickness probably ?
 size_z: 1920.9,
 position: [-1249.45, -517.54, 133.3],
 material: "stainless_steel",
@@ -222,9 +222,9 @@ index: "inner_structure_verticalrod_8",
 valid_begin: [0, 0],
 valid_end: [0, 0],
 mother: "ncv_detector",
-type: "cut_tube",
+type: "tube",
 r_max: 38.1, //3" OD SS tube
-r_hole: 34.9, //1/8" thickness probably ?
+r_min: 34.9, //1/8" thickness probably ?
 size_z: 1920.9,
 position: [-1249.45, 517.54, 133.3],
 material: "stainless_steel",
@@ -494,7 +494,8 @@ r_min: 250.25,
 position: [793.7, 0.0, 1609.7],
 material: "acrylic_uva_McMaster",
 color: [0.1, 0.4, 0.6, 0.3],
-drawstyle: "solid"
+drawstyle: "solid", 
+enable: 1,
 }
 
 {
@@ -509,7 +510,8 @@ size: [254.0, 254.0, 12.7], // mm
 position: [793.7, 0.0, 1876.4],
 material: "acrylic_uva_McMaster",
 color: [0.1, 0.4, 0.6, 0.3],
-drawstyle: "solid"
+drawstyle: "solid", 
+enable: 1,
 }
 
 {
@@ -524,7 +526,8 @@ size: [254.0, 254.0, 12.7], // mm
 position: [793.7, 0.0, 1343.0],
 material: "acrylic_uva_McMaster",
 color: [0.1, 0.4, 0.6, 0.3],
-drawstyle: "solid"
+drawstyle: "solid", 
+enable: 1,
 }
 
 {
@@ -540,7 +543,8 @@ size_z: 254.0,
 position: [793.7, 0.0, 1609.7],
 material: "ej335",
 color: [0.2, 0.1, 0.4, 0.3],
-drawstyle: "solid"
+drawstyle: "solid", 
+enable: 1,
 }
 
 // First NCV PMT
@@ -556,7 +560,8 @@ size_z: 150.0,
 position: [893.7, 0.0, 2039.1],
 material: "acrylic_uva_McMaster",
 color: [0.1, 0.4, 0.6, 0.3],
-drawstyle: "solid"
+drawstyle: "solid", 
+enable: 1,
 }
 
 {
@@ -575,7 +580,8 @@ r_min: 38.7,
 position: [893.7, 0.0, 2039.1],
 material: "acrylic_black", //not true but black 
 color: [1.0, 0.2, 0.6, 1.0],
-drawstyle: "solid"
+drawstyle: "solid", 
+enable: 1,
 }
 
 {
@@ -590,7 +596,8 @@ size_z: 148.0,
 position: [0.0, 0.0, 0.0],
 material: "air",
 color: [0.2, 0.1, 0.4, 0.3],
-drawstyle: "solid"
+drawstyle: "solid", 
+enable: 1,
 }
 
 // Second NCV PMT
@@ -606,7 +613,8 @@ size_z: 150.0,
 position: [693.7, 0.0, 2039.1],
 material: "acrylic_uva_McMaster",
 color: [0.1, 0.4, 0.6, 0.3],
-drawstyle: "solid"
+drawstyle: "solid", 
+enable: 1,
 }
 
 {
@@ -625,7 +633,8 @@ r_min: 38.7,
 position: [693.7, 0.0, 2039.1],
 material: "acrylic_black", //not true but black 
 color: [1.0, 0.2, 0.6, 1.0],
-drawstyle: "solid"
+drawstyle: "solid", 
+enable: 1,
 }
 
 {
@@ -640,7 +649,8 @@ size_z: 148.0,
 position: [0.0, 0.0, 0.0],
 material: "air",
 color: [0.2, 0.1, 0.4, 0.3],
-drawstyle: "solid"
+drawstyle: "solid", 
+enable: 1,
 }
 
 {
@@ -655,6 +665,7 @@ position: [793.7, 190.13, 1311.25],
 material: "stainless_steel",
 color: [0.1, 0.4, 0.1, 0.8],
 drawstyle: "solid",
+enable: 1,
 }
 
 {
@@ -669,6 +680,7 @@ position: [793.7, -190.13, 1311.25],
 material: "stainless_steel",
 color: [0.1, 0.4, 0.1, 0.8],
 drawstyle: "solid",
+enable: 1,
 }
 
 {
@@ -683,6 +695,7 @@ position: [793.7, -207.83, 1311.25],
 material: "stainless_steel",
 color: [0.1, 0.4, 0.1, 0.8],
 drawstyle: "solid",
+enable: 1,
 }
 
 {
@@ -697,6 +710,7 @@ position: [793.7, 207.83, 1311.25],
 material: "stainless_steel",
 color: [0.1, 0.4, 0.1, 0.8],
 drawstyle: "solid",
+enable: 1,
 }
 
 {
@@ -710,7 +724,8 @@ size: [190.0, 2.5, 19.05], // mm
 position: [793.7, 190.13, 1908.15],
 material: "stainless_steel",
 color: [0.1, 0.4, 0.1, 0.8],
-drawstyle: "solid",
+drawstyle: "solid", 
+enable: 1,
 }
 
 {
@@ -725,6 +740,7 @@ position: [793.7, -190.13, 1908.15],
 material: "stainless_steel",
 color: [0.1, 0.4, 0.1, 0.8],
 drawstyle: "solid",
+enable: 1,
 }
 
 {
@@ -739,6 +755,7 @@ position: [793.7, -207.83, 1908.15],
 material: "stainless_steel",
 color: [0.1, 0.4, 0.1, 0.8],
 drawstyle: "solid",
+enable: 1,
 }
 
 {
@@ -753,6 +770,7 @@ position: [793.7, 207.83, 1908.15],
 material: "stainless_steel",
 color: [0.1, 0.4, 0.1, 0.8],
 drawstyle: "solid",
+enable: 1,
 }
 
 {
@@ -769,6 +787,7 @@ material: "stainless_steel",
 color: [0.1, 0.4, 0.1, 0.8],
 drawstyle: "solid",
 rotation: [90.0, 0.0, 0.0]
+enable: 1,
 }
 
 {
@@ -785,6 +804,7 @@ material: "stainless_steel",
 color: [0.1, 0.4, 0.1, 0.8],
 drawstyle: "solid",
 rotation: [90.0, 0.0, 0.0]
+enable: 1,
 }
 
 {
@@ -799,6 +819,7 @@ position: [793.7, 0.0, 1914.5],
 material: "stainless_steel",
 color: [0.1, 0.4, 0.1, 0.8],
 drawstyle: "solid",
+enable: 1,
 }
 
 {
@@ -814,6 +835,7 @@ position: [981.33, 187.63, 1609.7],
 material: "stainless_steel",
 color: [0.1, 0.4, 0.1, 0.8],
 drawstyle: "solid",
+enable: 1,
 }
 
 {
@@ -829,6 +851,7 @@ position: [981.33, -187.63, 1609.7],
 material: "stainless_steel",
 color: [0.1, 0.4, 0.1, 0.8],
 drawstyle: "solid",
+enable: 1,
 }
 
 {
@@ -844,6 +867,7 @@ position: [606.07, 187.63, 1609.7],
 material: "stainless_steel",
 color: [0.1, 0.4, 0.1, 0.8],
 drawstyle: "solid",
+enable: 1,
 }
 
 {
@@ -859,6 +883,7 @@ position: [606.07, -187.63, 1609.7],
 material: "stainless_steel",
 color: [0.1, 0.4, 0.1, 0.8],
 drawstyle: "solid",
+enable: 1,
 }
 /////////////////////////////////////////////////////////////////////
 ////////////********** End of NCV volumes ***********////////////////
@@ -880,6 +905,7 @@ position: [793.7, 0.0, 1292.2],
 material: "aluminum",
 color: [0.1, 0.4, 0.6, 0.3],
 drawstyle: "solid"
+enable: 1,
 }
 
 {
@@ -899,6 +925,7 @@ position: [793.7, 0.0, 1609.7],
 material: "tyvek",
 color: [0.1, 0.4, 0.6, 0.3],
 drawstyle: "solid"
+enable: 1,
 }
 /////////////////////////////////////////////////////////////////////
 /////////********** End of Hefty run volumes ***********/////////////
@@ -910,10 +937,10 @@ drawstyle: "solid"
 {
 name: "GEO",
 index: "NCV",
-enable: 1,
 valid_begin: [0, 0],
 valid_end: [0, 0],
 mother: "ncv_detector",
+enable_ncv: 1,
 ncv_center: [793.7, 0.0, 1609.7],
 // frame_material: "stainless_steel",
 // ncv_material: "acrylic_uva_McMaster",
@@ -951,8 +978,7 @@ orientation: "manual",
 
 { 
 name: "GEO", 
-index: "ncv_pmt_1", 
-enable: 1,
+index: "ncv_pmt_1",
 valid_begin: [0, 0], 
 valid_end: [0, 0], 
 mother: "ncv_pmt_vessel_air_1", 
@@ -965,12 +991,12 @@ pos_table: "PMTINFO_run1_ncvpmt_1", //generated on the fly
 // start_idx: 60, //index of first inner pmt
 // end_idx: 1, //index of last inner pmt
 orientation: "manual",
+enable: 1,
 } 
 
 { 
 name: "GEO", 
-index: "ncv_pmt_2", 
-enable: 1,
+index: "ncv_pmt_2",
 valid_begin: [0, 0], 
 valid_end: [0, 0], 
 mother: "ncv_pmt_vessel_air_2", 
@@ -983,6 +1009,7 @@ pos_table: "PMTINFO_run1_ncvpmt_2", //generated on the fly
 // start_idx: 60, //index of first inner pmt
 // end_idx: 1, //index of last inner pmt
 orientation: "manual",
+enable: 1,
 } 
 /////////////////////////////////////////////////////////////////////
 ///////////********** End of PMT arrays ***********//////////////////
