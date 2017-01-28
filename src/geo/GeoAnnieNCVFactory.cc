@@ -101,7 +101,7 @@ G4VPhysicalVolume *GeoAnnieNCVFactory::Construct(DBLinkPtr table) {
     G4double rotation_radius_bridalbar = 265.34;
     
     G4double zpos_pmtcase = ncv_center_z + 429.4;
-    G4double zpos_ncvpmt = ncv_center_z + 152.12; //different cux PMT are in GLOBAL coordinates not wrt to mother volume
+    G4double zpos_ncvpmt = ncv_center_z + 152.12 + 1724.0; //different cuz PMT are in GLOBAL coordinates (world volume) not wrt to mother volume
     G4double xpos_pmtcase_1 = ncv_center_x + 100;
     G4double xpos_pmtcase_2 = ncv_center_x - 100;
     

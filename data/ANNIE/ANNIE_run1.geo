@@ -8,6 +8,9 @@
 //
 // Revisions:
 //  2016-09-13 : Only the tank is present so far (no veto nor MRD)
+//  2017-01-26 : NCV is fully parametrized (in a factory) and can be enable/disable and easily moved by user
+//  2017-01-27 : Geometry frame changed (beam-like frame), z is beam axis, y is vertical, tank subvolmes are unchanged since they are daughter of the tank 
+//               This is an awkward situation since the hall and tank use the new frame but not the rest. And the macros have to use the new frame as well... (RAT is not made for beam exp.)
 ////////////////////////////////////////////////////////
 
 {
@@ -29,8 +32,8 @@ valid_begin: [0, 0],
 valid_end: [0, 0],
 mother: "world", 
 type: "box",
-size: [3000.0, 3000.0, 4000.0], // mm, half-length
-position: [-1276.0, 0.0, 2018.8],
+size: [3505.2, 6172.2, 2438.4], // mm, half-length
+position: [-431.8, 4038.6, 2438.4],
 color: [0.5, 1.0, 0.0, 0.1],
 material: "air",
 }
@@ -47,10 +50,11 @@ mother: "hall",
 type: "tube",
 r_max: 1524.0,
 size_z: 1981.2,
-position: [1276.0, 0.0, -2018.8],
+position: [431.8, -4038.6, -714.4,],
 material: "stainless_steel",
 color: [1.0, 0.0, 0.0, 0.1],
-drawstyle: "solid"
+drawstyle: "solid",
+rotation: [90.0, 0.0, -90.0],
 }
 
 {
@@ -942,13 +946,6 @@ valid_end: [0, 0],
 mother: "ncv_detector",
 enable_ncv: 1,
 ncv_center: [793.7, 0.0, 1609.7],
-// frame_material: "stainless_steel",
-// ncv_material: "acrylic_uva_McMaster",
-// liquid_material: "ej335",
-// transparent_surface: "glass",
-// opaque_surface: "acrylic_opaque",
-// reflective_surface: "tyvek",
-// metal_surface: "stainless_steel",
 type: "annieNCV", //see the geo factory
 }
 /////////////////////////////////////////////////////////////////////
@@ -1017,16 +1014,17 @@ enable: 1,
 
 ///////////////////////// "Fake" volume for neutron generation //////////////////////////////
 
-{
+/*{
 name: "GEO",
 index: "dirt_box",
 valid_begin: [0, 0],
 valid_end: [0, 0],
-mother: "hall",
+mother: "world",
 type: "box",
-size: [0.5, 150.0, 150.0], // mm
-position: [2900.0, 0.0, -2018.8],
+size: [150.0, 150.0, 150.0], // mm
+position: [0.0, 0.0, 0.0,],
 material: "air",
-color: [1.0, 0.0, 0.0, 0.1],
-drawstyle: "solid"
-}
+color: [1.0, 0.5, 0.9, 0.2],
+drawstyle: "solid",
+enable: 0,
+}*/

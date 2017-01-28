@@ -51,7 +51,7 @@
 /rat/proclast outroot
 
 /generator/add cf 252:point
-/generator/pos/set 482.55 -63.5 2402.3
+/generator/pos/set 0 2269 930.3
 
 #/generator/add combo gun:regexfill
 #/generator/vtx/set neutron 0 0 0 50
