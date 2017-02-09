@@ -169,7 +169,7 @@ private:
   // Capture infos
   TString nucl_cap_pdg_code;
 //   TRegexp pdg_nucl, pdg_gd, pdg_h;
-  Int_t Ncaptures, Ncaptures_h, Ncaptures_gd, Ncaptures_c, Ncaptures_si, Ncaptures_fe;
+  Int_t Ncaptures, Ncaptures_h, Ncaptures_gd, Ncaptures_c, Ncaptures_si, Ncaptures_fe, N_inelastic;
   
   // PMT infos histos
   TH1F *hPMTx, *hPMTy, *hPMTz, *hPMTID,*hPMTcard,*hPMTchannel;
@@ -237,7 +237,8 @@ private:
    
    RAT::TrackNav *nav;
    RAT::TrackCursor *cursor;
-   RAT::TrackNode* node;
+   RAT::TrackNode *node;
+   RAT::TrackTest *TrackTest_neutron;
    
    // TVectors
    TVector3 init_pos;
