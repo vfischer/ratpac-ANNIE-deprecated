@@ -161,13 +161,15 @@ private:
   const static Int_t NbPMT_run2 = 200;
   
   // booleans and counters
-  Bool_t is_nGd, is_nH;
-  Int_t Nneutrons;
+  Bool_t is_nGd, is_nH, is_mu_tag;
+  Int_t test_counter;
+  Int_t Nneutrons, Nmuons, Nmuons_cut, Nneutrons_cut;
+  Int_t Nneutrons_tot, Nmuons_tot, Nmuons_track;
   
   // Capture infos
   TString nucl_cap_pdg_code;
 //   TRegexp pdg_nucl, pdg_gd, pdg_h;
-  Int_t Ncaptures, Ncaptures_h, Ncaptures_gd;
+  Int_t Ncaptures, Ncaptures_h, Ncaptures_gd, Ncaptures_c, Ncaptures_si, Ncaptures_fe;
   
   // PMT infos histos
   TH1F *hPMTx, *hPMTy, *hPMTz, *hPMTID,*hPMTcard,*hPMTchannel;
@@ -187,18 +189,26 @@ private:
   TH1F *hTrackLength;
   TH1F *hTrackLength_nGd;
   TH1F *hTrackLength_nH;
+  TH1F *hDist_nCap_muTrack;
+  TH1F *hTrackLength_mu;
+  TH1F *hNCaptures_perevt;
   
   // Dep. energy histos
   TH1F *hScintEdep;
   TH1F *hScintEdepQuen;
   TH1F *hScintEdep_x, *hScintEdep_y, *hScintEdep_z; // scintillation energy deposition
   TH1F *hEdep_x, *hEdep_y, *hEdep_z; // regular energy deposition
+  TH1F *hEdep_muTrack;
+  TH1F *hEdep_muTrack_nCap;
   
   // Variables
   Double_t init_time, fin_time;
   Double_t disp,deltat;
   Double_t charge_tot;
-  Int_t Nhit;
+  Double_t distance_nCap_muTrack;
+  std::vector<Double_t> vMuTrack_Edep;
+  Int_t Nhit,NbNoCaptures;
+  Int_t NCaptures_perevt;
   
   // Arrays
   int pmt_x_array_run1[NbPMT_run1];
@@ -232,6 +242,8 @@ private:
    // TVectors
    TVector3 init_pos;
    TVector3 fin_pos;
+   TVector3 muTrack_start, muTrack_end, nCapture_pos;
+   std::vector<TVector3> vMuTrack;
    
 //    UInt_t          fUniqueID;
 //    UInt_t          fBits;

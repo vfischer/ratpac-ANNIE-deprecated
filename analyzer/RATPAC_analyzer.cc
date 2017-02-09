@@ -24,9 +24,9 @@ void Analyzer::Initialization(){
   debug = false;
   
   // Capture nuclei PDG codes
-//   pdg_nucl("1000[0-9][0-9][0-9][0-9][0-9]");
-//   pdg_gd("100064[0-9][0-9][0-9]");
-//   pdg_h("100001[0-9][0-9][0-9]");
+  //   pdg_nucl("1000[0-9][0-9][0-9][0-9][0-9]");
+  //   pdg_gd("100064[0-9][0-9][0-9]");
+  //   pdg_h("100001[0-9][0-9][0-9]");
   
   // Histo time !
   hCharge = new TH1F("hCharge","Charge in all PMTs for one event (perPMT)",100,0,10);
@@ -53,6 +53,11 @@ void Analyzer::Initialization(){
   hTrackLength = new TH1F("hTrackLength","Displacement between creation and detection (mm)",200,0,2000);
   hTrackLength_nGd = new TH1F("hTrackLength_nGd","Displacement between creation and detection (mm) - nGd",200,0,2000);
   hTrackLength_nH = new TH1F("hTrackLength_nH","Displacement between creation and detection (mm) - nH",200,0,2000);
+  hDist_nCap_muTrack = new TH1F("hDist_nCap_muTrack","Distance between neutron capture and muon track (mm)",100,0,5000);  
+  hTrackLength_mu = new TH1F("hTrackLength_mu","Muon track lenght (mm)",100,0,5000);
+  hEdep_muTrack = new TH1F("hEdep_muTrack","Muon track deposited energy (MeV)",500,0,5000);
+  hEdep_muTrack_nCap = new TH1F("hEdep_muTrack_nCap","Neutron capture (after muon track) deposited energy (MeV)",2000,0,20);
+  hNCaptures_perevt = new TH1F("hNCaptures_perevt","Nb of neutron capture (after muon track) per muon track",20,0,20);
   
   // Energy infos
   hNumPE  = new TH1F("hNumPE","Num of PE (PMT summed)",1000,0,1000);
@@ -85,8 +90,8 @@ void Analyzer::Initialization(){
   
   // Initialization time   
   broken_pmt_vec.clear(); ncv_pmt_vec.clear();
-  Nneutrons = 0, Ncaptures = 0, Ncaptures_h = 0, Ncaptures_gd = 0;
-  
+  Nneutrons = 0, Nmuons = 0,Nneutrons_cut= 0, Nmuons_cut = 0, Ncaptures = 0, Ncaptures_h = 0, Ncaptures_gd = 0;NbNoCaptures=0;;
+  Nneutrons_tot = 0, Nmuons_tot = 0, Nmuons_track=0; test_counter=0;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -97,10 +102,10 @@ void Analyzer::Initialization(){
 void Analyzer::Loop() {
   
   // PMT grid coordinates (not in ratpac x,y,z)
-    int pmt_x_array_run1[] = {0,0,0,1,2,3,4,5,6,7,7,7,1,2,2,1,3,4,4,3,5,6,6,5,1,2,2,1,3,4,4,3,5,6,6,5,1,2,2,1,3,4,4,3,5,6,6,5,0,0,0,1,2,3,4,5,6,7,7,7};
-    int pmt_z_array_run1[] = {3,2,1,0,0,0,0,0,0,1,2,3,1,1,2,2,1,1,2,2,1,1,2,2,3,3,4,4,3,3,4,4,3,3,4,4,5,5,6,6,5,5,6,6,5,5,6,6,4,5,6,7,7,7,7,7,7,6,5,4};
-    int pmt_card_array_run1[] = {4,4,4,4,5,5,5,5,6,6,6,6,8,8,8,8,9,9,9,9,10,10,10,10,11,11,11,11,13,13,13,13,14,14,14,14,15,15,15,15,16,16,16,16,18,18,18,18,20,20,20,20};
-    int pmt_channel_array_run1[] = {0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3};
+  int pmt_x_array_run1[] = {0,0,0,1,2,3,4,5,6,7,7,7,1,2,2,1,3,4,4,3,5,6,6,5,1,2,2,1,3,4,4,3,5,6,6,5,1,2,2,1,3,4,4,3,5,6,6,5,0,0,0,1,2,3,4,5,6,7,7,7};
+  int pmt_z_array_run1[] = {3,2,1,0,0,0,0,0,0,1,2,3,1,1,2,2,1,1,2,2,1,1,2,2,3,3,4,4,3,3,4,4,3,3,4,4,5,5,6,6,5,5,6,6,5,5,6,6,4,5,6,7,7,7,7,7,7,6,5,4};
+  int pmt_card_array_run1[] = {4,4,4,4,5,5,5,5,6,6,6,6,8,8,8,8,9,9,9,9,10,10,10,10,11,11,11,11,13,13,13,13,14,14,14,14,15,15,15,15,16,16,16,16,18,18,18,18,20,20,20,20};
+  int pmt_channel_array_run1[] = {0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3};
   
   if (job_run1){ 
     broken_pmt_vec.push_back(6); broken_pmt_vec.push_back(19);broken_pmt_vec.push_back(37); broken_pmt_vec.push_back(49);
@@ -135,8 +140,9 @@ void Analyzer::Loop() {
     }
     
     // reset some counters
-    charge_tot=0;
-    is_nGd = false; is_nH = false;
+    charge_tot=0, NCaptures_perevt = 0;
+    is_nGd = false, is_nH = false, is_mu_tag = false;
+    vMuTrack.clear(); vMuTrack_Edep.clear();
     
     // Analysis part
     //     cout << entry << " " << ds->GetMC()->GetMCSummary()->GetTotalScintEdep()  << " " << ds->GetMC()->GetNumPE() <<  endl;
@@ -182,86 +188,218 @@ void Analyzer::Loop() {
     hEdep_y->Fill(ds->GetMC()->GetMCSummary()->GetEnergyCentroid().y());
     hEdep_z->Fill(ds->GetMC()->GetMCSummary()->GetEnergyCentroid().z());
     
-    hTrackLength->Fill((ds->GetMC()->GetMCSummary()->GetEnergyCentroid() - ds->GetMC()->GetMCParticle(0)->GetPosition()).Mag());
+    hTrackLength->Fill(disp);
     
-//     cout << ds->GetMC()->GetMCSummary()->GetEnergyLossByVolume("detector") << endl;
+    //     cout << ds->GetMC()->GetMCSummary()->GetEnergyLossByVolume("detector") << endl;
     
     nav = new RAT::TrackNav(ds);
     cursor = new RAT::TrackCursor(nav->RAT::TrackNav::Cursor(false));  //toggle human readable cursor
     
-    if(cursor->ChildCount()){
-      cursor->GoChild(0);
-      node = cursor->Here();
-      init_pos  = node->GetMomentum();
-      init_time = node->GetGlobalTime();
-      
-      node = cursor->TrackEnd();
-      fin_pos   = node->GetMomentum();	
-      fin_time = node->GetGlobalTime();
-//       	cout << node->GetPDGCode() << " " << node->GetProcess() << " " << node->GetParticleName() << endl;
-      
-      disp = (fin_pos - init_pos).Mag();
-      deltat = fin_time - init_time;
-      // 	cout << disp << " " << deltat << endl;
-      hTrackDuration->Fill(deltat);
-      cursor->GoParent();
-    }
+    //     cout << "Parents = " << ds->GetMC()->GetMCParentCount() << endl;
+    //     for(size_t iCh = 0; iCh<ds->GetMC()->GetMCParentCount(); iCh++){ cout << ds->GetMC()->GetMCParent(iCh)->GetParticleName() << endl;}
+    //     cout << "Particles = " << ds->GetMC()->GetMCParticleCount() << endl;
+    //     for(size_t iCh = 0; iCh<ds->GetMC()->GetMCParticleCount(); iCh++){ cout << ds->GetMC()->GetMCParticle(iCh)->GetParticleName() << endl;}
+    //     cout << "Tracks = " << ds->GetMC()->GetMCTrackCount() << endl;
+    //     for(size_t iCh = 0; iCh<ds->GetMC()->GetMCTrackCount(); iCh++){ cout << ds->GetMC()->GetMCTrack(iCh)->GetPDGCode() << endl;}
     
-    if(ds->GetMC()->GetMCParticle(0)->GetPDGCode() == 2112){ // only for neutrons, beginning of tracking loop
-      if(cursor->ChildCount()){
-	node = cursor->Here();
-	for(size_t iCh = 0; iCh<cursor->ChildCount(); iCh++){ //Primary Particle Tracks
-	  cursor->GoChild(iCh);
-	  cursor->GoTrackEnd(); // Last interaction of primary part.
-	  node = cursor->Here();
-//  	  cout << node->GetPDGCode() << " " << node->GetProcess() << " " << node->GetStepID() << endl;
-	  if(node->GetProcess() == "nCapture"){
-	    cursor->GoChild(cursor->ChildCount()-1);
-	    cursor->GoTrackStart();
-	    node = cursor->Here();
-//  	    cout << node->GetVolume() << endl;
-// 	    cout << "Primary -- " << node->GetPDGCode() << endl;
-	    nucl_cap_pdg_code = to_string(node->GetPDGCode());
-	    if (TPMERegexp("100001[0-9][0-9][0-9]").Match(nucl_cap_pdg_code)) {
-	      is_nH = true;
-	      Ncaptures_h++;
-	      hTrackDuration_nH->Fill(deltat);
-	      hTrackLength_nH->Fill((ds->GetMC()->GetMCSummary()->GetEnergyCentroid() - ds->GetMC()->GetMCParticle(0)->GetPosition()).Mag());
-	    } 
-	    if (TPMERegexp("100064[0-9][0-9][0-9]").Match(nucl_cap_pdg_code)) {
-	      is_nGd = true;
-	      Ncaptures_gd++;
-	      hTrackDuration_nGd->Fill(deltat); 
-	      hTrackLength_nGd->Fill((ds->GetMC()->GetMCSummary()->GetEnergyCentroid() - ds->GetMC()->GetMCParticle(0)->GetPosition()).Mag());
-	    }    
-	    cursor->GoParent();
-	    Ncaptures++;
+    /*
+    // Find track length and duration of ALL parent (initial) particles
+    if(cursor->ChildCount()){
+          cursor->GoChild(0);
+          node = cursor->Here();
+          init_pos  = node->GetEndpoint();
+          init_time = node->GetGlobalTime();
+          
+     //       cout << "INITIAL: position = " << init_pos.x() << " " <<  init_pos.y() << " " << init_pos.z() << ", time = " << init_time << ", energy = " << node->GetKE() << endl;
+     //       cout << node->GetPDGCode() << " " << node->GetProcess() << " " << node->GetParticleName() << endl;
+     //       cout << node->GetTrackID() << " " << node->GetStepID() << endl;
+     
+     for(size_t iCh = 1; iCh<cursor->StepCount()-1; iCh++){
+       node->Clear();
+       node = cursor->GoStep(iCh);
+       fin_pos   = node->GetEndpoint();	
+       fin_time = node->GetGlobalTime();
+       
+       // 	cout << "INTERMED: position = " << fin_pos.x() << " " <<  fin_pos.y() << " " << fin_pos.z() << ", time = " << fin_time << ", energy = " << node->GetKE() << endl;
+       // 	cout << node->GetPDGCode() << " " << node->GetProcess() << " " << node->GetParticleName() << endl;
+       // 	cout << node->GetTrackID() << " " << node->GetStepID() << endl << endl;
+     }
+     
+     node->Clear();
+     node = cursor->TrackEnd();
+     fin_pos   = node->GetEndpoint();	
+     fin_time = node->GetGlobalTime();
+     
+     //       cout << "FINAL: position = " << fin_pos.x() << " " <<  fin_pos.y() << " " << fin_pos.z() << ", time = " << fin_time << ", energy = " << node->GetKE() << endl;
+     //       cout << node->GetPDGCode() << " " << node->GetProcess() << " " << node->GetParticleName() << endl;
+     //       cout << node->GetTrackID() << " " << node->GetStepID() << endl;
+     //      
+     
+     if(node->GetProcess() == "nCapture"){
+       cursor->GoTrackEnd(); // Last interaction of primary part.
+       node = cursor->Here();
+       cursor->GoChild(cursor->ChildCount()-1);
+       cursor->GoTrackStart();
+       node = cursor->Here();
+       //  	    cout << node->GetVolume() << endl;
+       // 	    cout << "Primary -- " << node->GetPDGCode() << endl;
+       nucl_cap_pdg_code = to_string(node->GetPDGCode());
+       if (TPMERegexp("100001[0-9][0-9][0-9][0-9]").Match(nucl_cap_pdg_code)) {
+	 //       cout << " ===>  n-H !!\n\n";
+       } 
+       if (TPMERegexp("100064[0-9][0-9][0-9][0-9]").Match(nucl_cap_pdg_code)) {
+	 //  cout << " ===>  n-Gd !!\n\n";
+       }    
+       cursor->GoParent();
+     } else {
+       //   cout << " ===========================================  THAT WAS NOT A CAPTURE !!!! ===========================================\n";
+       NbNoCaptures++;
+     }
+     
+     
+     disp = (fin_pos - init_pos).Mag();
+     deltat = fin_time - init_time;
+     // 	cout << disp << " " << deltat << endl;
+     hTrackDuration->Fill(deltat);
+     cursor->GoParent();
+  }
+  */ 
+    //     for(size_t iCh = 0; iCh<ds->GetMC()->GetMCTrackCount(); iCh++){
+    //       cursor->FindNextTrack();
+    //       node = cursor->Here();
+    //       cout << "Global: " << node->GetGlobalTime() << endl;
+    //       cout << "Local: " << node->GetLocalTime() << endl;
+    //       cout << "Proper: " << node->GetProperTime() << endl;
+    //       hTrackDuration->Fill(node->GetGlobalTime());
+    //     }
+    
+    // cout << "New event --->\n";
+    if(cursor->ChildCount()){ // if particles associated to parents
+      for(size_t iCh = 0; iCh<ds->GetMC()->GetMCParticleCount(); iCh++){ // Loop on all particles in that event
+	cursor->GoChild(iCh); // go to particle
+	node = cursor->Here(); // "attach" node to this particle
+	if (node->GetParticleName() == "mu-" || node->GetParticleName() == "mu+") { // if muon
+	  Nmuons_tot++;
+	  for(size_t jCh = 0; jCh<cursor->StepCount(); jCh++){ //loop on each step
+	    node = cursor->GoStep(jCh); // go to step
+	    if (node->GetVolume() == "detector") { // is node is in the volume you want
+	      vMuTrack.push_back(node->GetEndpoint()); // fills the vectors of node position (front() and back() are first and last node in volumes (track) )
+	      vMuTrack_Edep.push_back(node->GetKE()); // record current KE of muon at each step of the track
+	    }
 	  }
-	  
-// 	  for(size_t jCh = 0; jCh<cursor->ChildCount()-1; jCh++){ //Secondary Particle Tracks
-// 	      cursor->GoChild(jCh);
-// 	      node = cursor->Here();
-// // 	      cout << "Secondary -- " << node->GetPDGCode() << " " << node->GetVolume() << " " <<  << endl;	      
-// 	      cursor->GoParent();
-// 	    }
-	    
-	  cursor->GoTrackStart();
-	  cursor->GoParent();
-		
-      Nneutrons++; 
-//       cout << ds->GetMC()->GetMCSummary()->GetEnergyLossByVolume("ncv_liquid") << endl;
-//       cout << ds->GetMC()->GetMCTrack(0)->GetMCTrackStep(0)->GetVolume() << endl;
-	} // end of primary particle track
+	  if (vMuTrack.size() != 0){
+	    Nmuons_track++;
+	    muTrack_start = vMuTrack.front();
+	    muTrack_end = vMuTrack.back();
+	    hTrackLength_mu->Fill((muTrack_end - muTrack_start).Mag());
+	    hEdep_muTrack->Fill(vMuTrack_Edep.back() - vMuTrack_Edep.front()); // deposited Edep of track if KEfinal-KEinitial
+	    // 	cout << "Muon track length: " << (muTrack_end - muTrack_start).Mag() << endl;
+	    if ((muTrack_end - muTrack_start).Mag() > 500){ //muon track length cut
+	      Nmuons_cut++; is_mu_tag = true;
+	    }
+	  } else {
+	    // 	  cout << "No muon track in this volume\n";
+	  }
+	  //  	cout << node->GetPDGCode() << " " << node->GetParticleName() << " " << node->GetVolume() << endl;
+	}
+	if (node->GetParticleName() == "neutron") { // if neutron
+	  Nneutrons_tot++;
+	  for(size_t jCh = 0; jCh<cursor->StepCount(); jCh++){ //loop on each step
+	    node = cursor->GoStep(jCh); // go to step
+	    if (node->GetVolume() == "detector" && node->GetProcess() == "nCapture" && is_mu_tag) { // if node is in the volume you want and the process is a capture
+	      // the part where it looks for the interaction nucleus
+	      cursor->GoTrackEnd(); // Last interaction of primary part.
+	      node = cursor->Here();
+	      cursor->GoChild(cursor->ChildCount()-1);
+	      cursor->GoTrackStart();
+	      node = cursor->Here();
+	      nucl_cap_pdg_code = to_string(node->GetPDGCode());
+	      if (TPMERegexp("100064[0-9][0-9][0-9][0-9]").Match(nucl_cap_pdg_code)) { // look for n-Gd capture
+		Nneutrons_cut++;
+		NCaptures_perevt++; // nb of ncaptures after muon
+		nCapture_pos = node->GetEndpoint();
+		// 	    cout << "Neutron capture at " << nCapture_pos.x() << " " <<  nCapture_pos.y() << " " << nCapture_pos.z() << endl;
+		distance_nCap_muTrack = ((nCapture_pos-muTrack_start).Cross(nCapture_pos-muTrack_end)).Mag()/(muTrack_end - muTrack_start).Mag();
+		// 	    cout << "Distance nCapture to MuonTrack = " << distance_nCap_muTrack << endl;
+		hDist_nCap_muTrack->Fill(distance_nCap_muTrack);
+	      }
+	      cursor->GoParent();
+	    }
+	  }
+	}
+	cursor->GoParent(); // "detach" node
       }
-    } // end of tracking loop
+      hNCaptures_perevt->Fill(NCaptures_perevt);
+    }
+    // Find track length and duration of ALL neutrons 
+    if(cursor->ChildCount()){ // if particles associated to parents
+      for(size_t iCh = 0; iCh<ds->GetMC()->GetMCParticleCount(); iCh++){ // Loop on all particles in that event
+	cursor->GoChild(iCh); // go to particle
+	node = cursor->Here(); // "attach" node to this particle
+	if(node->GetPDGCode() == 2112){ // only for neutrons, beginning of tracking loop
+	  for(size_t jCh = 0; jCh<cursor->StepCount(); jCh++){ //loop on each step
+	    node = cursor->GoStep(jCh); // go to step
+	    if(node->GetProcess() == "nCapture"){
+	      cursor->GoTrackEnd(); // Last interaction of primary part
+	      //  	  cout << node->GetPDGCode() << " " << node->GetProcess() << " " << node->GetStepID() << endl;
+	      cursor->GoChild(cursor->ChildCount()-1);
+	      cursor->GoTrackStart();
+	      node = cursor->Here();
+	      //  	    cout << node->GetVolume() << endl;
+	      // 	    cout << "Primary -- " << node->GetPDGCode() << endl;
+	      nucl_cap_pdg_code = to_string(node->GetPDGCode());
+	      if (TPMERegexp("100001[0-9][0-9][0-9][0-9]").Match(nucl_cap_pdg_code)) {
+		is_nH = true;
+		Ncaptures_h++;
+		hTrackDuration_nH->Fill(deltat);
+		hTrackLength_nH->Fill(ds->GetMC()->GetMCSummary()->GetEnergyCentroid().Mag());
+	      } 
+	      if (TPMERegexp("100064[0-9][0-9][0-9][0-9]").Match(nucl_cap_pdg_code)) {
+		is_nGd = true;
+		Ncaptures_gd++;
+		hTrackDuration_nGd->Fill(deltat); 
+		hTrackLength_nGd->Fill(ds->GetMC()->GetMCSummary()->GetEnergyCentroid().Mag());
+	      }   
+	      if (TPMERegexp("100006[0-9][0-9][0-9][0-9]").Match(nucl_cap_pdg_code)) {
+		Ncaptures_c++;
+	      }
+	      if (TPMERegexp("100014[0-9][0-9][0-9][0-9]").Match(nucl_cap_pdg_code)) {
+		Ncaptures_si++;
+	      }
+	      if (TPMERegexp("100026[0-9][0-9][0-9][0-9]").Match(nucl_cap_pdg_code)) {
+		Ncaptures_fe++;
+	      }
+	      cursor->GoParent();
+	      Ncaptures++;
+	    }
+	    
+	    // 	  for(size_t jCh = 0; jCh<cursor->ChildCount()-1; jCh++){ //Secondary Particle Tracks
+	    // 	      cursor->GoChild(jCh);
+	    // 	      node = cursor->Here();
+	    // // 	      cout << "Secondary -- " << node->GetPDGCode() << " " << node->GetVolume() << " " <<  << endl;	      
+	    // 	      cursor->GoParent();
+	    // 	    }
+	    
+	    // 	  cursor->GoTrackStart();
+	    // 	  cursor->GoParent();
+	  } // end of primary particle track
+	  Nneutrons++; 
+	  //       cout << ds->GetMC()->GetMCSummary()->GetEnergyLossByVolume("ncv_liquid") << endl;
+	  //       cout << ds->GetMC()->GetMCTrack(0)->GetMCTrackStep(0)->GetVolume() << endl;
+	  
+	  
+	} // end of tracking loop
+	cursor->GoParent();
+      }
+    }
     
     // Cleaning to avoid memory leak (because of the nav size)
     node->Clear();
-  delete cursor;
-  nav->Clear(); delete nav;
-  
-  }
+    delete cursor;
+    nav->Clear(); delete nav;
 }
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -318,15 +456,36 @@ void Analyzer::Finalize(){
   delete c2;
   
   f_output->Write();
-  
-  cout << "Neutrons created: " << Nneutrons << endl;
+  cout << "=========== Muon Analysis ==========\n";
+  cout << "Muons created: " << Nmuons_tot << endl;
+  cout << "Muons tracks in detector: " << Nmuons_track << endl;
+  cout << "Muons tracks in detector after cut: " << Nmuons_cut << endl;
+  cout << "Neutrons created: " << Nneutrons_tot << endl;
+  cout << "Neutrons after muons after cut: " << Nneutrons_cut << endl;
+  cout << "====================================\n\n";
+  cout << "=========== Neutron Analysis ==========\n";
+  cout << "Out of " << Nneutrons << " total neutrons: \n";
   cout << "Out of " << Ncaptures << " neutron captures: \n";
   cout << "\t -> " << Ncaptures_gd << " occurred on Gd.\n";
   cout << "\t -> " << Ncaptures_h << " occurred on H.\n";
-  f_output_txt << "Neutrons created: " << Nneutrons << endl;
+  cout << "\t -> " << Ncaptures_c << ", " << Ncaptures_si << ", " << Ncaptures_fe << " occurred on C, Si, Fe.\n";
+  cout << "====================================\n\n";
+  
+  f_output_txt << "=========== Muon Analysis ==========\n";
+  f_output_txt << "Muons created: " << Nmuons_tot << endl;
+  f_output_txt << "Muons tracks in detector: " << Nmuons_track << endl;
+  f_output_txt << "Muons tracks in detector after cut: " << Nmuons_cut << endl;
+  f_output_txt << "Neutrons created: " << Nneutrons_tot << endl;
+  f_output_txt << "Neutrons after muons after cut: " << Nneutrons_cut << endl;
+  f_output_txt << "====================================\n\n";
+  
+  f_output_txt << "=========== Neutron Analysis ==========\n";
+  f_output_txt << "Out of " << Nneutrons << " total neutrons: \n";
   f_output_txt << "Out of " << Ncaptures << " neutron captures: \n";
-  f_output_txt << "\t -> " << Ncaptures_gd << " occurred on Gd\n";
-  f_output_txt << "\t -> " << Ncaptures_h << " occurred on H\n";
+  f_output_txt << "\t -> " << Ncaptures_gd << " occurred on Gd.\n";
+  f_output_txt << "\t -> " << Ncaptures_h << " occurred on H.\n";
+  f_output_txt << "\t -> " << Ncaptures_c << ", " << Ncaptures_si << ", " << Ncaptures_fe << " occurred on C, Si, Fe.\n";
+  f_output_txt << "====================================\n\n";
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -394,13 +553,13 @@ InputFiles(InFiles), job(jobtype), output_dir(outputdir)
   } else  if ( job == "run1_hefty" ){
     job_run1_hefty = true;
   } else if ( job == "run2" ){
-      job_run2 = true; 
-    } else {
-      cout << " *** Unknown job type, stopping now ... ***" << endl;
-      abort();
-    }
-    
-    chain = new TChain("T");
+    job_run2 = true; 
+  } else {
+    cout << " *** Unknown job type, stopping now ... ***" << endl;
+    abort();
+  }
+  
+  chain = new TChain("T");
   
   for (vector<TString>::iterator it = InFiles.begin(); it != InFiles.end(); ++it) {
     file = new TFile((*it),"READ");
