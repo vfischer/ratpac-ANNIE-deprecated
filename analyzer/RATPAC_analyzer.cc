@@ -286,7 +286,7 @@ void Analyzer::Loop() {
 	  Nmuons_tot++;
 	  for(size_t jCh = 0; jCh<cursor->StepCount(); jCh++){ //loop on each step
 	    node = cursor->GoStep(jCh); // go to step
-	    if (node->GetVolume() == "detector") { // is node is in the volume you want
+	    if (node->GetVolume() == "detector" || node->GetVolume() == "detector_fiducial") { // is node is in the volume you want
 	      vMuTrack.push_back(node->GetEndpoint()); // fills the vectors of node position (front() and back() are first and last node in volumes (track) )
 	      vMuTrack_Edep.push_back(node->GetKE()); // record current KE of muon at each step of the track
 	    }
@@ -360,7 +360,7 @@ void Analyzer::Loop() {
       
       if (ds->GetMC()->GetMCTrack(iCh)->GetPDGCode() == 2112){ //look for neutrons, all neutrons
 	Nneutrons_tot++;
-	if (ds->GetMC()->GetMCTrack(iCh)->GetLastMCTrackStep()->GetProcess() == "nCapture" && ds->GetMC()->GetMCTrack(iCh)->GetLastMCTrackStep()->GetVolume() == "detector" && is_mu_tag) {
+	if (ds->GetMC()->GetMCTrack(iCh)->GetLastMCTrackStep()->GetProcess() == "nCapture" && (ds->GetMC()->GetMCTrack(iCh)->GetLastMCTrackStep()->GetVolume() == "detector" || node->GetVolume() == "detector_fiducial") && is_mu_tag) {
 	  Nneutrons_cut++;
 		NCaptures_perevt++; // nb of ncaptures after muon
 		nCapture_pos = ds->GetMC()->GetMCTrack(iCh)->GetLastMCTrackStep()->GetEndpoint();
