@@ -281,7 +281,7 @@ void Analyzer::Loop() {
       for(size_t iCh = 0; iCh<ds->GetMC()->GetMCParticleCount(); iCh++){ // Loop on all particles in that event
 	cursor->GoChild(iCh); // go to particle
 	node = cursor->Here(); // "attach" node to this particle
-	if(node->GetVolume() == "detector") { // only interaction in detector
+	if(node->GetVolume() == "detector" || node->GetVolume() == "detector_fiducial") { // only interaction in detector
 	if (node->GetParticleName() == "mu-" || node->GetParticleName() == "mu+") { // if muon
 	  Nmuons_tot++;
 	  for(size_t jCh = 0; jCh<cursor->StepCount(); jCh++){ //loop on each step
