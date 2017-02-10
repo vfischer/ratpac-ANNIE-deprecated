@@ -360,7 +360,7 @@ void Analyzer::Loop() {
       
       if (ds->GetMC()->GetMCTrack(iCh)->GetPDGCode() == 2112){ //look for neutrons, all neutrons
 	Nneutrons_tot++;
-	if (ds->GetMC()->GetMCTrack(iCh)->GetLastMCTrackStep()->GetProcess() == "nCapture" && (ds->GetMC()->GetMCTrack(iCh)->GetLastMCTrackStep()->GetVolume() == "detector" || node->GetVolume() == "detector_fiducial") && is_mu_tag) {
+	if (ds->GetMC()->GetMCTrack(iCh)->GetLastMCTrackStep()->GetProcess() == "nCapture" && (ds->GetMC()->GetMCTrack(iCh)->GetLastMCTrackStep()->GetVolume() == "detector" || ds->GetMC()->GetMCTrack(iCh)->GetLastMCTrackStep()->GetVolume() == "detector_fiducial") && is_mu_tag) {
 	  Nneutrons_cut++;
 		NCaptures_perevt++; // nb of ncaptures after muon
 		nCapture_pos = ds->GetMC()->GetMCTrack(iCh)->GetLastMCTrackStep()->GetEndpoint();
