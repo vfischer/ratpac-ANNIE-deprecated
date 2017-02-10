@@ -31,8 +31,8 @@ valid_begin: [0, 0],
 valid_end: [0, 0],
 mother: "world", 
 type: "box",
-size: [3000.0, 3000.0, 4000.0], // mm, half-length
-position: [-1276.0, 0.0, 2018.8],
+size: [3505.2, 6172.2, 2438.4], // mm, half-length
+position: [-431.8, 4038.6, 2438.4],
 color: [0.5, 1.0, 0.0, 0.1],
 material: "air",
 }
@@ -47,10 +47,11 @@ mother: "hall",
 type: "tube",
 r_max: 1524.0,
 size_z: 1981.2,
-position: [1276.0, 0.0, -2018.8],
+position: [431.8, -4038.6, -714.4,],
 material: "stainless_steel",
 color: [1.0, 0.0, 0.0, 0.1],
-drawstyle: "solid"
+drawstyle: "solid",
+rotation: [90.0, 0.0, -90.0],
 }
 
 {

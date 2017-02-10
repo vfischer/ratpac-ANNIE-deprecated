@@ -97,7 +97,7 @@ type: "tube",
 r_max: 1522.0,
 size_z: 1914.5,
 position: [0.0, 0.0, -133.3],
-material: "water",
+material: "water_gdS_0p2",
 color: [0.4, 0.4, 0.6, 0.3],
 drawstyle: "solid"
 }
@@ -944,7 +944,7 @@ index: "NCV",
 valid_begin: [0, 0],
 valid_end: [0, 0],
 mother: "ncv_detector",
-enable_ncv: 1,
+enable_ncv: 0,
 ncv_center: [793.7, 0.0, 1609.7],
 type: "annieNCV", //see the geo factory
 }
