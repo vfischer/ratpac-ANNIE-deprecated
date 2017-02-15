@@ -88,6 +88,13 @@ public:
   virtual bool operator() (TrackNode *c) { return fParticleName == c->GetParticleName(); };
 };
 
+class TrackTest_NotParticle : public TrackTest {
+  std::string fParticleName;
+public:
+  TrackTest_NotParticle(const std::string &particleName) : fParticleName(particleName) { };
+  virtual bool operator() (TrackNode *c) { return fParticleName != c->GetParticleName(); };
+};
+
 // class TrackTest_HasProcess : public TrackTest {
 //   std::string fProcess;
 // public:

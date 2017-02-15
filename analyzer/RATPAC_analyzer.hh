@@ -163,13 +163,13 @@ private:
   // booleans and counters
   Bool_t is_nGd, is_nH, is_mu_tag;
   Int_t test_counter;
-  Int_t Nneutrons, Nmuons, Nmuons_cut, Nneutrons_cut;
-  Int_t Nneutrons_tot, Nmuons_tot, Nmuons_track;
+  Int_t Nmuons, Nmuons_cut, Nneutrons_cap_cut, Npneutrons_cap_cut, Ninteractions_tot;
+  Int_t Nneutrons_track_tot, Nmuons_tot, Nmuons_track;
   
   // Capture infos
   TString nucl_cap_pdg_code;
 //   TRegexp pdg_nucl, pdg_gd, pdg_h;
-  Int_t Ncaptures, Ncaptures_h, Ncaptures_gd, Ncaptures_c, Ncaptures_si, Ncaptures_fe, N_inelastic;
+  Int_t Npneutrons, Npcaptures, Npcaptures_h, Npcaptures_gd, Npcaptures_c, Npcaptures_si, Npcaptures_fe, Npinelastic;
   
   // PMT infos histos
   TH1F *hPMTx, *hPMTy, *hPMTz, *hPMTID,*hPMTcard,*hPMTchannel;
@@ -192,6 +192,7 @@ private:
   TH1F *hDist_nCap_muTrack;
   TH1F *hTrackLength_mu;
   TH1F *hNCaptures_perevt;
+  TH1F *hNpCaptures_perevt;
   
   // Dep. energy histos
   TH1F *hScintEdep;
@@ -208,7 +209,10 @@ private:
   Double_t distance_nCap_muTrack;
   std::vector<Double_t> vMuTrack_Edep;
   Int_t Nhit,NbNoCaptures;
-  Int_t NCaptures_perevt;
+  Int_t Ncaptures_perevt, Npcaptures_perevt;
+  Double_t Edep_capture;
+  Int_t parenttrackID;
+  std::vector<Int_t> pparticles_trackID;
   
   // Arrays
   int pmt_x_array_run1[NbPMT_run1];
@@ -238,7 +242,10 @@ private:
    RAT::TrackNav *nav;
    RAT::TrackCursor *cursor;
    RAT::TrackNode *node;
-   RAT::TrackTest *TrackTest_neutron;
+   RAT::TrackTest *TrackTest_neutron, *TrackTest_gamma;
+   RAT::TrackTest *TrackTest_notelectron;
+   
+   std::vector<TString> interest_volumes;
    
    // TVectors
    TVector3 init_pos;

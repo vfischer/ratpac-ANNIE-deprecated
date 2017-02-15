@@ -73,7 +73,7 @@ drawstyle: "solid"
 
 {
 name: "GEO",
-index: "airgap",
+index: "detector",
 valid_begin: [0, 0],
 valid_end: [0, 0],
 mother: "liner",
@@ -81,21 +81,6 @@ type: "tube",
 r_max: 1522.0,
 size_z: 1979.2,
 position: [0.0, 0.0, 0.0],
-material: "air",
-color: [0.1, 0.2, 0.7, 0.4],
-drawstyle: "solid"
-}
-
-{
-name: "GEO",
-index: "detector",
-valid_begin: [0, 0],
-valid_end: [0, 0],
-mother: "airgap",
-type: "tube",
-r_max: 1522.0,
-size_z: 1914.5,
-position: [0.0, 0.0, -133.3],
 material: "water_gdS_0p2",
 color: [0.4, 0.4, 0.6, 0.3],
 drawstyle: "solid"
@@ -110,7 +95,7 @@ mother: "detector",
 type: "tube",
 r_max: 1200.0,
 size_z: 1500.0,
-position: [0.0, 0.0, 306.0], // because bottom PMTs are higher
+position: [0.0, 0.0, 0.0],
 material: "water_gdS_0p2",
 color: [0.1, 0.4, 0.6, 0.9],
 drawstyle: "solid"

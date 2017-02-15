@@ -368,6 +368,7 @@ G4VPhysicalVolume *GeoPMTFactoryBase::ConstructPMTs(DBLinkPtr table,
   for (string parent_name = mother_name; parent_name != ""; ) {
      G4VPhysicalVolume *parent_phys = FindPhysMother(parent_name);
      offset += parent_phys->GetFrameTranslation();
+     cout << "PMTINFO: Offset of physical volume " << parent_phys->GetName() << " is " << offset << endl;
      DBLinkPtr parent_table = DB::Get()->GetLink("GEO",parent_name);
      parent_name = parent_table->GetS("mother");
   }

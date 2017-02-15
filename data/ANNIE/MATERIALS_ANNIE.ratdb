@@ -177,7 +177,7 @@ materials: ["water","gadolinium"],
 matprop: [0.999, 0.001],
 }
 
-// Gd-loaded water (with Gd sulfated), 0.1% in mass of sulfate and about 1 % in mass of Gd
+// Gd-loaded water (with Gd sulfate), 0.2% in mass of sulfate and about 0.1 % in mass of Gd
 {
 name: "MATERIAL",
 index: "water_gdS_0p2",
