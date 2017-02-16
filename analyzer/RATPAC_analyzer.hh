@@ -169,7 +169,7 @@ private:
   // Capture infos
   TString nucl_cap_pdg_code;
 //   TRegexp pdg_nucl, pdg_gd, pdg_h;
-  Int_t Npneutrons, Npcaptures, Npcaptures_h, Npcaptures_gd, Npcaptures_c, Npcaptures_si, Npcaptures_fe, Npinelastic;
+  Int_t Npneutrons, Npcaptures, Npcaptures_h, Npcaptures_gd, Npcaptures_c, Npcaptures_si, Npcaptures_fe, Npinelastic, Npdecay;
   
   // PMT infos histos
   TH1F *hPMTx, *hPMTy, *hPMTz, *hPMTID,*hPMTcard,*hPMTchannel;
@@ -191,6 +191,9 @@ private:
   TH1F *hTrackLength_nH;
   TH1F *hDist_nCap_muTrack;
   TH1F *hTrackLength_mu;
+  TH1F *hTime_nCap_muTrack;
+  
+  // Counting histos
   TH1F *hNCaptures_perevt;
   TH1F *hNpCaptures_perevt;
   
@@ -213,6 +216,7 @@ private:
   Double_t Edep_capture;
   Int_t parenttrackID;
   std::vector<Int_t> pparticles_trackID;
+  Double_t Ek_nu;
   
   // Arrays
   int pmt_x_array_run1[NbPMT_run1];
