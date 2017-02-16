@@ -65,8 +65,6 @@ void Analyzer::Initialization(){
   hEdep_muTrack_nCap = new TH1F("hEdep_muTrack_nCap","Neutron capture (after muon track) deposited energy (MeV)",2000,0,20);
   hNCaptures_perevt = new TH1F("hNCaptures_perevt","Nb of neutron capture (after muon track) per muon track",20,0,20);
   hNpCaptures_perevt = new TH1F("hNpCaptures_perevt","Nb of primary neutron capture (after muon track) per muon track",20,0,20);
-  hNCaptures_perEnu = new TH1F("hNCaptures_perEnu","Nb of neutron capture (after muon track) per muon track wrt Enu",500,0,5000);
-  hNpCaptures_perEnu = new TH1F("hNpCaptures_perEnu","Nb of primary neutron capture (after muon track) per muon track wrt Enu",500,0,5000);
   
   // Energy infos
   hNumPE  = new TH1F("hNumPE","Num of PE (PMT summed)",1000,0,1000);
