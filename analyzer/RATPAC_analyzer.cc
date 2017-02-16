@@ -625,6 +625,11 @@ Bool_t Analyzer::SetSaveFile() {
   TPMERegexp("\\W","g").Substitute(opt,"_");
   if (opt != "") { opt += "_"; }
   
+  if (InputFiles.size()>1) { // if more than one file to analyze, print the nb of files in the output filename
+    opt += InputFiles.size();
+    opt += "files_";
+  }
+  
   TPMERegexp FileName("([^/]+)$");
   if (FileName.Match(save)) { save = "Analyzer_" + opt + FileName[0];}
   else {
