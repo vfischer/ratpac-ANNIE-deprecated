@@ -161,9 +161,9 @@ private:
   const static Int_t NbPMT_run2 = 200;
   
   // booleans and counters
-  Bool_t is_nGd, is_nH, is_mu_tag;
+  Bool_t is_nGd, is_nH, is_mu_tag, is_cut_cap_edep, is_cut_mu_cap_DT, is_cut_mu_cap_DR;
   Int_t test_counter;
-  Int_t Nmuons, Nmuons_cut, Nneutrons_cap_cut, Npneutrons_cap_cut, Ninteractions_tot;
+  Int_t Nmuons, Nmuons_cut, Nneutrons_cap_gd, Npneutrons_cap_gd, Nneutrons_cap_Ecut, Ninteractions_tot, Nneutrons_cap_tot, Nneutrons_cap_vol, Nneutrons_cap_DT, Nneutrons_cap_allcut;
   Int_t Nneutrons_track_tot, Nmuons_tot, Nmuons_track;
   
   // Capture infos
@@ -217,6 +217,7 @@ private:
   Int_t parenttrackID;
   std::vector<Int_t> pparticles_trackID;
   Double_t Ek_nu;
+  Double_t cut_mu_track, cut_cap_edep, cut_mu_cap_DT, cut_mu_cap_DR;
   
   // Arrays
   int pmt_x_array_run1[NbPMT_run1];
@@ -249,7 +250,7 @@ private:
    RAT::TrackTest *TrackTest_neutron, *TrackTest_gamma;
    RAT::TrackTest *TrackTest_notelectron;
    
-   std::vector<TString> interest_volumes;
+   std::vector<TString> interest_volumes_mu, interest_volumes_neu, interest_volumes_neuEdep; // volumes where to look for mu tracks, neutron captures, etc...
    
    // TVectors
    TVector3 init_pos;
