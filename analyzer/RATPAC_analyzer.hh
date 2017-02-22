@@ -163,7 +163,7 @@ private:
   // booleans and counters
   Bool_t is_nGd, is_nH, is_mu_tag, is_cut_mu_track, is_cut_cap_edep, is_cut_mu_cap_DT, is_cut_mu_cap_DR;
   Int_t test_counter;
-  Int_t Nmuons, Nmuons_cut, Nneutrons_cap_gd, Npneutrons_cap_gd, Nneutrons_cap_Ecut, Ninteractions_tot, Nneutrons_cap_tot, Nneutrons_cap_vol, Nneutrons_cap_mu, Nneutrons_cap_DT, Nneutrons_cap_allcut;
+  Int_t Nmuons, Nmuons_cut, Nneutrons_cap_gd, Npneutrons_cap_gd, Nneutrons_cap_Ecut, Ninteractions_tot, Nneutrons_cap_tot, Nneutrons_cap_vol, Nneutrons_cap_mucut, Nneutrons_cap_mu, Nneutrons_cap_DT, Nneutrons_cap_allcut;
   Int_t Nneutrons_track_tot, Nmuons_tot, Nmuons_track;
   
   // Capture infos
@@ -190,7 +190,9 @@ private:
   TH1F *hTrackLength_nGd;
   TH1F *hTrackLength_nH;
   TH1F *hDist_nCap_muTrack;
+  TH1F *hDist_nCap_muStart;
   TH1F *hTrackLength_mu;
+  TH1F *hTrackAngle_mu;
   TH1F *hTime_nCap_muTrack;
   
   // Counting histos
@@ -205,11 +207,13 @@ private:
   TH1F *hEdep_muTrack;
   TH1F *hEdep_muTrack_nCap;
   
+  TH2F *hNeutron_eff_tank, *hNeutron_shot_tank, *hNeutron_captured_tank;
+  
   // Variables
   Double_t init_time, fin_time;
   Double_t disp,deltat;
   Double_t charge_tot;
-  Double_t distance_nCap_muTrack;
+  Double_t distance_nCap_muTrack, distance_nCap_muStart;
   std::vector<Double_t> vMuTrack_Edep;
   Int_t Nhit,NbNoCaptures;
   Int_t Ncaptures_perevt, Npcaptures_perevt;
@@ -256,6 +260,8 @@ private:
    TVector3 init_pos;
    TVector3 fin_pos;
    TVector3 muTrack_start, muTrack_end, nCapture_pos;
+   TVector3 n_start, n_end;
+   TVector3 unit_z;
    std::vector<TVector3> vMuTrack;
    
 //    UInt_t          fUniqueID;

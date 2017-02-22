@@ -9,7 +9,7 @@
 // Revisions:
 //  2016-09-13 : Only the tank is present so far (no veto nor MRD)
 //  2017-01-26 : NCV is fully parametrized (in a factory) and can be enable/disable and easily moved by user
-//  2017-01-27 : Geometry frame changed (beam-like frame), z is beam axis, y is vertical, tank subvolmes are unchanged since they are daughter of the tank 
+//  2017-01-27 : Geometry frame changed (beam-like frame), z is beam axis, y is vertical, tank subvolmes are unchanged since they are daughters of the tank 
 //               This is an awkward situation since the hall and tank use the new frame but not the rest. And the macros have to use the new frame as well... (RAT is not made for beam exp.)
 ////////////////////////////////////////////////////////
 
@@ -945,7 +945,8 @@ valid_begin: [0, 0],
 valid_end: [0, 0],
 mother: "detector",
 enable_ncv: 0,
-ncv_center: [793.7, 0.0, 1609.7],
+ncv_center: [793.7, 0.0, 1609.7], // top position (May 2016 to 06-02-2017) (in dd-mm-yyyy system)
+//ncv_center: [1117.55, 0.0, -562.0], // bottom position (06-02-2017 to )
 type: "annieNCV", //see the geo factory
 }
 /////////////////////////////////////////////////////////////////////
