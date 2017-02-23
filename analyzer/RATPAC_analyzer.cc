@@ -408,13 +408,22 @@ void Analyzer::Loop() {
       if (node->GetProcess() == "nCapture" ) { // capture	
 	if (TPMERegexp("1000[0-9][0-9][0-9][0-9][0-9][0-9]").Match(Form("%d",node->GetPDGCode()))) { // capture on an atom
 	  Nneutrons_cap_tot++; // capture only occurs on atoms right ? so we'll increment the total nb of cap. counter
-	}
-	if (is_mu_tag) { // with a tagged muon
+	  if (is_mu_tag) { // with a tagged muon
 	    Nneutrons_cap_mu++;
-	    if (is_cut_mu_track) { // with a tagged muon having a track longer than the threshold cut
+	     if (is_cut_mu_track) { // with a tagged muon having a track longer than the threshold cut
 	      Nneutrons_cap_mucut++;
 	      if( std::find(interest_volumes_neu.begin(), interest_volumes_neu.end(), node->GetVolume()) != interest_volumes_neu.end() ) { // in the good volumes
 	      Nneutrons_cap_vol++;
+	      }
+	     }
+	  }
+	}
+	if (is_mu_tag) { // with a tagged muon
+// 	    Nneutrons_cap_mu++;
+	    if (is_cut_mu_track) { // with a tagged muon having a track longer than the threshold cut
+// 	      Nneutrons_cap_mucut++;
+	      if( std::find(interest_volumes_neu.begin(), interest_volumes_neu.end(), node->GetVolume()) != interest_volumes_neu.end() ) { // in the good volumes
+// 	      Nneutrons_cap_vol++;
 	    
 	    if (parenttrackID != cursor->Parent()->GetTrackID() ) {
 	      if (is_nGd) { // if next neutron as parent, fill info related to this neutron
@@ -689,12 +698,13 @@ void Analyzer::Finalize(){
   f_output_txt << "Muons tracks in detector after cut: " << Nmuons_cut << endl;
   f_output_txt << "Neutron tracks total: " << Nneutrons_track_tot << endl;
   f_output_txt << "Neutrons captures: " << Nneutrons_cap_tot << endl;
-  f_output_txt << "Neutrons captures in the volume of interest: " << Nneutrons_cap_vol << endl;
-  f_output_txt << "Neutrons captures after muons in the volume of interest: " <<  Nneutrons_cap_mu << endl;
+  f_output_txt << "Neutrons captures after muons: " << Nneutrons_cap_mu << endl;
+  f_output_txt << "Neutrons captures after muons after muon track cut: " <<  Nneutrons_cap_mucut << endl;
+  f_output_txt << "Neutrons captures after muons after muon track cut in the volume of interest: " <<  Nneutrons_cap_vol << endl;
   f_output_txt << "Neutrons captures on Gd after muons in the volume of interest after mu track cut: " << Nneutrons_cap_gd << " --> including " << Npneutrons_cap_gd << " 'primary' neutrons" << endl;
-  f_output_txt << "Neutrons captures on Gd after muons in the volume of interest after mu track and capture Edep cut: " << Nneutrons_cap_Ecut << endl;
-  f_output_txt << "Neutrons captures on Gd after muons in the volume of interest after mu track and capture Edep and DT cut: " << Nneutrons_cap_DT << endl;
-  f_output_txt << "Neutrons captures on Gd after muons in the volume of interest after mu track and capture Edep and DT and DR cut: " << Nneutrons_cap_allcut << endl;  
+  f_output_txt << "Neutrons captures on Gd after muons in the volume of interest after mu track cut and capture Edep cut: " << Nneutrons_cap_Ecut << endl;
+  f_output_txt << "Neutrons captures on Gd after muons in the volume of interest after mu track cut and capture Edep and DT cut: " << Nneutrons_cap_DT << endl;
+  f_output_txt << "Neutrons captures on Gd after muons in the volume of interest after mu track cut and capture Edep and DT and DR cut: " << Nneutrons_cap_allcut << endl;  
   f_output_txt << "====================================\n\n";
   f_output_txt << "=========== Neutron (primary) Analysis ==========\n";
   f_output_txt << "Out of " << Npneutrons << " total neutrons: \n";
