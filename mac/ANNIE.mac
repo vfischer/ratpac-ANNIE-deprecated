@@ -11,8 +11,8 @@
 /rat/db/set DETECTOR geo_file "ANNIE/ANNIE_run1.geo"
 
 /run/initialize
-/process/inactivate Cerenkov
-/glg4scint/off
+/process/activate Cerenkov
+/glg4scint/on
 #/glg4scint/reemission on
 
 #/process/inactivate DeferTrackProc all
@@ -55,7 +55,7 @@
 /generator/pos/set 0 0 1724
 #/generator/pos/set 0 0 -133.3
 
-/run/beamOn 10000
+/run/beamOn 1000
 
 #END EVENT LOOP
 #####################
