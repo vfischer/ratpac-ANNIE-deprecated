@@ -63,7 +63,7 @@ int rat2reco(char *filename) {
   // Load RAT libraries (for dsReader)
   gSystem->Load("$(RATPAC_PATH)/lib/libRATEvent.so");
   
-    // create a random number generator
+  // create a random number generator
   gRandom = new TRandom3();
   
   // Load the files
@@ -114,9 +114,11 @@ int rat2reco(char *filename) {
   PMTData->Branch("PMTy",&PMTy,"PMTy/I");
   PMTData->Branch("PMTz",&PMTz,"PMTz/I");
   
-
+  
   // Variables
   Bool_t broken_tube = false;
+  vector<Int_t> hitPMT;
+  Bool_t ncv_hit;
   
   for(Int_t i = 0; i < nb_samples; ++i) {
     waveform_samples[i] = i;
@@ -132,12 +134,30 @@ int rat2reco(char *filename) {
     ds = dsReader->GetEvent(entry);
     
     // Some initilizations
-    broken_tube = false;
+    broken_tube = false; hitPMT.clear(); ncv_hit = false;
     
-    cout << "New evt -- " << endl;
-    // PMT loop
-    for( Int_t iPMT = 0; iPMT < 64; ++iPMT ){
-      BufferSize = nb_samples;
+//     cout << "New evt -- " << endl;
+    
+    for( Int_t jPMT = 0; jPMT < ds->GetMC()->GetMCPMTCount(); ++jPMT ){
+     	if (ds->GetMC()->GetMCPMT(jPMT)->GetID()+1 == 61 || ds->GetMC()->GetMCPMT(jPMT)->GetID()+1 == 62){
+	 ncv_hit = true;
+	 break;
+	} 
+    }
+    
+    if(ncv_hit) {
+    for( Int_t jPMT = 0; jPMT < ds->GetMC()->GetMCPMTCount(); ++jPMT ){
+       
+      if (ds->GetMC()->GetMCPMT(jPMT)->GetID()+1 == 6 ||
+	ds->GetMC()->GetMCPMT(jPMT)->GetID()+1 == 49 ||
+	ds->GetMC()->GetMCPMT(jPMT)->GetID()+1 == 19 ||
+	ds->GetMC()->GetMCPMT(jPMT)->GetID()+1 == 37) { 
+	continue;
+	}
+	
+// 	 	cout << "Hit: " << ds->GetMC()->GetMCPMT(jPMT)->GetID() << endl;
+	
+	BufferSize = nb_samples;
       LastSync = 0;
       StartCount = 0;
       StartTimeSec = 0;
@@ -146,105 +166,97 @@ int rat2reco(char *filename) {
       TriggerCount = 0;
       Rate = 0;
       Trigger = entry;
-      SequenceID = entry;
+      SequenceID = entry; 
+      
+      if (ds->GetMC()->GetMCPMT(jPMT)->GetID()+1 == 61){
+// 	 		cout << " NCV" << endl;
+	PMTID = 6;
+	PMTx = pmt_x_array_run1[5];
+	PMTz = pmt_z_array_run1[5];
+	CardID = pmt_card_array_run1[5]; 
+	Channel = pmt_channel_array_run1[5];
+      } else if (ds->GetMC()->GetMCPMT(jPMT)->GetID()+1 == 62){
+// 	 		cout << " NCV" << endl;
+	PMTID = 49;
+	PMTx = pmt_x_array_run1[48];
+	PMTz = pmt_z_array_run1[48];
+	CardID = pmt_card_array_run1[48]; 
+	Channel = pmt_channel_array_run1[48];
+      } else {
+	PMTID = ds->GetMC()->GetMCPMT(jPMT)->GetID()+1;
+	PMTx = pmt_x_array_run1[ds->GetMC()->GetMCPMT(jPMT)->GetID()];
+	PMTz = pmt_z_array_run1[ds->GetMC()->GetMCPMT(jPMT)->GetID()];
+	CardID = pmt_card_array_run1[ds->GetMC()->GetMCPMT(jPMT)->GetID()]; 
+	Channel = pmt_channel_array_run1[ds->GetMC()->GetMCPMT(jPMT)->GetID()];
+      }
+      
+      hitPMT.push_back(PMTID-1);
       
       for(Int_t i = 0; i < nb_samples; ++i) {
-    Data[i] = gRandom->Gaus(mean_noise,sigma_noise);
-  }
-      if (iPMT >= 60) {
-	PMTID = 100;
-	PMTx = -10;
-	PMTz = -10; 
-	PMTy = -10; 
-	if (iPMT == 60) {
-	  CardID = 21;
-	  Channel = 0;
-	}
-	if (iPMT == 61) {
-	  CardID = 21;
-	  Channel = 1;
-	}
-	if (iPMT == 62) {
-	  CardID = 21;
-	  Channel = 2;
-	}
-	if (iPMT == 63) {
-	  CardID = 21;
-	  Channel = 3;
-	}
-      } else {
-	PMTID = iPMT+1;
-	PMTx = pmt_x_array_run1[iPMT];
-	PMTz = pmt_z_array_run1[iPMT]; 
-	CardID = pmt_card_array_run1[iPMT]; 
-	Channel = pmt_channel_array_run1[iPMT]; 
-	PMTy = 0; 
-      } 
-      PMTf = 0; 
+	Data[i] = gRandom->Gaus(mean_noise,sigma_noise);
+      }
       
-      for( Int_t jPMT = 0; jPMT < ds->GetMC()->GetMCPMTCount(); ++jPMT ){
-	if (ds->GetMC()->GetMCPMT(jPMT)->GetID() == iPMT) {
-	  // look for broken PMTs
-	  if (ds->GetMC()->GetMCPMT(jPMT)->GetID()+1 == 6 ||
-	    ds->GetMC()->GetMCPMT(jPMT)->GetID()+1 == 49 ||
-	    ds->GetMC()->GetMCPMT(jPMT)->GetID()+1 == 19 ||
-	    ds->GetMC()->GetMCPMT(jPMT)->GetID()+1 == 37) { 
-	    broken_tube = true;
-	    }
-	    
-	    if (!broken_tube) {
-	      if (ds->GetMC()->GetMCPMT(jPMT)->GetID()+1 == 61){
-		cout << " NCV" << endl;
-		PMTID = 6;
-		PMTx = pmt_x_array_run1[5];
-		PMTz = pmt_z_array_run1[5];
-	      } else if (ds->GetMC()->GetMCPMT(jPMT)->GetID()+1 == 62){
-		cout << " NCV" << endl;
-		PMTID = 49;
-		PMTx = pmt_x_array_run1[48];
-		PMTz = pmt_z_array_run1[48];
-	      } else {
-		PMTID = ds->GetMC()->GetMCPMT(jPMT)->GetID()+1;
-		PMTx = pmt_x_array_run1[ds->GetMC()->GetMCPMT(jPMT)->GetID()];
-		PMTz = pmt_z_array_run1[ds->GetMC()->GetMCPMT(jPMT)->GetID()];
-	      }
-	      
-	      
-// 	      CardID = pmt_card_array_run1[ds->GetMC()->GetMCPMT(jPMT)->GetID()]; 
-// 	      Channel = pmt_channel_array_run1[ds->GetMC()->GetMCPMT(jPMT)->GetID()]; 
-	      
-	      for( Int_t iPhot = 0; iPhot < ds->GetMC()->GetMCPMT(jPMT)->GetMCPhotonCount(); ++iPhot ){ // loop on photons that generated a PE
-// 		cout << ds->GetMC()->GetMCPMT(jPMT)->GetID() << endl;
-// 		cout << ds->GetMC()->GetMCPMT(jPMT)->GetMCPhoton(iPhot)->GetHitTime() << endl;
-// 		cout << ds->GetMC()->GetMCPMT(jPMT)->GetMCPhoton(iPhot)->GetCharge() << endl;
-		
-		for(Int_t i = 0; i < 6; ++i) {
-		  Data[10000 + TMath::FloorNint(ds->GetMC()->GetMCPMT(jPMT)->GetMCPhoton(ds->GetMC()->GetMCPMT(jPMT)->GetMCPhotonCount()-1)->GetHitTime()*0.5 - ds->GetMC()->GetMCPMT(jPMT)->GetMCPhoton(0)->GetHitTime()*0.5)] += pulse_shape[i]*ds->GetMC()->GetMCPMT(jPMT)->GetMCPhoton(iPhot)->GetCharge();
-		}
- 		gWave = new TGraph(nb_samples,waveform_samples,Data);
-	      }
-
-	    }
-	    
-	    broken_tube = false; 
+      
+      for( Int_t iPhot = 0; iPhot < ds->GetMC()->GetMCPMT(jPMT)->GetMCPhotonCount(); ++iPhot ){ // loop on photons that generated a PE		
+	
+	if (TMath::FloorNint(ds->GetMC()->GetMCPMT(jPMT)->GetMCPhoton(ds->GetMC()->GetMCPMT(jPMT)->GetMCPhotonCount()-1)->GetHitTime()*0.5 - ds->GetMC()->GetMCPMT(jPMT)->GetMCPhoton(0)->GetHitTime()*0.5) < 25000) {
+	  for(Int_t i = 0; i < 6; ++i) {
+	    Data[10000 + TMath::FloorNint(ds->GetMC()->GetMCPMT(jPMT)->GetMCPhoton(ds->GetMC()->GetMCPMT(jPMT)->GetMCPhotonCount()-1)->GetHitTime()*0.5 - ds->GetMC()->GetMCPMT(jPMT)->GetMCPhoton(0)->GetHitTime()*0.5)] += pulse_shape[i]*ds->GetMC()->GetMCPMT(jPMT)->GetMCPhoton(iPhot)->GetCharge();
+	  }
 	}
+	gWave = new TGraph(nb_samples,waveform_samples,Data);
+	
+	
       }
       PMTData->Fill();
     }
+    
+    // PMT loop
+    for( Int_t iPMT = 0; iPMT < 64; ++iPMT ){
+      if(!ncv_hit) { break;}
+      if (find(hitPMT.begin(), hitPMT.end(), iPMT) == hitPMT.end()) {
+// 	 	cout << "No hit: " << iPMT << endl;
+	for(Int_t i = 0; i < nb_samples; ++i) {
+	  Data[i] = gRandom->Gaus(mean_noise,sigma_noise);
+	}
+	if (iPMT >= 60) {
+	  PMTID = 100;
+	  PMTx = -10;
+	  PMTz = -10; 
+	  PMTy = -10; 
+	  if (iPMT == 60) {
+	    CardID = 21;
+	    Channel = 0;
+	  }
+	  if (iPMT == 61) {
+	    CardID = 21;
+	    Channel = 1;
+	  }
+	  if (iPMT == 62) {
+	    CardID = 21;
+	    Channel = 2;
+	  }
+	  if (iPMT == 63) {
+	    CardID = 21;
+	    Channel = 3;
+	  }
+	} else {
+	  PMTID = iPMT+1;
+	  PMTx = pmt_x_array_run1[iPMT];
+	  PMTz = pmt_z_array_run1[iPMT]; 
+	  CardID = pmt_card_array_run1[iPMT]; 
+	  Channel = pmt_channel_array_run1[iPMT]; 
+	  PMTy = 0; 
+	} 
+	PMTf = 0;
+	
+	PMTData->Fill();
+      }  
+      
+    }
+    }
+    
   }
-  
-//   for(Int_t i = 0; i < nb_samples; ++i) {
-//     waveform_samples[i] = i;
-//     waveform[i] = gRandom->Gaus(mean_noise,sigma_noise);
-//   }
-//   
-//   for(Int_t j = 0; j < 3; ++j) {
-//     for(Int_t i = 0; i < 6; ++i) {
-//       waveform[pulse_location[j]] += pulse_shape[i];
-//     }
-//   }
-//   
-//   gWave = new TGraph(nb_samples,waveform_samples,waveform); 
   
   c1 = new TCanvas("c1","A Simple Graph Example",200,10,700,500);
   gWave->Draw("AL");
