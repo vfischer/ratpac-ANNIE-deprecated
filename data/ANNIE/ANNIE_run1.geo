@@ -944,9 +944,10 @@ index: "NCV",
 valid_begin: [0, 0],
 valid_end: [0, 0],
 mother: "detector",
-enable_ncv: 0,
-ncv_center: [793.7, 0.0, 1609.7], // top position (May 2016 to 06-02-2017) (in dd-mm-yyyy system)
-//ncv_center: [1117.55, 0.0, -562.0], // bottom position (06-02-2017 to )
+enable_ncv: 1,
+// ncv_center: [793.7, 0.0, 1609.7], // top position (May 2016 to 06-02-2017) (in dd-mm-yyyy system)
+ncv_center: [-146.1, 0.0, 1597.18], // top center position (28-02-2017 to ??) 
+//ncv_center: [1117.55, 0.0, -562.0], // bottom position (06-02-2017 to 28-02-2017)
 type: "annieNCV", //see the geo factory
 }
 /////////////////////////////////////////////////////////////////////
