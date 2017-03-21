@@ -162,7 +162,7 @@ private:
   const static Int_t NbPMT_run2 = 200;
   
   // booleans and counters
-  Bool_t is_nGd, is_nH, is_mu_tag, is_cut_mu_track, is_cut_cap_edep, is_cut_mu_cap_DT, is_cut_mu_cap_DR;
+  Bool_t is_nGd, is_nH, is_mu_tag, is_cut_mu_track, is_cut_cap_edep, is_cut_mu_cap_DT, is_cut_mu_cap_DR, is_mu_fiducial;
   Int_t test_counter;
   Int_t Nmuons, Nmuons_cut, Nneutrons_cap_gd, Npneutrons_cap_gd, Nneutrons_cap_Ecut, Ninteractions_tot, Nneutrons_cap_tot, Nneutrons_cap_vol, Nneutrons_cap_mucut, Nneutrons_cap_mu, Nneutrons_cap_DT, Nneutrons_cap_allcut;
   Int_t Nneutrons_track_tot, Nmuons_tot, Nmuons_track;
@@ -195,6 +195,7 @@ private:
   TH1F *hTrackLength_mu;
   TH1F *hTrackAngle_mu;
   TH1F *hTime_nCap_muTrack;
+  TH1F *hNeutronCap_proj_x, *hNeutronCap_proj_y, *hNeutronCap_proj_z;
   
   // Counting histos
   TH1F *hNCaptures_perevt;

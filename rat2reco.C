@@ -74,7 +74,7 @@ int rat2reco(char *filename) {
   ULong64_t NbEntries = dsReader->GetTotal();
   
   // Initialize stuff
-  TGraph *gWave;    
+//   TGraph *gWave;    
   TCanvas *c1;
   
   // some values about your waveform
@@ -130,13 +130,13 @@ int rat2reco(char *filename) {
   int pmt_card_array_run1[] = {3,3,3,3,4,4,4,4,5,5,5,5,6,6,6,6,8,8,8,8,9,9,9,9,10,10,10,10,11,11,11,11,13,13,13,13,14,14,14,14,15,15,15,15,16,16,16,16,18,18,18,18,19,19,19,19,20,20,20,20};
   int pmt_channel_array_run1[] = {0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3};
   
-  for(ULong64_t entry=0; entry<10; ++entry){
+  for(ULong64_t entry=0; entry<NbEntries; ++entry){
     ds = dsReader->GetEvent(entry);
     
     // Some initilizations
     broken_tube = false; hitPMT.clear(); ncv_hit = false;
     
-//     cout << "New evt -- " << endl;
+     cout << "New evt -- " << endl;
     
     for( Int_t jPMT = 0; jPMT < ds->GetMC()->GetMCPMTCount(); ++jPMT ){
      	if (ds->GetMC()->GetMCPMT(jPMT)->GetID()+1 == 61 || ds->GetMC()->GetMCPMT(jPMT)->GetID()+1 == 62){
@@ -155,7 +155,7 @@ int rat2reco(char *filename) {
 	continue;
 	}
 	
-// 	 	cout << "Hit: " << ds->GetMC()->GetMCPMT(jPMT)->GetID() << endl;
+ 	 	cout << "Hit: " << ds->GetMC()->GetMCPMT(jPMT)->GetID() << endl;
 	
 	BufferSize = nb_samples;
       LastSync = 0;
@@ -204,7 +204,7 @@ int rat2reco(char *filename) {
 	    Data[10000 + TMath::FloorNint(ds->GetMC()->GetMCPMT(jPMT)->GetMCPhoton(ds->GetMC()->GetMCPMT(jPMT)->GetMCPhotonCount()-1)->GetHitTime()*0.5 - ds->GetMC()->GetMCPMT(jPMT)->GetMCPhoton(0)->GetHitTime()*0.5)] += pulse_shape[i]*ds->GetMC()->GetMCPMT(jPMT)->GetMCPhoton(iPhot)->GetCharge();
 	  }
 	}
-	gWave = new TGraph(nb_samples,waveform_samples,Data);
+// 	gWave = new TGraph(nb_samples,waveform_samples,Data);
 	
 	
       }
@@ -258,8 +258,8 @@ int rat2reco(char *filename) {
     
   }
   
-  c1 = new TCanvas("c1","A Simple Graph Example",200,10,700,500);
-  gWave->Draw("AL");
+//   c1 = new TCanvas("c1","A Simple Graph Example",200,10,700,500);
+//   gWave->Draw("AL");
   
   outputfile.Write();
   outputfile.Close();

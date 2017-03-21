@@ -97,7 +97,7 @@ type: "tube",
 r_max: 1522.0,
 size_z: 1914.5,
 position: [0.0, 0.0, -133.3],
-material: "water_gdS_0p2",
+material: "water",
 color: [0.4, 0.4, 0.6, 0.3],
 drawstyle: "solid"
 }

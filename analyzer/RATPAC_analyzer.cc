@@ -68,6 +68,10 @@ void Analyzer::Initialization(){
   hNCaptures_perevt = new TH1F("hNCaptures_perevt","Nb of neutron capture (after muon track) per muon track",20,0,20);
   hNpCaptures_perevt = new TH1F("hNpCaptures_perevt","Nb of primary neutron capture (after muon track) per muon track",20,0,20);
   
+  hNeutronCap_proj_x = new TH1F("hNeutronCap_proj_x","Projection of neutron capture point on x axis (mm)",600,-3000,3000);
+  hNeutronCap_proj_y = new TH1F("hNeutronCap_proj_y","Projection of neutron capture point on y axis (mm)",600,-3000,3000);
+  hNeutronCap_proj_z = new TH1F("hNeutronCap_proj_z","Projection of neutron capture point on z axis (mm)",600,-1000,5000);
+  
   hNeutron_eff_tank = new TH2F("hNeutron_eff_tank","Rho,y plot of the neutron capture efficiency in the tank",10,0,2000,30,-3000,3000);
   hNeutron_captured_tank = new TH2F("hNeutron_captured_tank","Rho,y plot of the number of neutrons captured in the tank",10,0,2000,30,-3000,3000);
   hNeutron_shot_tank = new TH2F("hNeutron_shot_tank","Rho,y plot of the number of neutrons shot in the tank",10,0,2000,30,-3000,3000);
@@ -183,7 +187,7 @@ void Analyzer::Loop() {
     
     // reset some counters
     charge_tot = 0, Ncaptures_perevt = 0, Npcaptures_perevt = 0, parenttrackID = 0, Edep_capture = 0;;
-    is_nGd = false, is_nH = false, is_mu_tag = false, is_cut_mu_track = false, is_cut_cap_edep = false, is_cut_mu_cap_DT = false, is_cut_mu_cap_DR = false;
+    is_nGd = false, is_nH = false, is_mu_tag = false, is_cut_mu_track = false, is_cut_cap_edep = false, is_cut_mu_cap_DT = false, is_cut_mu_cap_DR = false, is_mu_fiducial = false;
     vMuTrack.clear(), vMuTrack_Edep.clear(), pparticles_trackID.clear();
     
     // Analysis part
@@ -472,6 +476,10 @@ void Analyzer::Loop() {
 		  is_cut_mu_cap_DT = true;
 		}
 		hTime_nCap_muTrack->Fill(node->GetGlobalTime());
+		
+		hNeutronCap_proj_x->Fill(nCapture_pos.X());
+		hNeutronCap_proj_y->Fill(nCapture_pos.Y());
+		hNeutronCap_proj_z->Fill(nCapture_pos.Z());
 		
 	      } else if (TPMERegexp("100001[0-9][0-9][0-9][0-9]").Match(Form("%d",node->GetPDGCode()))) { //  look for H
 		is_nH = true;
