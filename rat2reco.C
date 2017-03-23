@@ -74,15 +74,15 @@ int rat2reco(char *filename) {
   ULong64_t NbEntries = dsReader->GetTotal();
   
   // Initialize stuff
-//   TGraph *gWave;    
+  TGraph *gWave;    
   TCanvas *c1;
   
   // some values about your waveform
   Float_t sigma_noise = 1.*0.001; // in V
   Float_t mean_noise = 0.0*0.001; // in V
-  Float_t pulse_shape[6] = {5*0.001/35.,10*0.001/35.,8*0.001/35.,6*0.001/35.,4*0.001/35.,2*0.001/35.};
-  Int_t pulse_location[3] = {10000,10010,10013}; // where you want your pulses to be located
+  Float_t pulse_shape[6] = {5*0.001,10*0.001,8*0.001,6*0.001,4*0.001,2*0.001};
   const Int_t nb_samples = 40000; // nb points in your waveform
+  Int_t trigger_offset = 100; // amount of samples you want to keep free at the beginning of your window 
   
   Float_t waveform[nb_samples], waveform_samples[nb_samples];
   
@@ -130,13 +130,14 @@ int rat2reco(char *filename) {
   int pmt_card_array_run1[] = {3,3,3,3,4,4,4,4,5,5,5,5,6,6,6,6,8,8,8,8,9,9,9,9,10,10,10,10,11,11,11,11,13,13,13,13,14,14,14,14,15,15,15,15,16,16,16,16,18,18,18,18,19,19,19,19,20,20,20,20};
   int pmt_channel_array_run1[] = {0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3};
   
-  for(ULong64_t entry=0; entry<NbEntries; ++entry){
+  for(ULong64_t entry=9; entry<10; ++entry){
     ds = dsReader->GetEvent(entry);
     
     // Some initilizations
     broken_tube = false; hitPMT.clear(); ncv_hit = false;
     
-     cout << "New evt -- " << endl;
+    cout << "================================" << endl;
+    cout << "========= New evt -- ===========" << endl;
     
     for( Int_t jPMT = 0; jPMT < ds->GetMC()->GetMCPMTCount(); ++jPMT ){
      	if (ds->GetMC()->GetMCPMT(jPMT)->GetID()+1 == 61 || ds->GetMC()->GetMCPMT(jPMT)->GetID()+1 == 62){
@@ -155,9 +156,9 @@ int rat2reco(char *filename) {
 	continue;
 	}
 	
- 	 	cout << "Hit: " << ds->GetMC()->GetMCPMT(jPMT)->GetID() << endl;
+      cout << "****==== ID(-1) of PMT Hit: " << ds->GetMC()->GetMCPMT(jPMT)->GetID() << " ====****\n";
 	
-	BufferSize = nb_samples;
+      BufferSize = nb_samples;
       LastSync = 0;
       StartCount = 0;
       StartTimeSec = 0;
@@ -198,13 +199,15 @@ int rat2reco(char *filename) {
       
       
       for( Int_t iPhot = 0; iPhot < ds->GetMC()->GetMCPMT(jPMT)->GetMCPhotonCount(); ++iPhot ){ // loop on photons that generated a PE		
-	
-	if (TMath::FloorNint(ds->GetMC()->GetMCPMT(jPMT)->GetMCPhoton(ds->GetMC()->GetMCPMT(jPMT)->GetMCPhotonCount()-1)->GetHitTime()*0.5 - ds->GetMC()->GetMCPMT(jPMT)->GetMCPhoton(0)->GetHitTime()*0.5) < 25000) {
+// 	cout << "Sample: " << ds->GetMC()->GetMCPMT(jPMT)->GetMCPhoton(iPhot)->GetHitTime()*0.5 << endl;
+// 	cout << "Charge: " << ds->GetMC()->GetMCPMT(jPMT)->GetMCPhoton(iPhot)->GetCharge() << endl;
+	if (TMath::FloorNint(ds->GetMC()->GetMCPMT(jPMT)->GetMCPhoton(iPhot)->GetHitTime()*0.5)  < nb_samples-trigger_offset) {
 	  for(Int_t i = 0; i < 6; ++i) {
-	    Data[10000 + TMath::FloorNint(ds->GetMC()->GetMCPMT(jPMT)->GetMCPhoton(ds->GetMC()->GetMCPMT(jPMT)->GetMCPhotonCount()-1)->GetHitTime()*0.5 - ds->GetMC()->GetMCPMT(jPMT)->GetMCPhoton(0)->GetHitTime()*0.5)] += pulse_shape[i]*ds->GetMC()->GetMCPMT(jPMT)->GetMCPhoton(iPhot)->GetCharge();
+	    Data[trigger_offset + TMath::FloorNint(ds->GetMC()->GetMCPMT(jPMT)->GetMCPhoton(iPhot)->GetHitTime()*0.5)] += pulse_shape[i]*ds->GetMC()->GetMCPMT(jPMT)->GetMCPhoton(iPhot)->GetCharge();
+// 	    cout << pulse_shape[i]*ds->GetMC()->GetMCPMT(jPMT)->GetMCPhoton(iPhot)->GetCharge() << endl;
 	  }
 	}
-// 	gWave = new TGraph(nb_samples,waveform_samples,Data);
+ 	if (ds->GetMC()->GetMCPMT(jPMT)->GetID()+1 == 61) {gWave = new TGraph(nb_samples,waveform_samples,Data);}
 	
 	
       }
@@ -258,8 +261,8 @@ int rat2reco(char *filename) {
     
   }
   
-//   c1 = new TCanvas("c1","A Simple Graph Example",200,10,700,500);
-//   gWave->Draw("AL");
+  c1 = new TCanvas("c1","A Simple Graph Example",200,10,700,500);
+  gWave->Draw("AL");
   
   outputfile.Write();
   outputfile.Close();
