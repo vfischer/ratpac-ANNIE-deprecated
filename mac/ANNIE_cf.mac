@@ -64,7 +64,7 @@
 #/generator/pos/set 100 100 0
 #/generator/pos/set NCVliquid
 
-/run/beamOn 10000
+/run/beamOn 1000
 
 #END EVENT LOOP
 #####################

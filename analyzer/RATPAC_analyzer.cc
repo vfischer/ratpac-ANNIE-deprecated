@@ -106,7 +106,7 @@ void Analyzer::Initialization(){
   }
   
   // Initialization time   
-  broken_pmt_vec.clear(); ncv_pmt_vec.clear(), interest_volumes_mu.clear(), interest_volumes_mu_vertex.clear(), interest_volumes_neu.clear(), interest_volumes_neuEdep.clear();
+  broken_pmt_vec.clear(); ncv_pmt_vec.clear(), interest_volumes_mu_track.clear(), interest_volumes_mu_water.clear(), interest_volumes_mu_vertex.clear(), interest_volumes_neu.clear(), interest_volumes_neuEdep.clear();
   Npneutrons = 0, Nmuons = 0, Nneutrons_cap_gd = 0, Npneutrons_cap_gd = 0, Nneutrons_cap_Ecut = 0, Nmuons_cut = 0;
   Npcaptures = 0, Npcaptures_h = 0, Npcaptures_gd = 0, Npcaptures_c = 0,Npcaptures_si = 0,Npcaptures_fe = 0, Npinelastic = 0, Npdecay = 0, NbNoCaptures = 0;
   Nneutrons_track_tot = 0, Nmuons_tot = 0, Nmuons_fidu = 0, Nmuons_track = 0; test_counter = 0;
@@ -136,8 +136,8 @@ void Analyzer::Loop() {
   
   // Volumes of interest for analysis
   if (job_run1 || job_run1_hefty) {
-    interest_volumes_mu.push_back("ncv_liquid");
-    interest_volumes_mu.push_back("detector");
+    interest_volumes_mu_vertex.push_back("ncv_liquid");
+    interest_volumes_mu_vertex.push_back("detector");
     interest_volumes_neu.push_back("ncv_liquid");
     interest_volumes_neu.push_back("detector");
     interest_volumes_neuEdep.push_back("ncv_liquid");
@@ -145,10 +145,11 @@ void Analyzer::Loop() {
   }
   if (job_run2) {
     interest_volumes_mu_vertex.push_back("detector_fiducial_muon");
-    interest_volumes_mu.push_back("detector");
-    interest_volumes_mu.push_back("detector_fiducial");
-    interest_volumes_mu.push_back("mrd_scint_hori_1");
-    interest_volumes_mu.push_back("mrd_scint_vert_1");
+    interest_volumes_mu_water.push_back("detector");
+    interest_volumes_mu_water.push_back("detector_fiducial");
+    interest_volumes_mu_water.push_back("detector_fiducial_muon");
+    interest_volumes_mu_track.push_back("detector_fiducial_muon");
+    interest_volumes_mu_track.push_back("mrd_scint_vert_1");
     interest_volumes_neu.push_back("detector_fiducial");
     interest_volumes_neuEdep.push_back("detector_fiducial");
     interest_volumes_neuEdep.push_back("detector");
@@ -190,8 +191,8 @@ void Analyzer::Loop() {
     
     // reset some counters
     charge_tot = 0, Ncaptures_perevt = 0, Npcaptures_perevt = 0, parenttrackID = 0, Edep_capture = 0;;
-    is_nGd = false, is_nH = false, is_mu_tag = false, is_cut_mu_track = false, is_cut_cap_edep = false, is_cut_mu_cap_DT = false, is_cut_mu_cap_DR = false, is_mu_fiducial = false;
-    vMuTrack.clear(), vMuTrack_Edep.clear(), pparticles_trackID.clear();
+    is_nGd = false, is_nH = false, is_mu_tag = false, is_cut_mu_track = false, is_cut_cap_edep = false, is_cut_mu_cap_DT = false, is_cut_mu_cap_DR = false, is_mu_fiducial = false, MRD_hit = false;
+    vMuTrack.clear(), vMuTrack_Edep.clear(), vMuTrack_volume.clear(), pparticles_trackID.clear();
     
     // Analysis part
     //     cout << entry << " " << ds->GetMC()->GetMCSummary()->GetTotalScintEdep()  << " " << ds->GetMC()->GetNumPE() <<  endl;
@@ -236,8 +237,6 @@ void Analyzer::Loop() {
     hEdep_x->Fill(ds->GetMC()->GetMCSummary()->GetEnergyCentroid().x());
     hEdep_y->Fill(ds->GetMC()->GetMCSummary()->GetEnergyCentroid().y());
     hEdep_z->Fill(ds->GetMC()->GetMCSummary()->GetEnergyCentroid().z());
-    
-    hTrackLength->Fill(disp);
     
     //     cout << ds->GetMC()->GetMCSummary()->GetEnergyLossByVolume("detector") << endl;
     
@@ -341,9 +340,10 @@ void Analyzer::Loop() {
 	if(ds->GetMC()->GetMCParticle(iCh)->GetParticleName() == "mu-" || ds->GetMC()->GetMCParticle(iCh)->GetParticleName() == "mu+")  {
 	  hTrackAngle_mu->Fill(unit_z.Angle(ds->GetMC()->GetMCParticle(iCh)->GetMomentum()));
 	}
+
 	cursor->GoChild(iCh); // go to particle
 	node = cursor->Here(); // "attach" node to this particle
-	if( std::find(interest_volumes_mu.begin(), interest_volumes_mu.end(), node->GetVolume()) != interest_volumes_mu.end() ) { // only interaction in volumes of interest
+	if( std::find(interest_volumes_mu_water.begin(), interest_volumes_mu_water.end(), node->GetVolume()) != interest_volumes_mu_water.end() ) { // only interaction in volumes of interest
 	  if(iCh == 0) { Ninteractions_tot++;} // only fill this once per event	  
 	  if (node->GetParticleName() == "mu-" || node->GetParticleName() == "mu+") { // if muon
 	    Nmuons_tot++;
@@ -352,21 +352,30 @@ void Analyzer::Loop() {
 	    is_mu_tag = true;	    
 	    for(size_t jCh = 0; jCh<cursor->StepCount(); jCh++){ //loop on each step
 	      node = cursor->GoStep(jCh); // go to step
-	      if ( std::find(interest_volumes_mu.begin(), interest_volumes_mu.end(), node->GetVolume()) != interest_volumes_mu.end() ) { // is node is in the volume you want
+	      vMuTrack_volume.push_back(node->GetVolume()); //fills a vector with all the volumes the muon went through
+	      vMuTrack.push_back(node->GetEndpoint()); // fills the vectors of node position (front() and back() are first and last node in volumes (track) )
+	      vMuTrack_Edep.push_back(node->GetKE()); // record current KE of muon at each step of the track
+	      for (std::vector<TString>::iterator it = vMuTrack_volume.begin() ; it != vMuTrack_volume.end(); ++it) {
+		if (*it == interest_volumes_mu_track.back()) {
+		    MRD_hit = true;
+		 }
+	      }
+	      
+	      if ( std::find(interest_volumes_mu_track.begin(), interest_volumes_mu_track.end(), node->GetVolume()) != interest_volumes_mu_track.end() ) { // is node is in the volume you want
 		vMuTrack.push_back(node->GetEndpoint()); // fills the vectors of node position (front() and back() are first and last node in volumes (track) )
 		vMuTrack_Edep.push_back(node->GetKE()); // record current KE of muon at each step of the track
 	      }
 	    }
-	    if (vMuTrack.size() != 0){
+	    if (MRD_hit){
 	      Nmuons_track++;
 	      muTrack_start = vMuTrack.front();
 	      muTrack_end = vMuTrack.back();
 	      hTrackLength_mu->Fill((muTrack_end - muTrack_start).Mag());
 	      hEdep_muTrack->Fill(vMuTrack_Edep.front() - vMuTrack_Edep.back()); // deposited Edep of track is KEfinal-KEinitial
 	      // 	cout << "Muon track length: " << (muTrack_end - muTrack_start).Mag() << endl;
-	      if ((muTrack_end - muTrack_start).Mag() > cut_mu_track){ //muon track length cut
-		Nmuons_cut++; is_cut_mu_track = true;
-	      }
+// 	      if ((muTrack_end - muTrack_start).Mag() > cut_mu_track){ //muon track length cut
+// 		Nmuons_cut++; is_cut_mu_track = true;
+// 	      }
 	    } else {
 	      // 	  cout << "No muon track in this volume\n";
 	    }
@@ -420,17 +429,17 @@ void Analyzer::Loop() {
 	  Nneutrons_cap_tot++; // capture only occurs on atoms right ? so we'll increment the total nb of cap. counter
 	  if (is_mu_tag) { // with a tagged muon
 	    Nneutrons_cap_mu++;
-	     if (is_cut_mu_track) { // with a tagged muon having a track longer than the threshold cut
-	      Nneutrons_cap_mucut++;
+// 	     if (is_cut_mu_track) { // with a tagged muon having a track longer than the threshold cut
+// 	      Nneutrons_cap_mucut++;
 	      if( std::find(interest_volumes_neu.begin(), interest_volumes_neu.end(), node->GetVolume()) != interest_volumes_neu.end() ) { // in the good volumes
 	      Nneutrons_cap_vol++;
 	      }
-	     }
+// 	     }
 	  }
 	}
 	if (is_mu_tag) { // with a tagged muon
 // 	    Nneutrons_cap_mu++;
-	    if (is_cut_mu_track) { // with a tagged muon having a track longer than the threshold cut
+// 	    if (is_cut_mu_track) { // with a tagged muon having a track longer than the threshold cut
 // 	      Nneutrons_cap_mucut++;
 	      if( std::find(interest_volumes_neu.begin(), interest_volumes_neu.end(), node->GetVolume()) != interest_volumes_neu.end() ) { // in the good volumes
 // 	      Nneutrons_cap_vol++;
@@ -506,7 +515,7 @@ void Analyzer::Loop() {
 	    }
 	    parenttrackID = cursor->Parent()->GetTrackID();
 	  }	
-	}
+// 	}
 	}
       }
     }
@@ -560,15 +569,17 @@ void Analyzer::Loop() {
 	    //  	    cout << node->GetVolume() << endl;
 	    // 	    cout << "Primary -- " << node->GetPDGCode() << endl;
 	    nucl_cap_pdg_code = to_string(node->GetPDGCode());
+	    hTrackDuration->Fill(node->GetGlobalTime());
+	    hTrackLength->Fill(n_end.Mag() - n_start.Mag());
 	    if (TPMERegexp("100001[0-9][0-9][0-9][0-9]").Match(nucl_cap_pdg_code)) {
 	      Npcaptures_h++;
 	      hTrackDuration_nH->Fill(node->GetGlobalTime());
-	      hTrackLength_nH->Fill(ds->GetMC()->GetMCSummary()->GetEnergyCentroid().Mag());
+	      hTrackLength_nH->Fill(n_end.Mag() - n_start.Mag());
 	    } 
 	    if (TPMERegexp("100064[0-9][0-9][0-9][0-9]").Match(nucl_cap_pdg_code)) {
 	      Npcaptures_gd++;
 	      hTrackDuration_nGd->Fill(node->GetGlobalTime()); 
-	      hTrackLength_nGd->Fill(ds->GetMC()->GetMCSummary()->GetEnergyCentroid().Mag());
+	      hTrackLength_nGd->Fill(n_end.Mag() - n_start.Mag());
 	      hNeutron_captured_tank->Fill(Hypot(n_start.X(),n_start.Z()-1724),n_start.Y());
 	    }   
 	    if (TPMERegexp("100006[0-9][0-9][0-9][0-9]").Match(nucl_cap_pdg_code)) {

@@ -163,6 +163,7 @@ private:
   
   // booleans and counters
   Bool_t is_nGd, is_nH, is_mu_tag, is_cut_mu_track, is_cut_cap_edep, is_cut_mu_cap_DT, is_cut_mu_cap_DR, is_mu_fiducial;
+  Bool_t MRD_hit;
   Int_t test_counter;
   Int_t Nmuons, Nmuons_cut, Nneutrons_cap_gd, Npneutrons_cap_gd, Nneutrons_cap_Ecut, Ninteractions_tot, Nneutrons_cap_tot, Nneutrons_cap_vol, Nneutrons_cap_mucut, Nneutrons_cap_mu, Nneutrons_cap_DT, Nneutrons_cap_allcut;
   Int_t Nneutrons_track_tot, Nmuons_tot, Nmuons_fidu, Nmuons_track;
@@ -216,7 +217,6 @@ private:
   Double_t disp,deltat;
   Double_t charge_tot;
   Double_t distance_nCap_muTrack, distance_nCap_muStart;
-  std::vector<Double_t> vMuTrack_Edep;
   Int_t Nhit,NbNoCaptures;
   Int_t Ncaptures_perevt, Npcaptures_perevt;
   Double_t Edep_capture;
@@ -256,7 +256,7 @@ private:
    RAT::TrackTest *TrackTest_neutron, *TrackTest_gamma;
    RAT::TrackTest *TrackTest_notelectron;
    
-   std::vector<TString> interest_volumes_mu_vertex, interest_volumes_mu, interest_volumes_neu, interest_volumes_neuEdep; // volumes where to look for mu tracks, neutron captures, etc...
+   std::vector<TString> interest_volumes_mu_vertex, interest_volumes_mu_track, interest_volumes_mu_water, interest_volumes_neu, interest_volumes_neuEdep; // volumes where to look for mu tracks, neutron captures, etc...
    
    // TVectors
    TVector3 init_pos;
@@ -265,6 +265,8 @@ private:
    TVector3 n_start, n_end;
    TVector3 unit_z;
    std::vector<TVector3> vMuTrack;
+   std::vector<Double_t> vMuTrack_Edep;
+   std::vector<TString> vMuTrack_volume;
    
 //    UInt_t          fUniqueID;
 //    UInt_t          fBits;
