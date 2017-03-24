@@ -100,6 +100,22 @@ material: "water_gdS_0p2",
 color: [0.1, 0.4, 0.6, 0.9],
 drawstyle: "solid"
 }
+
+{
+name: "GEO",
+index: "detector_fiducial_muon",
+valid_begin: [0, 0],
+valid_end: [0, 0],
+mother: "detector_fiducial",
+type: "tube",
+r_max: 500.0,
+size_z: 650.0,
+position: [500.0, 0.0, 100.0],
+material: "water_gdS_0p2",
+color: [0.6, 0.4, 0.6, 0.5],
+drawstyle: "solid",
+rotation: [0.0, 90.0, 0.0],
+}
 /////////////////////////////////////////////////////////////////////
 ///////////********** End of tank volumes ***********////////////////
 /////////////////////////////////////////////////////////////////////
@@ -491,7 +507,7 @@ mother: "hall",
 type: "box",
 size: [1525.0, 1370.0, 24.4], // mm
 position: [431.8, -4038.6, 1209.6],
-rotation: [0.0, 0.0, -45.0], // X, Y, Z axis rotations (deg) of element about its center. Rotations are applied in X, Y, Z order
+rotation: [0.0, 0.0, -90.0], // X, Y, Z axis rotations (deg) of element about its center. Rotations are applied in X, Y, Z order
 material: "steel",
 color: [1.0, 0.0, 0.0, 0.1],
 drawstyle: "solid",
@@ -506,7 +522,7 @@ mother: "hall",
 type: "box",
 size: [1550.0, 1300.0, 3.0], // mm
 position: [431.8, -4038.6, 1238],
-rotation: [0.0, 0.0, -45.0], // X, Y, Z axis rotations (deg) of element about its center. Rotations are applied in X, Y, Z order
+rotation: [0.0, 0.0, -90.0], // X, Y, Z axis rotations (deg) of element about its center. Rotations are applied in X, Y, Z order
 material: "plastic_scint",
 color: [1.0, 0.5, 0.2, 0.1],
 drawstyle: "solid",
@@ -521,7 +537,7 @@ mother: "hall",
 type: "box",
 size: [1525.0, 1370.0, 24.4], // mm
 position: [431.8, -4038.6, 1266.4],
-rotation: [0.0, 0.0, -45.0], // X, Y, Z axis rotations (deg) of element about its center. Rotations are applied in X, Y, Z order
+rotation: [0.0, 0.0, -90.0], // X, Y, Z axis rotations (deg) of element about its center. Rotations are applied in X, Y, Z order
 material: "steel",
 color: [1.0, 0.0, 0.0, 0.1],
 drawstyle: "solid",
@@ -536,7 +552,7 @@ mother: "hall",
 type: "box",
 size: [1500.0, 1380.0, 3.0], // mm
 position: [431.8, -4038.6, 1294.8],
-rotation: [0.0, 0.0, -45.0], // X, Y, Z axis rotations (deg) of element about its center. Rotations are applied in X, Y, Z order
+rotation: [0.0, 0.0, -90.0], // X, Y, Z axis rotations (deg) of element about its center. Rotations are applied in X, Y, Z order
 material: "plastic_scint",
 color: [1.0, 0.5, 0.2, 0.1],
 drawstyle: "solid",
