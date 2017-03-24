@@ -165,7 +165,7 @@ private:
   Bool_t is_nGd, is_nH, is_mu_tag, is_cut_mu_track, is_cut_cap_edep, is_cut_mu_cap_DT, is_cut_mu_cap_DR, is_mu_fiducial;
   Int_t test_counter;
   Int_t Nmuons, Nmuons_cut, Nneutrons_cap_gd, Npneutrons_cap_gd, Nneutrons_cap_Ecut, Ninteractions_tot, Nneutrons_cap_tot, Nneutrons_cap_vol, Nneutrons_cap_mucut, Nneutrons_cap_mu, Nneutrons_cap_DT, Nneutrons_cap_allcut;
-  Int_t Nneutrons_track_tot, Nmuons_tot, Nmuons_track;
+  Int_t Nneutrons_track_tot, Nmuons_tot, Nmuons_fidu, Nmuons_track;
   
   // Capture infos
   TString nucl_cap_pdg_code;
@@ -256,7 +256,7 @@ private:
    RAT::TrackTest *TrackTest_neutron, *TrackTest_gamma;
    RAT::TrackTest *TrackTest_notelectron;
    
-   std::vector<TString> interest_volumes_mu, interest_volumes_neu, interest_volumes_neuEdep; // volumes where to look for mu tracks, neutron captures, etc...
+   std::vector<TString> interest_volumes_mu_vertex, interest_volumes_mu, interest_volumes_neu, interest_volumes_neuEdep; // volumes where to look for mu tracks, neutron captures, etc...
    
    // TVectors
    TVector3 init_pos;

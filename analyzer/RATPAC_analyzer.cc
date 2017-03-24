@@ -106,10 +106,10 @@ void Analyzer::Initialization(){
   }
   
   // Initialization time   
-  broken_pmt_vec.clear(); ncv_pmt_vec.clear(), interest_volumes_mu.clear(), interest_volumes_neu.clear(), interest_volumes_neuEdep.clear();
+  broken_pmt_vec.clear(); ncv_pmt_vec.clear(), interest_volumes_mu.clear(), interest_volumes_mu_vertex.clear(), interest_volumes_neu.clear(), interest_volumes_neuEdep.clear();
   Npneutrons = 0, Nmuons = 0, Nneutrons_cap_gd = 0, Npneutrons_cap_gd = 0, Nneutrons_cap_Ecut = 0, Nmuons_cut = 0;
   Npcaptures = 0, Npcaptures_h = 0, Npcaptures_gd = 0, Npcaptures_c = 0,Npcaptures_si = 0,Npcaptures_fe = 0, Npinelastic = 0, Npdecay = 0, NbNoCaptures = 0;
-  Nneutrons_track_tot = 0, Nmuons_tot = 0, Nmuons_track = 0; test_counter = 0;
+  Nneutrons_track_tot = 0, Nmuons_tot = 0, Nmuons_fidu = 0, Nmuons_track = 0; test_counter = 0;
   Ninteractions_tot = 0, Nneutrons_cap_mu = 0, Nneutrons_cap_tot = 0, Nneutrons_cap_vol = 0, Nneutrons_cap_mucut = 0, Nneutrons_cap_DT = 0, Nneutrons_cap_allcut = 0;
   Ek_nu = 0;
   unit_z.SetXYZ(0,0,1);
@@ -144,8 +144,11 @@ void Analyzer::Loop() {
     interest_volumes_neuEdep.push_back("detector");
   }
   if (job_run2) {
+    interest_volumes_mu_vertex.push_back("detector_fiducial_muon");
     interest_volumes_mu.push_back("detector");
     interest_volumes_mu.push_back("detector_fiducial");
+    interest_volumes_mu.push_back("mrd_scint_hori_1");
+    interest_volumes_mu.push_back("mrd_scint_vert_1");
     interest_volumes_neu.push_back("detector_fiducial");
     interest_volumes_neuEdep.push_back("detector_fiducial");
     interest_volumes_neuEdep.push_back("detector");
@@ -341,10 +344,12 @@ void Analyzer::Loop() {
 	cursor->GoChild(iCh); // go to particle
 	node = cursor->Here(); // "attach" node to this particle
 	if( std::find(interest_volumes_mu.begin(), interest_volumes_mu.end(), node->GetVolume()) != interest_volumes_mu.end() ) { // only interaction in volumes of interest
-	  if(iCh == 0) { Ninteractions_tot++;} // only fill this once per event
+	  if(iCh == 0) { Ninteractions_tot++;} // only fill this once per event	  
 	  if (node->GetParticleName() == "mu-" || node->GetParticleName() == "mu+") { // if muon
-	    is_mu_tag = true;
 	    Nmuons_tot++;
+	    if( std::find(interest_volumes_mu_vertex.begin(), interest_volumes_mu_vertex.end(), node->GetVolume()) != interest_volumes_mu_vertex.end() ) { // only interaction in volumes of interest 
+	    Nmuons_fidu++; // only fill this once per event
+	    is_mu_tag = true;	    
 	    for(size_t jCh = 0; jCh<cursor->StepCount(); jCh++){ //loop on each step
 	      node = cursor->GoStep(jCh); // go to step
 	      if ( std::find(interest_volumes_mu.begin(), interest_volumes_mu.end(), node->GetVolume()) != interest_volumes_mu.end() ) { // is node is in the volume you want
@@ -368,6 +373,7 @@ void Analyzer::Loop() {
 	  }
 	  
 	}
+      }
 	if (node->GetParticleName() == "neutron") { // put all primary neutrons trackIDs in an array
 	  pparticles_trackID.push_back(node->GetTrackID());	
 	}
@@ -677,6 +683,7 @@ void Analyzer::Finalize(){
   cout << "Interactions in the volumes of interest: " << Ninteractions_tot << endl;
   cout << "Total number of neutrons captures from those interactions: " << Nneutrons_cap_tot << endl;
   cout << "Muons created in the volumes of interest: " << Nmuons_tot << endl;
+  cout << "Muons created in the muon fiducial volume: " << Nmuons_fidu << endl;
   cout << "Muons tracks in detector after cut: " << Nmuons_cut << endl;
   cout << "Neutron tracks total: " << Nneutrons_track_tot << endl;
   cout << "Neutrons captures: " << Nneutrons_cap_tot << endl;
@@ -703,6 +710,7 @@ void Analyzer::Finalize(){
   f_output_txt << "Interactions in the volumes of interest: " << Ninteractions_tot << endl;
   f_output_txt << "Total number of neutrons captures from those interactions: " << Nneutrons_cap_tot << endl;
   f_output_txt << "Muons created in the volumes of interest: " << Nmuons_tot << endl;
+  f_output_txt << "Muons created in the muon fiducial volume: " << Nmuons_fidu << endl;
   f_output_txt << "Muons tracks in detector after cut: " << Nmuons_cut << endl;
   f_output_txt << "Neutron tracks total: " << Nneutrons_track_tot << endl;
   f_output_txt << "Neutrons captures: " << Nneutrons_cap_tot << endl;
