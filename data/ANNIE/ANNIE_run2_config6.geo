@@ -86,20 +86,20 @@ color: [0.4, 0.4, 0.6, 0.3],
 drawstyle: "solid"
 }
 
-// {
-// name: "GEO",
-// index: "detector_fiducial",
-// valid_begin: [0, 0],
-// valid_end: [0, 0],
-// mother: "detector",
-// type: "tube",
-// r_max: 1200.0,
-// size_z: 1500.0,
-// position: [0.0, 0.0, 100.0],
-// material: "water_gdS_0p2",
-// color: [0.1, 0.4, 0.6, 0.9],
-// drawstyle: "solid"
-// }
+{
+name: "GEO",
+index: "detector_fiducial",
+valid_begin: [0, 0],
+valid_end: [0, 0],
+mother: "detector",
+type: "tube",
+r_max: 1150.0,
+size_z: 1500.0,
+position: [0.0, 0.0, 100.0],
+material: "water_gdS_0p2",
+color: [0.1, 0.4, 0.6, 0.9],
+drawstyle: "solid"
+}
 /////////////////////////////////////////////////////////////////////
 ///////////********** End of tank volumes ***********////////////////
 /////////////////////////////////////////////////////////////////////
@@ -477,6 +477,72 @@ drawstyle: "solid",
 }
 /////////////////////////////////////////////////////////////////////
 //////////********** End of inner structure ***********//////////////
+/////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////
+///////////////********** MRD volumes ***********////////////////////
+/////////////////////////////////////////////////////////////////////
+{
+name: "GEO",
+index: "mrd_iron_layer_1",
+valid_begin: [0, 0],
+valid_end: [0, 0],
+mother: "hall",
+type: "box",
+size: [1525.0, 1370.0, 24.4], // mm
+position: [431.8, -4038.6, 1209.6],
+rotation: [0.0, 0.0, -45.0], // X, Y, Z axis rotations (deg) of element about its center. Rotations are applied in X, Y, Z order
+material: "steel",
+color: [1.0, 0.0, 0.0, 0.1],
+drawstyle: "solid",
+}
+
+{
+name: "GEO",
+index: "mrd_scint_hori_1",
+valid_begin: [0, 0],
+valid_end: [0, 0],
+mother: "hall",
+type: "box",
+size: [1550.0, 1300.0, 3.0], // mm
+position: [431.8, -4038.6, 1238],
+rotation: [0.0, 0.0, -45.0], // X, Y, Z axis rotations (deg) of element about its center. Rotations are applied in X, Y, Z order
+material: "plastic_scint",
+color: [1.0, 0.5, 0.2, 0.1],
+drawstyle: "solid",
+}
+
+{
+name: "GEO",
+index: "mrd_iron_layer_2",
+valid_begin: [0, 0],
+valid_end: [0, 0],
+mother: "hall",
+type: "box",
+size: [1525.0, 1370.0, 24.4], // mm
+position: [431.8, -4038.6, 1266.4],
+rotation: [0.0, 0.0, -45.0], // X, Y, Z axis rotations (deg) of element about its center. Rotations are applied in X, Y, Z order
+material: "steel",
+color: [1.0, 0.0, 0.0, 0.1],
+drawstyle: "solid",
+}
+
+{
+name: "GEO",
+index: "mrd_scint_vert_1",
+valid_begin: [0, 0],
+valid_end: [0, 0],
+mother: "hall",
+type: "box",
+size: [1500.0, 1380.0, 3.0], // mm
+position: [431.8, -4038.6, 1294.8],
+rotation: [0.0, 0.0, -45.0], // X, Y, Z axis rotations (deg) of element about its center. Rotations are applied in X, Y, Z order
+material: "plastic_scint",
+color: [1.0, 0.5, 0.2, 0.1],
+drawstyle: "solid",
+}
+/////////////////////////////////////////////////////////////////////
+///////////********** End of MRD volumes  ***********////////////////
 /////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////////
