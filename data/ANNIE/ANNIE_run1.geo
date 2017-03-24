@@ -898,7 +898,7 @@ enable: 1,
 /////////////////////////////////////////////////////////////////////
 {
 name: "GEO",
-index: "ncv_hefty_bottom_reflective_mylar",
+index: "ncv_hefty_bottom_reflective_tyvek",
 valid_begin: [0, 0],
 valid_end: [0, 0],
 mother: "detector",
@@ -906,7 +906,7 @@ type: "box",
 size: [254.0, 254.0, 0.1], // mm
 //position: [0.0, 0.0, 0.0],
 position: [793.7, 0.0, 1292.2],
-material: "aluminum",
+material: "tyvek",
 color: [0.1, 0.4, 0.6, 0.3],
 drawstyle: "solid"
 enable: 1,
@@ -928,6 +928,62 @@ r_min: 254.0,
 position: [793.7, 0.0, 1609.7],
 material: "tyvek",
 color: [0.1, 0.4, 0.6, 0.3],
+drawstyle: "solid"
+enable: 1,
+}
+
+{
+name: "GEO",
+index: "ncv_hefty_side_black_bag",
+valid_begin: [0, 0],
+valid_end: [0, 0],
+mother: "detector",
+type: "tube",
+size_z: 448.7,
+r_max: 360.0,
+r_min: 359.1,
+// low_norm: [0.0, 0.0, -1.0],
+// high_norm: [0.0, 0.0, 1.0],
+//position: [0.0, 0.0, 0.0],
+position: [793.7, 0.0, 1609.7],
+material: "acrylic_black",
+color: [0.2, 0.4, 0.6, 0.9],
+drawstyle: "solid"
+enable: 1,
+}
+
+// {
+// name: "GEO",
+// index: "ncv_hefty_top_black_bag",
+// valid_begin: [0, 0],
+// valid_end: [0, 0],
+// mother: "hall", //depends on the NCV location (can be "detector" or "airgap"), there's probably a better way to do this..
+// type: "tube",
+// size_z: 0.1,
+// r_max: 360.0,
+// r_min: 0.0,
+// //position: [0.0, 0.0, 0.0],
+// position: [793.7, 0.0, 1292.2],
+// material: "acrylic_black",
+// color: [0.2, 0.4, 0.6, 0.9],
+// drawstyle: "solid"
+// enable: 1,
+// }
+
+{
+name: "GEO",
+index: "ncv_hefty_bottom_black_bag",
+valid_begin: [0, 0],
+valid_end: [0, 0],
+mother: "detector",
+type: "tube",
+size_z: 0.1,
+r_max: 360.0,
+r_min: 0.0,
+//position: [0.0, 0.0, 0.0],
+position: [793.7, 0.0, 1292.2],
+material: "acrylic_black",
+color: [0.2, 0.4, 0.6, 0.9],
 drawstyle: "solid"
 enable: 1,
 }

@@ -105,7 +105,11 @@ G4VPhysicalVolume *GeoAnnieNCVFactory::Construct(DBLinkPtr table) {
     G4double xpos_pmtcase_1 = ncv_center_x + 100;
     G4double xpos_pmtcase_2 = ncv_center_x - 100;
     
-    G4double zpos_hefty_bottom_reflective_mylar = ncv_center_z - 317.5;
+    G4double zpos_hefty_bottom_reflective_tyvek = ncv_center_z - 317.5;
+    
+    G4double zpos_hefty_side_black_bag = ncv_center_z + 130.7;
+    G4double zpos_hefty_top_black_bag = zpos_hefty_side_black_bag + 448.65;
+    G4double zpos_hefty_bottom_black_bag = zpos_hefty_side_black_bag - 448.65;
     
     // Fills vector of one element..
     vector<G4double> xpos_ncv_pmt_1; xpos_ncv_pmt_1.clear(); xpos_ncv_pmt_1.push_back(xpos_pmtcase_1);
@@ -349,12 +353,21 @@ G4VPhysicalVolume *GeoAnnieNCVFactory::Construct(DBLinkPtr table) {
     db->SetDArray("PMTINFO_run1_ncvpmt_2","z",zpos_ncv_pmt_2);
     
     // Hefty mode information
-    volume_position[0] = ncv_center_x; volume_position[1] = ncv_center_y; volume_position[2] = zpos_hefty_bottom_reflective_mylar;
-    db->SetDArray("GEO","ncv_hefty_bottom_reflective_mylar","position",volume_position);
-    db->SetI("GEO","ncv_hefty_bottom_reflective_mylar","enable",enable_ncv);
+    volume_position[0] = ncv_center_x; volume_position[1] = ncv_center_y; volume_position[2] = zpos_hefty_bottom_reflective_tyvek;
+    db->SetDArray("GEO","ncv_hefty_bottom_reflective_tyvek","position",volume_position);
+    db->SetI("GEO","ncv_hefty_bottom_reflective_tyvek","enable",enable_ncv);
     volume_position[0] = ncv_center_x; volume_position[1] = ncv_center_y; volume_position[2] = ncv_center_z;
     db->SetDArray("GEO","ncv_hefty_side_reflective_tyvek","position",volume_position);
     db->SetI("GEO","ncv_hefty_side_reflective_tyvek","enable",enable_ncv);
+    volume_position[0] = ncv_center_x; volume_position[1] = ncv_center_y; volume_position[2] = zpos_hefty_side_black_bag;
+    db->SetDArray("GEO","ncv_hefty_side_black_bag","position",volume_position);
+    db->SetI("GEO","ncv_hefty_side_black_bag","enable",enable_ncv);
+    volume_position[0] = ncv_center_x; volume_position[1] = ncv_center_y; volume_position[2] = zpos_hefty_top_black_bag;
+    db->SetDArray("GEO","ncv_hefty_top_black_bag","position",volume_position);
+    db->SetI("GEO","ncv_hefty_top_black_bag","enable",enable_ncv);
+    volume_position[0] = ncv_center_x; volume_position[1] = ncv_center_y; volume_position[2] = zpos_hefty_bottom_black_bag;
+    db->SetDArray("GEO","ncv_hefty_bottom_black_bag","position",volume_position);
+    db->SetI("GEO","ncv_hefty_bottom_black_bag","enable",enable_ncv);
     
     return NULL; //Unsure about returning NULL here but it seems not to break anything.
 }
