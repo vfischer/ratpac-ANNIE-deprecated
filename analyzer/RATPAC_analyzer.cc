@@ -359,6 +359,7 @@ void Analyzer::Loop() {
 	    is_mu_tag = true;	    
 	    for(size_t jCh = 0; jCh<cursor->StepCount(); jCh++){ //loop on each step
 	      node = cursor->GoStep(jCh); // go to step
+	      cout << node->GetEndpoint().X() << " " << node->GetEndpoint().Y() << " " << node->GetEndpoint().Z() << endl;
 	      vMuTrack_volume.push_back(node->GetVolume()); //fills a vector with all the volumes the muon went through
 	      vMuTrack.push_back(node->GetEndpoint()); // fills the vectors of node position (front() and back() are first and last node in volumes (track) )
 	      vMuTrack_Edep.push_back(node->GetKE()); // record current KE of muon at each step of the track
@@ -373,6 +374,7 @@ void Analyzer::Loop() {
 		vMuTrack_Edep.push_back(node->GetKE()); // record current KE of muon at each step of the track
 	      }
 	    }
+	      cout << unit_z.Angle(ds->GetMC()->GetMCParticle(iCh)->GetMomentum()) << endl;
 	    if (MRD_hit){
 	      Nmuons_track++;
 	      hTrackAngle_mu->Fill(unit_z.Angle(ds->GetMC()->GetMCParticle(iCh)->GetMomentum())); 
@@ -435,7 +437,7 @@ void Analyzer::Loop() {
       if (node->GetProcess() == "nCapture" ) { // capture	
 	if (TPMERegexp("1000[0-9][0-9][0-9][0-9][0-9][0-9]").Match(Form("%d",node->GetPDGCode()))) { // capture on an atom
 	  Nneutrons_cap_tot++; // capture only occurs on atoms right ? so we'll increment the total nb of cap. counter
-	  if (is_mu_tag) { // with a tagged muon
+	  if (MRD_hit) { // with a tagged muon
 	    Nneutrons_cap_mu++;
 // 	     if (is_cut_mu_track) { // with a tagged muon having a track longer than the threshold cut
 // 	      Nneutrons_cap_mucut++;
@@ -446,7 +448,7 @@ void Analyzer::Loop() {
 // 	     }
 	  }
 	}
-	if (is_mu_tag) { // with a tagged muon
+	if (MRD_hit) { // with a tagged muon
 // 	    Nneutrons_cap_mu++;
 // 	    if (is_cut_mu_track) { // with a tagged muon having a track longer than the threshold cut
 // 	      Nneutrons_cap_mucut++;
@@ -550,7 +552,7 @@ void Analyzer::Loop() {
       Edep_capture = 0; is_nGd = false; is_cut_cap_edep = false; is_cut_mu_cap_DR = false; is_cut_mu_cap_DT = false; 
     }
     
-    if (is_mu_tag) { // fills this only in case of a muon track
+    if (MRD_hit) { // fills this only in case of a muon track
       hNCaptures_perevt->Fill(Ncaptures_perevt);
       hNpCaptures_perevt->Fill(Npcaptures_perevt);
     }
@@ -719,7 +721,7 @@ void Analyzer::Finalize(){
   cout << "Total number of neutrons captures from those interactions: " << Nneutrons_cap_tot << endl;
   cout << "Muons created in the volumes of interest: " << Nmuons_tot << endl;
   cout << "Muons created in the muon fiducial volume: " << Nmuons_fidu << endl;
-  cout << "Muons tracks in detector after cut: " << Nmuons_cut << endl;
+  cout << "Muons tracks in detector after MRD cut: " << Nmuons_track << endl;
   cout << "Neutron tracks total: " << Nneutrons_track_tot << endl;
   cout << "Neutrons captures: " << Nneutrons_cap_tot << endl;
   cout << "Neutrons captures after muons: " << Nneutrons_cap_mu << endl;
@@ -746,7 +748,7 @@ void Analyzer::Finalize(){
   f_output_txt << "Total number of neutrons captures from those interactions: " << Nneutrons_cap_tot << endl;
   f_output_txt << "Muons created in the volumes of interest: " << Nmuons_tot << endl;
   f_output_txt << "Muons created in the muon fiducial volume: " << Nmuons_fidu << endl;
-  f_output_txt << "Muons tracks in detector after cut: " << Nmuons_cut << endl;
+  f_output_txt << "Muons tracks in detector after MRD cut: " << Nmuons_track << endl;
   f_output_txt << "Neutron tracks total: " << Nneutrons_track_tot << endl;
   f_output_txt << "Neutrons captures: " << Nneutrons_cap_tot << endl;
   f_output_txt << "Neutrons captures after muons: " << Nneutrons_cap_mu << endl;
