@@ -61,8 +61,9 @@ void Analyzer::Initialization(){
   hDist_nCap_muTrack = new TH1F("hDist_nCap_muTrack","Distance between neutron capture and muon track (mm)",100,0,5000); 
   hDist_nCap_muStart = new TH1F("hDist_nCap_muStart","Distance between neutron capture and neutrino interaction (mm)",100,0,5000); 
   hTime_nCap_muTrack = new TH1F("hTime_nCap_muTrack","Time between neutron capture and muon track (ns)",1000,0,1000000);
-  hTrackLength_mu = new TH1F("hTrackLength_mu","Muon track length (mm)",100,0,5000);
+  hTrackLength_mu = new TH1F("hTrackLength_mu","Muon track length (mm)",200,0,10000);
   hTrackAngle_mu = new TH1F("hTrackAngle_mu","Muon track angle (rad)",100,0,4);
+  hTrackAngle_mu_MRD = new TH1F("hTrackAngle_mu_MRD","Muon track angle (rad) when going through MRD",100,0,4);
   hEdep_muTrack = new TH1F("hEdep_muTrack","Muon track deposited energy (MeV)",500,0,5000);
   hEdep_muTrack_nCap = new TH1F("hEdep_muTrack_nCap","Neutron capture (after muon track) deposited energy (MeV)",2000,0,20);
   hNCaptures_perevt = new TH1F("hNCaptures_perevt","Nb of neutron capture (after muon track) per muon track",20,0,20);
@@ -73,12 +74,16 @@ void Analyzer::Initialization(){
   hNeutronCap_proj_z = new TH1F("hNeutronCap_proj_z","Projection of neutron capture point on z axis (mm)",600,-1000,5000);
   
   hNeutron_eff_tank = new TH2F("hNeutron_eff_tank","Rho,y plot of the neutron capture efficiency in the tank",10,0,2000,30,-3000,3000);
+  hNeutron_eff_tank_NPE = new TH2F("hNeutron_eff_tank_NPE","Rho,y plot of the neutron capture (energy cut) efficiency in the tank",10,0,2000,30,-3000,3000);
   hNeutron_captured_tank = new TH2F("hNeutron_captured_tank","Rho,y plot of the number of neutrons captured in the tank",10,0,2000,30,-3000,3000);
+  hNeutron_captured_tank_NPE = new TH2F("hNeutron_captured_tank_NPE","Rho,y plot of the number of neutrons captured (energy cut) in the tank",10,0,2000,30,-3000,3000);
   hNeutron_shot_tank = new TH2F("hNeutron_shot_tank","Rho,y plot of the number of neutrons shot in the tank",10,0,2000,30,-3000,3000);
   
   // Energy infos
   hNumPE  = new TH1F("hNumPE","Num of PE (PMT summed)",1000,0,1000);
   hNHit = new TH1F("hNHit","Num of hits (summed)", 1000,0,1000);
+  hNHit_Gd = new TH1F("hNHit_Gd","Num of hits for n-Gd (summed)", 1000,0,1000);
+  hNHit_H = new TH1F("hNHit_H","Num of hits for n-H (summed)", 1000,0,1000);
   if (job_run1) {
     hNbPMThit = new TH1F("hNbPMThit","Number of PMTs hit per events",100,0,100);
   }
@@ -87,12 +92,12 @@ void Analyzer::Initialization(){
   }
   hScintEdep  = new TH1F("hScintEdep","Scintillation deposited energy",1000,0,100);
   hScintEdepQuen  = new TH1F("hScintEdepQuen","Scintillation deposited energy (quenched)",1000,0,100);
-  hScintEdep_x  = new TH1F("hScintEdep_x","Scintillation deposited energy - X position",4000,-2000,2000);
-  hScintEdep_y  = new TH1F("hScintEdep_y","Scintillation deposited energy - Y position",4000,-2000,2000);
-  hScintEdep_z  = new TH1F("hScintEdep_z","Scintillation deposited energy - Z position",4000,-2000,2000);
-  hEdep_x  = new TH1F("hEdep_x","Deposited energy - X position",4000,-2000,2000);
-  hEdep_y  = new TH1F("hEdep_y","Deposited energy - Y position",4000,-2000,2000);
-  hEdep_z  = new TH1F("hEdep_z","Deposited energy - Z position",4000,-2000,2000);
+  hScintEdep_x  = new TH1F("hScintEdep_x","Scintillation deposited energy - X position",8000,-4000,4000);
+  hScintEdep_y  = new TH1F("hScintEdep_y","Scintillation deposited energy - Y position",8000,-4000,4000);
+  hScintEdep_z  = new TH1F("hScintEdep_z","Scintillation deposited energy - Z position",8000,-4000,4000);
+  hEdep_x  = new TH1F("hEdep_x","Deposited energy - X position",8000,-4000,4000);
+  hEdep_y  = new TH1F("hEdep_y","Deposited energy - Y position",8000,-4000,4000);
+  hEdep_z  = new TH1F("hEdep_z","Deposited energy - Z position",8000,-4000,4000);
   
   if (job_run1) {
     for(Int_t i=0; i<NbPMT_run1; i++) {
@@ -151,8 +156,10 @@ void Analyzer::Loop() {
     interest_volumes_mu_track.push_back("detector_fiducial_muon");
     interest_volumes_mu_track.push_back("mrd_scint_vert_1");
     interest_volumes_neu.push_back("detector_fiducial");
+    interest_volumes_neu.push_back("detector_fiducial_muon");
     interest_volumes_neuEdep.push_back("detector_fiducial");
     interest_volumes_neuEdep.push_back("detector");
+    interest_volumes_neuEdep.push_back("detector_fiducial_muon");
   }
   
   // Cut values for analysis
@@ -368,6 +375,7 @@ void Analyzer::Loop() {
 	    }
 	    if (MRD_hit){
 	      Nmuons_track++;
+	      hTrackAngle_mu->Fill(unit_z.Angle(node->GetMomentum())); 
 	      muTrack_start = vMuTrack.front();
 	      muTrack_end = vMuTrack.back();
 	      hTrackLength_mu->Fill((muTrack_end - muTrack_start).Mag());
@@ -575,12 +583,25 @@ void Analyzer::Loop() {
 	      Npcaptures_h++;
 	      hTrackDuration_nH->Fill(node->GetGlobalTime());
 	      hTrackLength_nH->Fill(n_end.Mag() - n_start.Mag());
+	      for( Int_t jPMT = 0; jPMT < ds->GetMC()->GetMCPMTCount(); ++jPMT ){
+		if (ds->GetMC()->GetMCPMT(jPMT)->GetID()+1 == 61 || ds->GetMC()->GetMCPMT(jPMT)->GetID()+1 == 62) {
+		  hNHit_H->Fill(ds->GetMC()->GetMCPMT(jPMT)->GetMCPhotonCount());
+		}
+	      }
 	    } 
 	    if (TPMERegexp("100064[0-9][0-9][0-9][0-9]").Match(nucl_cap_pdg_code)) {
 	      Npcaptures_gd++;
 	      hTrackDuration_nGd->Fill(node->GetGlobalTime()); 
 	      hTrackLength_nGd->Fill(n_end.Mag() - n_start.Mag());
+	      for( Int_t jPMT = 0; jPMT < ds->GetMC()->GetMCPMTCount(); ++jPMT ){
+		if (ds->GetMC()->GetMCPMT(jPMT)->GetID()+1 == 61 || ds->GetMC()->GetMCPMT(jPMT)->GetID()+1 == 62) {
+		  hNHit_Gd->Fill(ds->GetMC()->GetMCPMT(jPMT)->GetMCPhotonCount());
+		}
+	      }
 	      hNeutron_captured_tank->Fill(Hypot(n_start.X(),n_start.Z()-1724),n_start.Y());
+	      if (ds->GetMC()->GetNumPE() > 10) {
+		hNeutron_captured_tank_NPE->Fill(Hypot(n_start.X(),n_start.Z()-1724),n_start.Y());
+	      }
 	    }   
 	    if (TPMERegexp("100006[0-9][0-9][0-9][0-9]").Match(nucl_cap_pdg_code)) {
 	      Npcaptures_c++;
@@ -664,6 +685,7 @@ void Analyzer::Finalize(){
   gStyle->SetNumberContours(99);
   
   hNeutron_eff_tank->Divide(hNeutron_captured_tank,hNeutron_shot_tank);
+  hNeutron_eff_tank_NPE->Divide(hNeutron_captured_tank_NPE,hNeutron_shot_tank);
   
   // Plotting  
   c1 = new TCanvas("c1", "Charge and amp infos", 0,0, 1200, 1000);

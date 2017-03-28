@@ -180,9 +180,10 @@ private:
   TH1F *hCharge_perPMT_run1[NbPMT_run1];
   TH1F *hCharge_perPMT_run2[NbPMT_run2];
   TH1F *hNumPE;
-  TH1F *hNHit; // number of photons hits 
+  TH1F *hNHit, *hNHit_Gd, *hNHit_H; // number of photons hits 
   TH1F *hNbPMThit; // number of PMTs hit per events
   TH2F *hCharge_XZ;
+  
   
   // Time and distance histos
   TH1F *hTrackDuration;
@@ -195,6 +196,7 @@ private:
   TH1F *hDist_nCap_muStart;
   TH1F *hTrackLength_mu;
   TH1F *hTrackAngle_mu;
+  TH1F *hTrackAngle_mu_MRD;
   TH1F *hTime_nCap_muTrack;
   TH1F *hNeutronCap_proj_x, *hNeutronCap_proj_y, *hNeutronCap_proj_z;
   
@@ -210,7 +212,7 @@ private:
   TH1F *hEdep_muTrack;
   TH1F *hEdep_muTrack_nCap;
   
-  TH2F *hNeutron_eff_tank, *hNeutron_shot_tank, *hNeutron_captured_tank;
+  TH2F *hNeutron_eff_tank, *hNeutron_eff_tank_NPE, *hNeutron_shot_tank, *hNeutron_captured_tank, *hNeutron_captured_tank_NPE;
   
   // Variables
   Double_t init_time, fin_time;
