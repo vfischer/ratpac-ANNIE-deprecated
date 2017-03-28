@@ -359,7 +359,6 @@ void Analyzer::Loop() {
 	    is_mu_tag = true;	    
 	    for(size_t jCh = 0; jCh<cursor->StepCount(); jCh++){ //loop on each step
 	      node = cursor->GoStep(jCh); // go to step
-	      cout << node->GetEndpoint().X() << " " << node->GetEndpoint().Y() << " " << node->GetEndpoint().Z() << endl;
 	      vMuTrack_volume.push_back(node->GetVolume()); //fills a vector with all the volumes the muon went through
 	      vMuTrack.push_back(node->GetEndpoint()); // fills the vectors of node position (front() and back() are first and last node in volumes (track) )
 	      vMuTrack_Edep.push_back(node->GetKE()); // record current KE of muon at each step of the track
@@ -377,10 +376,7 @@ void Analyzer::Loop() {
 	      
 	    if (MRD_hit){
 	      Nmuons_track++;
-	      cout << unit_z.Angle(ds->GetMC()->GetMCParticle(iCh)->GetMomentum()) << endl;
-	      cout << entry << endl;
-	      return;
-	      hTrackAngle_mu->Fill(unit_z.Angle(ds->GetMC()->GetMCParticle(iCh)->GetMomentum())); 
+	      hTrackAngle_mu_MRD->Fill(unit_z.Angle(ds->GetMC()->GetMCParticle(iCh)->GetMomentum())); 
 	      muTrack_start = vMuTrack.front();
 	      muTrack_end = vMuTrack.back();
 	      hTrackLength_mu->Fill((muTrack_end - muTrack_start).Mag());
