@@ -375,7 +375,7 @@ void Analyzer::Loop() {
 	    }
 	    if (MRD_hit){
 	      Nmuons_track++;
-	      hTrackAngle_mu->Fill(unit_z.Angle(node->GetMomentum())); 
+	      hTrackAngle_mu->Fill(unit_z.Angle(ds->GetMC()->GetMCParticle(iCh)->GetMomentum())); 
 	      muTrack_start = vMuTrack.front();
 	      muTrack_end = vMuTrack.back();
 	      hTrackLength_mu->Fill((muTrack_end - muTrack_start).Mag());
@@ -439,8 +439,9 @@ void Analyzer::Loop() {
 	    Nneutrons_cap_mu++;
 // 	     if (is_cut_mu_track) { // with a tagged muon having a track longer than the threshold cut
 // 	      Nneutrons_cap_mucut++;
-	      if( std::find(interest_volumes_neu.begin(), interest_volumes_neu.end(), node->GetVolume()) != interest_volumes_neu.end() ) { // in the good volumes
-	      Nneutrons_cap_vol++;
+	      //if( std::find(interest_volumes_neu.begin(), interest_volumes_neu.end(), node->GetVolume()) != interest_volumes_neu.end() ) { // in the good volumes
+	      if(TMath::Sqrt(TMath::Power(node->GetEndpoint().X(), 2) + TMath::Power(node->GetEndpoint().Z()-1724, 2)) < 1150. && node->GetEndpoint().Y() < 1500. && node->GetEndpoint().Y() > -1500.) {
+		Nneutrons_cap_vol++;
 	      }
 // 	     }
 	  }
@@ -449,7 +450,8 @@ void Analyzer::Loop() {
 // 	    Nneutrons_cap_mu++;
 // 	    if (is_cut_mu_track) { // with a tagged muon having a track longer than the threshold cut
 // 	      Nneutrons_cap_mucut++;
-	      if( std::find(interest_volumes_neu.begin(), interest_volumes_neu.end(), node->GetVolume()) != interest_volumes_neu.end() ) { // in the good volumes
+// 	      if( std::find(interest_volumes_neu.begin(), interest_volumes_neu.end(), node->GetVolume()) != interest_volumes_neu.end() ) { // in the good volumes
+	      if(TMath::Sqrt(TMath::Power(node->GetEndpoint().X(), 2) + TMath::Power(node->GetEndpoint().Z()-1724, 2)) < 1150. && node->GetEndpoint().Y() < 1500. && node->GetEndpoint().Y() > -1500.) {
 // 	      Nneutrons_cap_vol++;
 	    
 	    if (parenttrackID != cursor->Parent()->GetTrackID() ) {
