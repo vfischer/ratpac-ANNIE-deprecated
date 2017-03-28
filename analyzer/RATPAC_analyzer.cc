@@ -374,9 +374,12 @@ void Analyzer::Loop() {
 		vMuTrack_Edep.push_back(node->GetKE()); // record current KE of muon at each step of the track
 	      }
 	    }
-	      cout << unit_z.Angle(ds->GetMC()->GetMCParticle(iCh)->GetMomentum()) << endl;
+	      
 	    if (MRD_hit){
 	      Nmuons_track++;
+	      cout << unit_z.Angle(ds->GetMC()->GetMCParticle(iCh)->GetMomentum()) << endl;
+	      cout << entry << endl;
+	      return;
 	      hTrackAngle_mu->Fill(unit_z.Angle(ds->GetMC()->GetMCParticle(iCh)->GetMomentum())); 
 	      muTrack_start = vMuTrack.front();
 	      muTrack_end = vMuTrack.back();
