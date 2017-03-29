@@ -164,6 +164,7 @@ private:
   // booleans and counters
   Bool_t is_nGd, is_nH, is_mu_tag, is_cut_mu_track, is_cut_cap_edep, is_cut_mu_cap_DT, is_cut_mu_cap_DR, is_mu_fiducial;
   Bool_t MRD_hit;
+  Bool_t has_pion;
   Int_t test_counter;
   Int_t Nmuons, Nmuons_cut, Nneutrons_cap_gd, Npneutrons_cap_gd, Nneutrons_cap_Ecut, Ninteractions_tot, Nneutrons_cap_tot, Nneutrons_cap_vol, Nneutrons_cap_mucut, Nneutrons_cap_mu, Nneutrons_cap_DT, Nneutrons_cap_allcut;
   Int_t Nneutrons_track_tot, Nmuons_tot, Nmuons_fidu, Nmuons_track;

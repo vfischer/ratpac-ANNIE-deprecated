@@ -198,7 +198,7 @@ void Analyzer::Loop() {
     
     // reset some counters
     charge_tot = 0, Ncaptures_perevt = 0, Npcaptures_perevt = 0, parenttrackID = 0, Edep_capture = 0;;
-    is_nGd = false, is_nH = false, is_mu_tag = false, is_cut_mu_track = false, is_cut_cap_edep = false, is_cut_mu_cap_DT = false, is_cut_mu_cap_DR = false, is_mu_fiducial = false, MRD_hit = false;
+    is_nGd = false, is_nH = false, is_mu_tag = false, is_cut_mu_track = false, is_cut_cap_edep = false, is_cut_mu_cap_DT = false, is_cut_mu_cap_DR = false, is_mu_fiducial = false, MRD_hit = false, has_pion = false;
     vMuTrack.clear(), vMuTrack_Edep.clear(), vMuTrack_volume.clear(), pparticles_trackID.clear();
     
     // Analysis part
@@ -343,6 +343,15 @@ void Analyzer::Loop() {
     ////////////////////////////////////////////////////////
     //     cout << "New event --->\n";
     if(cursor->ChildCount()){ // if particles associated to parents
+      
+      for(size_t iCh = 0; iCh<ds->GetMC()->GetMCParticleCount(); iCh++){
+	if (ds->GetMC()->GetMCParticle(iCh)->GetPDGCode() == 111 || TMath::Abs(ds->GetMC()->GetMCParticle(iCh)->GetPDGCode()) == 211) { // look for pions (0,+,-)
+	  has_pion = true;
+	}
+      }
+      if (has_pion) {
+	continue;
+      }
       for(size_t iCh = 0; iCh<ds->GetMC()->GetMCParticleCount(); iCh++){ // Loop on all particles in that event
 	if(ds->GetMC()->GetMCParticle(iCh)->GetParticleName() == "mu-" || ds->GetMC()->GetMCParticle(iCh)->GetParticleName() == "mu+")  {
 	  hTrackAngle_mu->Fill(unit_z.Angle(ds->GetMC()->GetMCParticle(iCh)->GetMomentum()));
@@ -713,7 +722,6 @@ void Analyzer::Finalize(){
   
   f_output->Write();
   
-  cout << test_counter << endl;
   cout << "\n";
   cout << "=========== Muon Analysis ==========\n";
   cout << "Interactions in the volumes of interest: " << Ninteractions_tot << endl;
