@@ -350,8 +350,8 @@ void Analyzer::Loop() {
 	}
       }
       if (has_pion) {
-	node->Clear();
-	delete cursor;
+// 	node->Clear();
+//  	delete cursor;
 	nav->Clear(); delete nav;
 	continue; // continue alone creates a memory leak..
       }
