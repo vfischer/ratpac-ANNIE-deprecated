@@ -350,7 +350,10 @@ void Analyzer::Loop() {
 	}
       }
       if (has_pion) {
-	continue;
+	node->Clear();
+	delete cursor;
+	nav->Clear(); delete nav;
+	continue; // continue alone creates a memory leak..
       }
       for(size_t iCh = 0; iCh<ds->GetMC()->GetMCParticleCount(); iCh++){ // Loop on all particles in that event
 	if(ds->GetMC()->GetMCParticle(iCh)->GetParticleName() == "mu-" || ds->GetMC()->GetMCParticle(iCh)->GetParticleName() == "mu+")  {
