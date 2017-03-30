@@ -86,20 +86,20 @@ color: [0.4, 0.4, 0.6, 0.3],
 drawstyle: "solid"
 }
 
-{
-name: "GEO",
-index: "detector_fiducial",
-valid_begin: [0, 0],
-valid_end: [0, 0],
-mother: "detector",
-type: "tube",
-r_max: 1200.0,
-size_z: 1500.0,
-position: [0.0, 0.0, 100.0],
-material: "water_gdS_0p2",
-color: [0.1, 0.4, 0.6, 0.9],
-drawstyle: "solid"
-}
+// {
+// name: "GEO",
+// index: "detector_fiducial",
+// valid_begin: [0, 0],
+// valid_end: [0, 0],
+// mother: "detector",
+// type: "tube",
+// r_max: 1200.0,
+// size_z: 1500.0,
+// position: [0.0, 0.0, 100.0],
+// material: "water_gdS_0p2",
+// color: [0.1, 0.4, 0.6, 0.9],
+// drawstyle: "solid"
+// }
 /////////////////////////////////////////////////////////////////////
 ///////////********** End of tank volumes ***********////////////////
 /////////////////////////////////////////////////////////////////////

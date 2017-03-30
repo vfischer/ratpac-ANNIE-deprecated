@@ -72,12 +72,18 @@ void Analyzer::Initialization(){
   hNeutronCap_proj_x = new TH1F("hNeutronCap_proj_x","Projection of neutron capture point on x axis (mm)",600,-3000,3000);
   hNeutronCap_proj_y = new TH1F("hNeutronCap_proj_y","Projection of neutron capture point on y axis (mm)",600,-3000,3000);
   hNeutronCap_proj_z = new TH1F("hNeutronCap_proj_z","Projection of neutron capture point on z axis (mm)",600,-1000,5000);
+  hNeutronCap_disp_x = new TH1F("hNeutronCap_disp_x","Displacement of neutron capture point on x axis (mm)",600,-3000,3000);
+  hNeutronCap_disp_y = new TH1F("hNeutronCap_disp_y","Displacement of neutron capture point on y axis (mm)",600,-3000,3000);
+  hNeutronCap_disp_z = new TH1F("hNeutronCap_disp_z","Displacement of neutron capture point on z axis (mm)",600,-1000,5000);
   
   hNeutron_eff_tank = new TH2F("hNeutron_eff_tank","Rho,y plot of the neutron capture efficiency in the tank",10,0,2000,30,-3000,3000);
   hNeutron_eff_tank_NPE = new TH2F("hNeutron_eff_tank_NPE","Rho,y plot of the neutron capture (energy cut) efficiency in the tank",10,0,2000,30,-3000,3000);
+  hNeutronMu_eff_tank = new TH2F("hNeutronMu_eff_tank","Rho,y plot of the neutron capture after muons efficiency in the tank",10,0,2000,30,-3000,3000);
   hNeutron_captured_tank = new TH2F("hNeutron_captured_tank","Rho,y plot of the number of neutrons captured in the tank",10,0,2000,30,-3000,3000);
   hNeutron_captured_tank_NPE = new TH2F("hNeutron_captured_tank_NPE","Rho,y plot of the number of neutrons captured (energy cut) in the tank",10,0,2000,30,-3000,3000);
   hNeutron_shot_tank = new TH2F("hNeutron_shot_tank","Rho,y plot of the number of neutrons shot in the tank",10,0,2000,30,-3000,3000);
+  hNeutronMu_cap_point = new TH2F("hNeutronMu_cap_point","Rho,y plot of the neutron after muons capture point",10,0,2000,30,-3000,3000);
+  hNeutronMu_start_point = new TH2F("hNeutronMu_start_point","Rho,y plot of the neutron after muons start point",10,0,2000,30,-3000,3000);
   
   // Energy infos
   hNumPE  = new TH1F("hNumPE","Num of PE (PMT summed)",1000,0,1000);
@@ -150,6 +156,7 @@ void Analyzer::Loop() {
   }
   if (job_run2) {
     interest_volumes_mu_vertex.push_back("detector_fiducial_muon");
+    interest_volumes_mu_vertex.push_back("detector_fiducial");
     interest_volumes_mu_water.push_back("detector");
     interest_volumes_mu_water.push_back("detector_fiducial");
     interest_volumes_mu_water.push_back("detector_fiducial_muon");
@@ -441,6 +448,7 @@ void Analyzer::Loop() {
       //       }
       if (node->GetParticleName() == "neutron"){ // loop on all neutron tracks
 	Nneutrons_track_tot++;
+	hNeutronMu_start_point->Fill(Hypot(muTrack_start.X(),muTrack_start.Z()-1724),muTrack_start.Y());
       }
       
 //                   cout << node->GetParticleName() << " " << node->GetPDGCode() << " " << node->GetVolume() << " " << node->GetProcess() << " " << node->GetKE() << " " << is_mu_tag << endl; 
@@ -518,6 +526,11 @@ void Analyzer::Loop() {
 		hNeutronCap_proj_x->Fill(nCapture_pos.X());
 		hNeutronCap_proj_y->Fill(nCapture_pos.Y());
 		hNeutronCap_proj_z->Fill(nCapture_pos.Z());
+		hNeutronCap_disp_x->Fill(nCapture_pos.X()-muTrack_start.X());
+		hNeutronCap_disp_y->Fill(nCapture_pos.Y()-muTrack_start.Y());
+		hNeutronCap_disp_z->Fill(nCapture_pos.Z()-muTrack_start.Z());
+		
+		hNeutronMu_cap_point->Fill(Hypot(muTrack_start.X(),muTrack_start.Z()-1724),muTrack_start.Y());
 		
 	      } else if (TPMERegexp("100001[0-9][0-9][0-9][0-9]").Match(Form("%d",node->GetPDGCode()))) { //  look for H
 		is_nH = true;
@@ -701,6 +714,7 @@ void Analyzer::Finalize(){
   
   hNeutron_eff_tank->Divide(hNeutron_captured_tank,hNeutron_shot_tank);
   hNeutron_eff_tank_NPE->Divide(hNeutron_captured_tank_NPE,hNeutron_shot_tank);
+  hNeutronMu_eff_tank->Divide(hNeutronMu_cap_point,hNeutronMu_start_point);
   
   // Plotting  
   c1 = new TCanvas("c1", "Charge and amp infos", 0,0, 1200, 1000);

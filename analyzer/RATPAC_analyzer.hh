@@ -199,7 +199,7 @@ private:
   TH1F *hTrackAngle_mu;
   TH1F *hTrackAngle_mu_MRD;
   TH1F *hTime_nCap_muTrack;
-  TH1F *hNeutronCap_proj_x, *hNeutronCap_proj_y, *hNeutronCap_proj_z;
+  TH1F *hNeutronCap_proj_x, *hNeutronCap_proj_y, *hNeutronCap_proj_z, *hNeutronCap_disp_x, *hNeutronCap_disp_y, *hNeutronCap_disp_z;
   
   // Counting histos
   TH1F *hNCaptures_perevt;
@@ -214,6 +214,7 @@ private:
   TH1F *hEdep_muTrack_nCap;
   
   TH2F *hNeutron_eff_tank, *hNeutron_eff_tank_NPE, *hNeutron_shot_tank, *hNeutron_captured_tank, *hNeutron_captured_tank_NPE;
+  TH2F *hNeutronMu_cap_point, *hNeutronMu_start_point, *hNeutronMu_eff_tank;
   
   // Variables
   Double_t init_time, fin_time;
