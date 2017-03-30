@@ -78,14 +78,14 @@ void Analyzer::Initialization(){
   
   hNeutron_eff_tank = new TH2F("hNeutron_eff_tank","Rho,y plot of the neutron capture efficiency in the tank",10,0,2000,30,-3000,3000);
   hNeutron_eff_tank_NPE = new TH2F("hNeutron_eff_tank_NPE","Rho,y plot of the neutron capture (energy cut) efficiency in the tank",10,0,2000,30,-3000,3000);
-  hNeutronMu_eff_tank = new TH2F("hNeutronMu_eff_tank","Rho,y plot of the neutron capture after muons efficiency in the tank",10,0,2000,30,-3000,3000);
-  hNeutronMu_eff_tank_Edep = new TH2F("hNeutronMu_eff_tank_Edep","Rho,y plot of the neutron capture after muons efficiency in the tank, edep cut",10,0,2000,30,-3000,3000);
+  hNeutronMu_eff_tank = new TH2F("hNeutronMu_eff_tank","z,y plot of the neutron capture after muons efficiency in the tank",25,0,5000,30,-3000,3000);
+  hNeutronMu_eff_tank_Edep = new TH2F("hNeutronMu_eff_tank_Edep","z,y plot of the neutron capture after muons efficiency in the tank, edep cut",25,0,5000,30,-3000,3000);
   hNeutron_captured_tank = new TH2F("hNeutron_captured_tank","Rho,y plot of the number of neutrons captured in the tank",10,0,2000,30,-3000,3000);
   hNeutron_captured_tank_NPE = new TH2F("hNeutron_captured_tank_NPE","Rho,y plot of the number of neutrons captured (energy cut) in the tank",10,0,2000,30,-3000,3000);
   hNeutron_shot_tank = new TH2F("hNeutron_shot_tank","Rho,y plot of the number of neutrons shot in the tank",10,0,2000,30,-3000,3000);
-  hNeutronMu_cap_point = new TH2F("hNeutronMu_cap_point","Rho,y plot of the neutron after muons capture point",10,0,2000,30,-3000,3000);
-  hNeutronMu_cap_point_Edep = new TH2F("hNeutronMu_cap_point_Edep","Rho,y plot of the neutron after muons capture point, edep cut",10,0,2000,30,-3000,3000);
-  hNeutronMu_start_point = new TH2F("hNeutronMu_start_point","Rho,y plot of the neutron after muons start point",10,0,2000,30,-3000,3000);
+  hNeutronMu_cap_point = new TH2F("hNeutronMu_cap_point","z,y plot of the neutron after muons capture point",25,0,5000,30,-3000,3000);
+  hNeutronMu_cap_point_Edep = new TH2F("hNeutronMu_cap_point_Edep","z,y plot of the neutron after muons capture point, edep cut",25,0,5000,30,-3000,3000);
+  hNeutronMu_start_point = new TH2F("hNeutronMu_start_point","z,y plot of the neutron after muons start point",25,0,5000,30,-3000,3000);
   
   // Energy infos
   hNumPE  = new TH1F("hNumPE","Num of PE (PMT summed)",1000,0,1000);
@@ -451,7 +451,7 @@ void Analyzer::Loop() {
       if (node->GetParticleName() == "neutron"){ // loop on all neutron tracks
 	Nneutrons_track_tot++;
 	if (is_mu_tag) {
-	  hNeutronMu_start_point->Fill(Hypot(muTrack_start.X(),muTrack_start.Z()-1724),muTrack_start.Y());
+	  hNeutronMu_start_point->Fill(muTrack_start.Z(),muTrack_start.Y());
 	}	  
       }
       
@@ -485,7 +485,7 @@ void Analyzer::Loop() {
 		parenttrackID = cursor->Parent()->GetTrackID();
 		hEdep_muTrack_nCap->Fill(Edep_capture);
 		if(Edep_capture > 4.) {
-		  hNeutronMu_cap_point_Edep->Fill(Hypot(muTrack_start.X(),muTrack_start.Z()-1724),muTrack_start.Y());
+		  hNeutronMu_cap_point_Edep->Fill(muTrack_start.Z(),muTrack_start.Y());
 		}
 		if (Edep_capture > cut_cap_edep) {
 		  is_cut_cap_edep = true;
@@ -538,7 +538,7 @@ void Analyzer::Loop() {
 		hNeutronCap_disp_y->Fill(nCapture_pos.Y()-muTrack_start.Y());
 		hNeutronCap_disp_z->Fill(nCapture_pos.Z()-muTrack_start.Z());
 		
-		hNeutronMu_cap_point->Fill(Hypot(muTrack_start.X(),muTrack_start.Z()-1724),muTrack_start.Y());
+		hNeutronMu_cap_point->Fill(muTrack_start.Z(),muTrack_start.Y());
 		
 	      } else if (TPMERegexp("100001[0-9][0-9][0-9][0-9]").Match(Form("%d",node->GetPDGCode()))) { //  look for H
 		is_nH = true;
@@ -567,7 +567,7 @@ void Analyzer::Loop() {
     if (is_nGd) { // fills the last Edep_capture information or the only one if only 1 gamma
       hEdep_muTrack_nCap->Fill(Edep_capture);
       if(Edep_capture > 4.) {
-	hNeutronMu_cap_point_Edep->Fill(Hypot(muTrack_start.X(),muTrack_start.Z()-1724),muTrack_start.Y());
+	hNeutronMu_cap_point_Edep->Fill(muTrack_start.Z(),muTrack_start.Y());
       }
       if (Edep_capture > cut_cap_edep) {
 	is_cut_cap_edep = true;
