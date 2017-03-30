@@ -214,7 +214,7 @@ private:
   TH1F *hEdep_muTrack_nCap;
   
   TH2F *hNeutron_eff_tank, *hNeutron_eff_tank_NPE, *hNeutron_shot_tank, *hNeutron_captured_tank, *hNeutron_captured_tank_NPE;
-  TH2F *hNeutronMu_cap_point, *hNeutronMu_start_point, *hNeutronMu_eff_tank;
+  TH2F *hNeutronMu_cap_point, *hNeutronMu_cap_point_Edep, *hNeutronMu_start_point, *hNeutronMu_eff_tank, *hNeutronMu_eff_tank_Edep;
   
   // Variables
   Double_t init_time, fin_time;
