@@ -448,8 +448,11 @@ void Analyzer::Loop() {
       //       }
       if (node->GetParticleName() == "neutron"){ // loop on all neutron tracks
 	Nneutrons_track_tot++;
-	hNeutronMu_start_point->Fill(Hypot(muTrack_start.X(),muTrack_start.Z()-1724),muTrack_start.Y());
+	if (is_mu_tag) {
+	  hNeutronMu_start_point->Fill(Hypot(muTrack_start.X(),muTrack_start.Z()-1724),muTrack_start.Y());
+	}	  
       }
+      
       
 //                   cout << node->GetParticleName() << " " << node->GetPDGCode() << " " << node->GetVolume() << " " << node->GetProcess() << " " << node->GetKE() << " " << is_mu_tag << endl; 
       
