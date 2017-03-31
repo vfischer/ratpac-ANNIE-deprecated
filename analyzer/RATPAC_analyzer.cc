@@ -451,7 +451,7 @@ void Analyzer::Loop() {
       //       }
       if (node->GetParticleName() == "neutron"){ // loop on all neutron tracks
 	Nneutrons_track_tot++;
-	if (is_mu_tag) {
+	if (MRD_hit) {
 	  hNeutronMu_start_point->Fill(muTrack_start.Z(),muTrack_start.X());
 	}	  
       }
@@ -478,7 +478,7 @@ void Analyzer::Loop() {
 // 	    if (is_cut_mu_track) { // with a tagged muon having a track longer than the threshold cut
 // 	      Nneutrons_cap_mucut++;
 // 	      if( std::find(interest_volumes_neu.begin(), interest_volumes_neu.end(), node->GetVolume()) != interest_volumes_neu.end() ) { // in the good volumes
-	      if(TMath::Sqrt(TMath::Power(node->GetEndpoint().X(), 2) + TMath::Power(node->GetEndpoint().Z()-1724, 2)) < 1150. && node->GetEndpoint().Y() < 1500. && node->GetEndpoint().Y() > -1500.) {
+// 	      if(TMath::Sqrt(TMath::Power(node->GetEndpoint().X(), 2) + TMath::Power(node->GetEndpoint().Z()-1724, 2)) < 1150. && node->GetEndpoint().Y() < 1500. && node->GetEndpoint().Y() > -1500.) {
 // 	      Nneutrons_cap_vol++;
 	    
 	    if (parenttrackID != cursor->Parent()->GetTrackID() ) {
@@ -559,7 +559,7 @@ void Analyzer::Loop() {
 	      
 	    }
 	    parenttrackID = cursor->Parent()->GetTrackID();
-	  }	
+// 	  }	
 // 	}
 	}
       }
