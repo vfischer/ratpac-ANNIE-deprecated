@@ -351,7 +351,7 @@ void Analyzer::Loop() {
     ////////////////////////////////////////////////////////
     //************ Primary muon search loop **************//
     ////////////////////////////////////////////////////////
-    //     cout << "New event --->\n";
+         cout << "New event --->\n";
     if(cursor->ChildCount()){ // if particles associated to parents
       
       for(size_t iCh = 0; iCh<ds->GetMC()->GetMCParticleCount(); iCh++){
@@ -449,13 +449,12 @@ void Analyzer::Loop() {
       // // 	    N_inelastic++;
       // 	  }
       //       }
-      if (node->GetParticleName() == "neutron"){ // loop on all neutron tracks
+      if (node->GetParticleName() == "neutron" && (node->GetProcess() == "start" || node->GetProcess() == "neutronInelastic")){ // loop on all neutron tracks
 	Nneutrons_track_tot++;
 	if (MRD_hit) {
 	  hNeutronMu_start_point->Fill(muTrack_start.Z(),muTrack_start.X());
 	}	  
       }
-      
       
 //                   cout << node->GetParticleName() << " " << node->GetPDGCode() << " " << node->GetVolume() << " " << node->GetProcess() << " " << node->GetKE() << " " << is_mu_tag << endl; 
       
