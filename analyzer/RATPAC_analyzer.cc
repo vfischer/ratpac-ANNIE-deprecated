@@ -163,6 +163,7 @@ void Analyzer::Loop() {
     interest_volumes_mu_water.push_back("detector_fiducial");
     interest_volumes_mu_water.push_back("detector_fiducial_muon");
     interest_volumes_mu_track.push_back("detector_fiducial_muon");
+    interest_volumes_mu_track.push_back("detector_fiducial");
     interest_volumes_mu_track.push_back("mrd_scint_vert_1");
     interest_volumes_neu.push_back("detector_fiducial");
     interest_volumes_neu.push_back("detector_fiducial_muon");
@@ -389,10 +390,10 @@ void Analyzer::Loop() {
 		 }
 	      }
 	      
-	      if ( std::find(interest_volumes_mu_track.begin(), interest_volumes_mu_track.end(), node->GetVolume()) != interest_volumes_mu_track.end() ) { // is node is in the volume you want
-		vMuTrack.push_back(node->GetEndpoint()); // fills the vectors of node position (front() and back() are first and last node in volumes (track) )
-		vMuTrack_Edep.push_back(node->GetKE()); // record current KE of muon at each step of the track
-	      }
+// 	      if ( std::find(interest_volumes_mu_track.begin(), interest_volumes_mu_track.end(), node->GetVolume()) != interest_volumes_mu_track.end() ) { // is node is in the volume you want
+// 		vMuTrack.push_back(node->GetEndpoint()); // fills the vectors of node position (front() and back() are first and last node in volumes (track) )
+// 		vMuTrack_Edep.push_back(node->GetKE()); // record current KE of muon at each step of the track
+// 	      }
 	    }
 	      
 	    if (MRD_hit){
