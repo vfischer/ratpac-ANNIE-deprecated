@@ -452,7 +452,7 @@ void Analyzer::Loop() {
       if (node->GetParticleName() == "neutron"){ // loop on all neutron tracks
 	Nneutrons_track_tot++;
 	if (is_mu_tag) {
-	  hNeutronMu_start_point->Fill(muTrack_start.Z(),muTrack_start.Y());
+	  hNeutronMu_start_point->Fill(muTrack_start.Z(),muTrack_start.X());
 	}	  
       }
       
@@ -486,7 +486,7 @@ void Analyzer::Loop() {
 		parenttrackID = cursor->Parent()->GetTrackID();
 		hEdep_muTrack_nCap->Fill(Edep_capture);
 		if(Edep_capture > 4.) {
-		  hNeutronMu_cap_point_Edep->Fill(muTrack_start.Z(),muTrack_start.Y());
+		  hNeutronMu_cap_point_Edep->Fill(muTrack_start.Z(),muTrack_start.X());
 		}
 		if (Edep_capture > cut_cap_edep) {
 		  is_cut_cap_edep = true;
@@ -539,7 +539,7 @@ void Analyzer::Loop() {
 		hNeutronCap_disp_y->Fill(nCapture_pos.Y()-muTrack_start.Y());
 		hNeutronCap_disp_z->Fill(nCapture_pos.Z()-muTrack_start.Z());
 		
-		hNeutronMu_cap_point->Fill(muTrack_start.Z(),muTrack_start.Y());
+		hNeutronMu_cap_point->Fill(muTrack_start.Z(),muTrack_start.X());
 		
 	      } else if (TPMERegexp("100001[0-9][0-9][0-9][0-9]").Match(Form("%d",node->GetPDGCode()))) { //  look for H
 		is_nH = true;
@@ -568,7 +568,7 @@ void Analyzer::Loop() {
     if (is_nGd) { // fills the last Edep_capture information or the only one if only 1 gamma
       hEdep_muTrack_nCap->Fill(Edep_capture);
       if(Edep_capture > 4.) {
-	hNeutronMu_cap_point_Edep->Fill(muTrack_start.Z(),muTrack_start.Y());
+	hNeutronMu_cap_point_Edep->Fill(muTrack_start.Z(),muTrack_start.X());
       }
       if (Edep_capture > cut_cap_edep) {
 	is_cut_cap_edep = true;
