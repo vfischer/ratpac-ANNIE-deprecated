@@ -449,7 +449,7 @@ void Analyzer::Loop() {
       // // 	    N_inelastic++;
       // 	  }
       //       }
-      if (node->GetParticleName() == "neutron" && (node->GetProcess() == "start" || node->GetProcess() == "neutronInelastic")){ // loop on all neutron tracks
+      if (node->GetParticleName() == "neutron" && (node->GetProcess() == "start" || node->GetProcess() == "muMinusCaptureAtRest")){ // loop on all neutron tracks
 	Nneutrons_track_tot++;
 	if (MRD_hit) {
 	  hNeutronMu_start_point->Fill(muTrack_start.Z(),muTrack_start.X());
