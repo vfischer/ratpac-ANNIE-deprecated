@@ -74,7 +74,7 @@ void Analyzer::Initialization(){
   hNeutronCap_proj_z = new TH1F("hNeutronCap_proj_z","Projection of neutron capture point on z axis (mm)",600,-1000,5000);
   hNeutronCap_disp_x = new TH1F("hNeutronCap_disp_x","Displacement of neutron capture point on x axis (mm)",600,-3000,3000);
   hNeutronCap_disp_y = new TH1F("hNeutronCap_disp_y","Displacement of neutron capture point on y axis (mm)",600,-3000,3000);
-  hNeutronCap_disp_z = new TH1F("hNeutronCap_disp_z","Displacement of neutron capture point on z axis (mm)",600,-1000,5000);
+  hNeutronCap_disp_z = new TH1F("hNeutronCap_disp_z","Displacement of neutron capture point on z axis (mm)",600,-3000,3000);
   hMuVertex_proj_x = new TH1F("hMuVertex_proj_x","Projection of muon vertex on x axis (mm)",600,-3000,3000);
   hMuVertex_proj_y = new TH1F("hMuVertex_proj_y","Projection of muon vertex on y axis (mm)",600,-3000,3000);
   hMuVertex_proj_z = new TH1F("hMuVertex_proj_z","Projection of muon vertex on z axis (mm)",600,-1000,5000);
@@ -484,10 +484,10 @@ void Analyzer::Loop() {
       //       }
       if (node->GetParticleName() == "neutron" && node->GetProcess() != "neutronInelastic"){ // loop on all neutron tracks
 	Nneutrons_track_tot++;
-// 	if (MRD_hit) {
+	if (is_mu_tag) {
 	  hNeutronMu_start_point->Fill(muTrack_start.Z(),muTrack_start.X());
 	  hNeutronMu_start_point_3D->Fill(muTrack_start.Z(),muTrack_start.X(),muTrack_start.Y());
-// 	}	  
+	}	  
       }
       
 //                   cout << node->GetParticleName() << " " << node->GetPDGCode() << " " << node->GetVolume() << " " << node->GetProcess() << " " << node->GetKE() << " " << is_mu_tag << endl; 
@@ -506,7 +506,7 @@ void Analyzer::Loop() {
 // 	     }
 	  }
 	}
-// 	if (MRD_hit) { // with a tagged muon
+	if (is_mu_tag) { // with a tagged muon
 // 	    Nneutrons_cap_mu++;
 // 	    if (is_cut_mu_track) { // with a tagged muon having a track longer than the threshold cut
 // 	      Nneutrons_cap_mucut++;
@@ -596,7 +596,7 @@ void Analyzer::Loop() {
 	    parenttrackID = cursor->Parent()->GetTrackID();
 // 	  }	
 // 	}
-// 	}
+	}
       }
     }
     
