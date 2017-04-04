@@ -169,8 +169,8 @@ void Analyzer::Loop() {
   }
   if (job_run2) {
     interest_volumes_mu_vertex.push_back("detector_fiducial_muon");
-    interest_volumes_mu_vertex.push_back("detector_fiducial");
-    interest_volumes_mu_vertex.push_back("detector");
+//     interest_volumes_mu_vertex.push_back("detector_fiducial");
+//     interest_volumes_mu_vertex.push_back("detector");
     interest_volumes_mu_water.push_back("detector");
     interest_volumes_mu_water.push_back("detector_fiducial");
     interest_volumes_mu_water.push_back("detector_fiducial_muon");
@@ -407,7 +407,7 @@ void Analyzer::Loop() {
 	    Nmuons_fidu++; // only fill this once per event
 	    is_mu_tag = true;	    
 	    for(size_t jCh = 1; jCh<cursor->StepCount(); jCh++){ //loop on each step (starts at 1 for some reason)
-	      cout << jCh << " " << node->GetVolume() << " " << node->GetKE() << " " << node->GetProcess() << " " << node->GetEndpoint().X() << " " << node->GetEndpoint().Y() << " " << node->GetEndpoint().Z() << endl;
+// 	      cout << jCh << " " << node->GetVolume() << " " << node->GetKE() << " " << node->GetProcess() << " " << node->GetEndpoint().X() << " " << node->GetEndpoint().Y() << " " << node->GetEndpoint().Z() << endl;
 	      node = cursor->GoStep(jCh); // go to step
 	      vMuTrack_volume.push_back(node->GetVolume()); //fills a vector with all the volumes the muon went through
 	      vMuTrack.push_back(node->GetEndpoint()); // fills the vectors of node position (front() and back() are first and last node in volumes (track) )
