@@ -170,7 +170,7 @@ void Analyzer::Loop() {
   if (job_run2) {
     interest_volumes_mu_vertex.push_back("detector_fiducial_muon");
     interest_volumes_mu_vertex.push_back("detector_fiducial");
-    interest_volumes_mu_vertex.push_back("detector");
+//     interest_volumes_mu_vertex.push_back("detector");
     interest_volumes_mu_water.push_back("detector");
     interest_volumes_mu_water.push_back("detector_fiducial");
     interest_volumes_mu_water.push_back("detector_fiducial_muon");
@@ -504,7 +504,7 @@ void Analyzer::Loop() {
 // 	     }
 	  }
 	}
-	if (MRD_hit) { // with a tagged muon
+// 	if (MRD_hit) { // with a tagged muon
 // 	    Nneutrons_cap_mu++;
 // 	    if (is_cut_mu_track) { // with a tagged muon having a track longer than the threshold cut
 // 	      Nneutrons_cap_mucut++;
@@ -594,7 +594,7 @@ void Analyzer::Loop() {
 	    parenttrackID = cursor->Parent()->GetTrackID();
 // 	  }	
 // 	}
-	}
+// 	}
       }
     }
     
