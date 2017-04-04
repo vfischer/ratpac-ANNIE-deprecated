@@ -169,8 +169,8 @@ void Analyzer::Loop() {
   }
   if (job_run2) {
     interest_volumes_mu_vertex.push_back("detector_fiducial_muon");
-//     interest_volumes_mu_vertex.push_back("detector_fiducial");
-//     interest_volumes_mu_vertex.push_back("detector");
+    interest_volumes_mu_vertex.push_back("detector_fiducial");
+    interest_volumes_mu_vertex.push_back("detector");
     interest_volumes_mu_water.push_back("detector");
     interest_volumes_mu_water.push_back("detector_fiducial");
     interest_volumes_mu_water.push_back("detector_fiducial_muon");
@@ -378,7 +378,7 @@ void Analyzer::Loop() {
     ////////////////////////////////////////////////////////
     //************ Primary muon search loop **************//
     ////////////////////////////////////////////////////////
-    cout << "New event --->\n";
+//     cout << "New event --->\n";
     if(cursor->ChildCount()){ // if particles associated to parents
       
       for(size_t iCh = 0; iCh<ds->GetMC()->GetMCParticleCount(); iCh++){
