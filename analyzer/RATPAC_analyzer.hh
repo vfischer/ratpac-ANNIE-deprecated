@@ -5,6 +5,7 @@
 #include <TH1.h>
 #include <TF1.h>
 #include <TH2.h>
+#include <TH3.h>
 #include <TGraph.h>
 #include <TCanvas.h>
 #include <TTree.h>
@@ -216,6 +217,7 @@ private:
   
   TH2F *hNeutron_eff_tank, *hNeutron_eff_tank_NPE, *hNeutron_shot_tank, *hNeutron_captured_tank, *hNeutron_captured_tank_NPE;
   TH2F *hNeutronMu_cap_point, *hNeutronMu_cap_point_Edep, *hNeutronMu_start_point, *hNeutronMu_eff_tank, *hNeutronMu_eff_tank_Edep;
+  TH3F *hNeutronMu_cap_point_3D, *hNeutronMu_cap_point_Edep_3D, *hNeutronMu_start_point_3D, *hNeutronMu_eff_tank_3D, *hNeutronMu_eff_tank_Edep_3D;
   
   // Variables
   Double_t init_time, fin_time;

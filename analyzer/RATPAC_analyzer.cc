@@ -83,12 +83,18 @@ void Analyzer::Initialization(){
   hNeutron_eff_tank_NPE = new TH2F("hNeutron_eff_tank_NPE","Rho,y plot of the neutron capture (energy cut) efficiency in the tank",10,0,2000,30,-3000,3000);
   hNeutronMu_eff_tank = new TH2F("hNeutronMu_eff_tank","z,y plot of the neutron capture after muons efficiency in the tank",25,0,5000,30,-3000,3000);
   hNeutronMu_eff_tank_Edep = new TH2F("hNeutronMu_eff_tank_Edep","z,y plot of the neutron capture after muons efficiency in the tank, edep cut",25,0,5000,30,-3000,3000);
+  hNeutronMu_eff_tank_3D = new TH3F("hNeutronMu_eff_tank_3D","3D plot of the neutron capture after muons efficiency in the tank",25,0,5000,30,-3000,3000,30,-3000,3000);
+  hNeutronMu_eff_tank_Edep_3D = new TH3F("hNeutronMu_eff_tank_Edep_3D","3D plot of the neutron capture after muons efficiency in the tank, edep cut",25,0,5000,30,-3000,3000,30,-3000,3000);
+  
   hNeutron_captured_tank = new TH2F("hNeutron_captured_tank","Rho,y plot of the number of neutrons captured in the tank",10,0,2000,30,-3000,3000);
   hNeutron_captured_tank_NPE = new TH2F("hNeutron_captured_tank_NPE","Rho,y plot of the number of neutrons captured (energy cut) in the tank",10,0,2000,30,-3000,3000);
   hNeutron_shot_tank = new TH2F("hNeutron_shot_tank","Rho,y plot of the number of neutrons shot in the tank",10,0,2000,30,-3000,3000);
   hNeutronMu_cap_point = new TH2F("hNeutronMu_cap_point","z,y plot of the neutron after muons capture point",25,0,5000,30,-3000,3000);
   hNeutronMu_cap_point_Edep = new TH2F("hNeutronMu_cap_point_Edep","z,y plot of the neutron after muons capture point, edep cut",25,0,5000,30,-3000,3000);
   hNeutronMu_start_point = new TH2F("hNeutronMu_start_point","z,y plot of the neutron after muons start point",25,0,5000,30,-3000,3000);
+  hNeutronMu_cap_point_3D = new TH3F("hNeutronMu_cap_point_3D","3D plot of the neutron after muons capture point",25,0,5000,30,-3000,3000,30,-3000,3000);
+  hNeutronMu_cap_point_Edep_3D = new TH3F("hNeutronMu_cap_point_Edep_3D","3D plot of the neutron after muons capture point, edep cut",25,0,5000,30,-3000,3000,30,-3000,3000);
+  hNeutronMu_start_point_3D = new TH3F("hNeutronMu_start_point_3D","3D plot of the neutron after muons start point",25,0,5000,30,-3000,3000,30,-3000,3000);
   
   // Energy infos
   hNumPE  = new TH1F("hNumPE","Num of PE (PMT summed)",1000,0,1000);
@@ -372,7 +378,7 @@ void Analyzer::Loop() {
     ////////////////////////////////////////////////////////
     //************ Primary muon search loop **************//
     ////////////////////////////////////////////////////////
-//          cout << "New event --->\n";
+    cout << "New event --->\n";
     if(cursor->ChildCount()){ // if particles associated to parents
       
       for(size_t iCh = 0; iCh<ds->GetMC()->GetMCParticleCount(); iCh++){
@@ -400,7 +406,8 @@ void Analyzer::Loop() {
 	    if( std::find(interest_volumes_mu_vertex.begin(), interest_volumes_mu_vertex.end(), node->GetVolume()) != interest_volumes_mu_vertex.end() ) { // only interaction in volumes of interest 
 	    Nmuons_fidu++; // only fill this once per event
 	    is_mu_tag = true;	    
-	    for(size_t jCh = 0; jCh<cursor->StepCount(); jCh++){ //loop on each step
+	    for(size_t jCh = 1; jCh<cursor->StepCount(); jCh++){ //loop on each step (starts at 1 for some reason)
+	      cout << jCh << " " << node->GetVolume() << " " << node->GetKE() << " " << node->GetProcess() << " " << node->GetEndpoint().X() << " " << node->GetEndpoint().Y() << " " << node->GetEndpoint().Z() << endl;
 	      node = cursor->GoStep(jCh); // go to step
 	      vMuTrack_volume.push_back(node->GetVolume()); //fills a vector with all the volumes the muon went through
 	      vMuTrack.push_back(node->GetEndpoint()); // fills the vectors of node position (front() and back() are first and last node in volumes (track) )
@@ -417,9 +424,9 @@ void Analyzer::Loop() {
 // 	      }
 	    }
 	      
-	      hMuVertex_proj_x->Fill(muTrack_start.X());
-	      hMuVertex_proj_y->Fill(muTrack_start.Y());
-	      hMuVertex_proj_z->Fill(muTrack_start.Z());
+	      hMuVertex_proj_x->Fill(vMuTrack.front().X());
+	      hMuVertex_proj_y->Fill(vMuTrack.front().Y());
+	      hMuVertex_proj_z->Fill(vMuTrack.front().Z());
 	    if (MRD_hit){
 	      Nmuons_track++;
 	      hTrackAngle_mu_MRD->Fill(unit_z.Angle(ds->GetMC()->GetMCParticle(iCh)->GetMomentum())); 
@@ -477,6 +484,7 @@ void Analyzer::Loop() {
 	Nneutrons_track_tot++;
 	if (MRD_hit) {
 	  hNeutronMu_start_point->Fill(muTrack_start.Z(),muTrack_start.X());
+	  hNeutronMu_start_point_3D->Fill(muTrack_start.Z(),muTrack_start.X(),muTrack_start.Y());
 	}	  
       }
       
@@ -510,6 +518,7 @@ void Analyzer::Loop() {
 		hEdep_muTrack_nCap->Fill(Edep_capture);
 		if(Edep_capture > 4.) {
 		  hNeutronMu_cap_point_Edep->Fill(muTrack_start.Z(),muTrack_start.X());
+		  hNeutronMu_cap_point_Edep_3D->Fill(muTrack_start.Z(),muTrack_start.X(),muTrack_start.Y());
 		}
 		if (Edep_capture > cut_cap_edep) {
 		  is_cut_cap_edep = true;
@@ -563,6 +572,7 @@ void Analyzer::Loop() {
 		hNeutronCap_disp_z->Fill(nCapture_pos.Z()-muTrack_start.Z());
 		
 		hNeutronMu_cap_point->Fill(muTrack_start.Z(),muTrack_start.X());
+		hNeutronMu_cap_point_3D->Fill(muTrack_start.Z(),muTrack_start.X(),muTrack_start.Y());
 		
 	      } else if (TPMERegexp("100001[0-9][0-9][0-9][0-9]").Match(Form("%d",node->GetPDGCode()))) { //  look for H
 		is_nH = true;
@@ -592,6 +602,7 @@ void Analyzer::Loop() {
       hEdep_muTrack_nCap->Fill(Edep_capture);
       if(Edep_capture > 4.) {
 	hNeutronMu_cap_point_Edep->Fill(muTrack_start.Z(),muTrack_start.X());
+	hNeutronMu_cap_point_Edep_3D->Fill(muTrack_start.Z(),muTrack_start.X(),muTrack_start.Y());
       }
       if (Edep_capture > cut_cap_edep) {
 	is_cut_cap_edep = true;
@@ -751,6 +762,8 @@ void Analyzer::Finalize(){
   hNeutron_eff_tank_NPE->Divide(hNeutron_captured_tank_NPE,hNeutron_shot_tank);
   hNeutronMu_eff_tank->Divide(hNeutronMu_cap_point,hNeutronMu_start_point);
   hNeutronMu_eff_tank_Edep->Divide(hNeutronMu_cap_point_Edep,hNeutronMu_start_point);
+  hNeutronMu_eff_tank_3D->Divide(hNeutronMu_cap_point_3D,hNeutronMu_start_point_3D);
+  hNeutronMu_eff_tank_Edep_3D->Divide(hNeutronMu_cap_point_Edep_3D,hNeutronMu_start_point_3D);
   
   // Plotting  
   c1 = new TCanvas("c1", "Charge and amp infos", 0,0, 1200, 1000);
