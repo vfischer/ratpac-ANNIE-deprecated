@@ -424,23 +424,25 @@ void Analyzer::Loop() {
 // 	      }
 	    }
 	      
-	      hMuVertex_proj_x->Fill(vMuTrack.front().X());
-	      hMuVertex_proj_y->Fill(vMuTrack.front().Y());
-	      hMuVertex_proj_z->Fill(vMuTrack.front().Z());
-	    if (MRD_hit){
+	      
+// 	    if (MRD_hit){
 	      Nmuons_track++;
 	      hTrackAngle_mu_MRD->Fill(unit_z.Angle(ds->GetMC()->GetMCParticle(iCh)->GetMomentum())); 
 	      muTrack_start = vMuTrack.front();
 	      muTrack_end = vMuTrack.back();
 	      hTrackLength_mu->Fill((muTrack_end - muTrack_start).Mag());
 	      hEdep_muTrack->Fill(vMuTrack_Edep.front() - vMuTrack_Edep.back()); // deposited Edep of track is KEfinal-KEinitial
+	      
+	      hMuVertex_proj_x->Fill(muTrack_start.X());
+	      hMuVertex_proj_y->Fill(muTrack_start.Y());
+	      hMuVertex_proj_z->Fill(muTrack_start.Z());
 	      // 	cout << "Muon track length: " << (muTrack_end - muTrack_start).Mag() << endl;
 // 	      if ((muTrack_end - muTrack_start).Mag() > cut_mu_track){ //muon track length cut
 // 		Nmuons_cut++; is_cut_mu_track = true;
 // 	      }
-	    } else {
+// 	    } else {
 	      // 	  cout << "No muon track in this volume\n";
-	    }
+// 	    }
 	  }
 	  
 	}
@@ -482,10 +484,10 @@ void Analyzer::Loop() {
       //       }
       if (node->GetParticleName() == "neutron" && node->GetProcess() != "neutronInelastic"){ // loop on all neutron tracks
 	Nneutrons_track_tot++;
-	if (MRD_hit) {
+// 	if (MRD_hit) {
 	  hNeutronMu_start_point->Fill(muTrack_start.Z(),muTrack_start.X());
 	  hNeutronMu_start_point_3D->Fill(muTrack_start.Z(),muTrack_start.X(),muTrack_start.Y());
-	}	  
+// 	}	  
       }
       
 //                   cout << node->GetParticleName() << " " << node->GetPDGCode() << " " << node->GetVolume() << " " << node->GetProcess() << " " << node->GetKE() << " " << is_mu_tag << endl; 
