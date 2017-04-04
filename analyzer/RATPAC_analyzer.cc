@@ -75,6 +75,9 @@ void Analyzer::Initialization(){
   hNeutronCap_disp_x = new TH1F("hNeutronCap_disp_x","Displacement of neutron capture point on x axis (mm)",600,-3000,3000);
   hNeutronCap_disp_y = new TH1F("hNeutronCap_disp_y","Displacement of neutron capture point on y axis (mm)",600,-3000,3000);
   hNeutronCap_disp_z = new TH1F("hNeutronCap_disp_z","Displacement of neutron capture point on z axis (mm)",600,-1000,5000);
+  hMuVertex_proj_x = new TH1F("hMuVertex_proj_x","Projection of muon vertex on x axis (mm)",600,-3000,3000);
+  hMuVertex_proj_y = new TH1F("hMuVertex_proj_y","Projection of muon vertex on y axis (mm)",600,-3000,3000);
+  hMuVertex_proj_z = new TH1F("hMuVertex_proj_z","Projection of muon vertex on z axis (mm)",600,-1000,5000);
   
   hNeutron_eff_tank = new TH2F("hNeutron_eff_tank","Rho,y plot of the neutron capture efficiency in the tank",10,0,2000,30,-3000,3000);
   hNeutron_eff_tank_NPE = new TH2F("hNeutron_eff_tank_NPE","Rho,y plot of the neutron capture (energy cut) efficiency in the tank",10,0,2000,30,-3000,3000);
@@ -94,6 +97,8 @@ void Analyzer::Initialization(){
   hNHit_H = new TH1F("hNHit_H","Num of hits for n-H (summed)", 1000,0,1000);
   if (job_run1) {
     hNbPMThit = new TH1F("hNbPMThit","Number of PMTs hit per events",100,0,100);
+    hNumPE_NCV1  = new TH1F("hNumPE_NCV1","Num of PE in NCV PMT 1",1000,0,1000);
+    hNumPE_NCV2  = new TH1F("hNumPE_NCV2","Num of PE in NCV PMT 2",1000,0,1000);
   }
   if (job_run2) {
     hNbPMThit = new TH1F("hNbPMThit","Number of PMTs hit per events",200,0,200);
@@ -217,18 +222,33 @@ void Analyzer::Loop() {
     //PMT loop
     for( size_t iPMT = 0; iPMT < ds->GetMC()->GetMCPMTCount(); iPMT++ ){
       if (!binary_search(broken_pmt_vec.begin(), broken_pmt_vec.end(), ds->GetMC()->GetMCPMT(iPMT)->GetID()+1)){
-	if (job_run1 && (ds->GetMC()->GetMCPMT(iPMT)->GetID()+1 == 61 || ds->GetMC()->GetMCPMT(iPMT)->GetID()+1 == 62)) { continue;}
+// 	if (job_run1 && (ds->GetMC()->GetMCPMT(iPMT)->GetID()+1 == 61 || ds->GetMC()->GetMCPMT(iPMT)->GetID()+1 == 62)) { continue;}
 	
 	hPMTID->Fill(ds->GetMC()->GetMCPMT(iPMT)->GetID()+1);
 	
 	if (job_run1){ 
-	  hPMTx->Fill(pmt_x_array_run1[ds->GetMC()->GetMCPMT(iPMT)->GetID()]);
-	  hPMTy->Fill(0); 
-	  hPMTz->Fill(pmt_z_array_run1[ds->GetMC()->GetMCPMT(iPMT)->GetID()]); 
-	  hPMTcard->Fill(pmt_card_array_run1[ds->GetMC()->GetMCPMT(iPMT)->GetID()]); 
-	  hPMTchannel->Fill(pmt_channel_array_run1[ds->GetMC()->GetMCPMT(iPMT)->GetID()]); 
-	  hCharge_XZ->Fill(pmt_x_array_run1[ds->GetMC()->GetMCPMT(iPMT)->GetID()],pmt_z_array_run1[ds->GetMC()->GetMCPMT(iPMT)->GetID()]);
+	  if (ds->GetMC()->GetMCPMT(iPMT)->GetID()+1 != 61 && ds->GetMC()->GetMCPMT(iPMT)->GetID()+1 != 62) {
+	    hPMTx->Fill(pmt_x_array_run1[ds->GetMC()->GetMCPMT(iPMT)->GetID()]);
+	    hPMTy->Fill(0); 
+	    hPMTz->Fill(pmt_z_array_run1[ds->GetMC()->GetMCPMT(iPMT)->GetID()]); 
+	    hPMTcard->Fill(pmt_card_array_run1[ds->GetMC()->GetMCPMT(iPMT)->GetID()]); 
+	    hPMTchannel->Fill(pmt_channel_array_run1[ds->GetMC()->GetMCPMT(iPMT)->GetID()]); 
+	    hCharge_XZ->Fill(pmt_x_array_run1[ds->GetMC()->GetMCPMT(iPMT)->GetID()],pmt_z_array_run1[ds->GetMC()->GetMCPMT(iPMT)->GetID()]);
+	  }
 	  hCharge_perPMT_run1[ds->GetMC()->GetMCPMT(iPMT)->GetID()]->Fill(ds->GetMC()->GetMCPMT(iPMT)->GetCharge());
+	  if (ds->GetMC()->GetMCPMT(iPMT)->GetID()+1 == 61) {
+	    cout << "aaa\n";
+	    hNumPE_NCV1->Fill(ds->GetMC()->GetMCPMT(iPMT)->GetMCPhotonCount());
+	    for(size_t iPhot = 0; iPhot < ds->GetMC()->GetMCPMT(iPMT)->GetMCPhotonCount(); iPhot++){
+	      cout << ds->GetMC()->GetMCPMT(iPMT)->GetMCPhoton(iPhot)->GetPosition().X() << " "
+	           << ds->GetMC()->GetMCPMT(iPMT)->GetMCPhoton(iPhot)->GetPosition().Y() << " "
+	           << ds->GetMC()->GetMCPMT(iPMT)->GetMCPhoton(iPhot)->GetPosition().Z() << endl;
+	    }
+	  }
+	  if (ds->GetMC()->GetMCPMT(iPMT)->GetID()+1 == 62) {
+	    cout << "bbb\n";
+	    hNumPE_NCV2->Fill(ds->GetMC()->GetMCPMT(iPMT)->GetMCPhotonCount());
+	  }
 	}
 	
 	if (job_run2){ 
@@ -351,7 +371,7 @@ void Analyzer::Loop() {
     ////////////////////////////////////////////////////////
     //************ Primary muon search loop **************//
     ////////////////////////////////////////////////////////
-         cout << "New event --->\n";
+//          cout << "New event --->\n";
     if(cursor->ChildCount()){ // if particles associated to parents
       
       for(size_t iCh = 0; iCh<ds->GetMC()->GetMCParticleCount(); iCh++){
@@ -401,6 +421,9 @@ void Analyzer::Loop() {
 	      hTrackAngle_mu_MRD->Fill(unit_z.Angle(ds->GetMC()->GetMCParticle(iCh)->GetMomentum())); 
 	      muTrack_start = vMuTrack.front();
 	      muTrack_end = vMuTrack.back();
+	      hMuVertex_proj_x->Fill(muTrack_start.X());
+	      hMuVertex_proj_y->Fill(muTrack_start.Y());
+	      hMuVertex_proj_z->Fill(muTrack_start.Z());
 	      hTrackLength_mu->Fill((muTrack_end - muTrack_start).Mag());
 	      hEdep_muTrack->Fill(vMuTrack_Edep.front() - vMuTrack_Edep.back()); // deposited Edep of track is KEfinal-KEinitial
 	      // 	cout << "Muon track length: " << (muTrack_end - muTrack_start).Mag() << endl;

@@ -158,8 +158,8 @@ private:
   Bool_t job_simu, job_run1, job_run1_hefty, job_run2;
   
   // PMT number for run 1 and 2
-  const static Int_t NbPMT_run1 = 60;
-  const static Int_t NbPMT_run2 = 200;
+  const static Int_t NbPMT_run1 = 62;
+  const static Int_t NbPMT_run2 = 300;
   
   // booleans and counters
   Bool_t is_nGd, is_nH, is_mu_tag, is_cut_mu_track, is_cut_cap_edep, is_cut_mu_cap_DT, is_cut_mu_cap_DR, is_mu_fiducial;
@@ -180,7 +180,7 @@ private:
   TH1F *hCharge, *hCharge_tot;
   TH1F *hCharge_perPMT_run1[NbPMT_run1];
   TH1F *hCharge_perPMT_run2[NbPMT_run2];
-  TH1F *hNumPE;
+  TH1F *hNumPE, *hNumPE_NCV1, *hNumPE_NCV2;
   TH1F *hNHit, *hNHit_Gd, *hNHit_H; // number of photons hits 
   TH1F *hNbPMThit; // number of PMTs hit per events
   TH2F *hCharge_XZ;
@@ -200,6 +200,7 @@ private:
   TH1F *hTrackAngle_mu_MRD;
   TH1F *hTime_nCap_muTrack;
   TH1F *hNeutronCap_proj_x, *hNeutronCap_proj_y, *hNeutronCap_proj_z, *hNeutronCap_disp_x, *hNeutronCap_disp_y, *hNeutronCap_disp_z;
+  TH1F *hMuVertex_proj_x, *hMuVertex_proj_y, *hMuVertex_proj_z;
   
   // Counting histos
   TH1F *hNCaptures_perevt;
