@@ -416,14 +416,14 @@ void Analyzer::Loop() {
 // 	      }
 	    }
 	      
+	      hMuVertex_proj_x->Fill(muTrack_start.X());
+	      hMuVertex_proj_y->Fill(muTrack_start.Y());
+	      hMuVertex_proj_z->Fill(muTrack_start.Z());
 	    if (MRD_hit){
 	      Nmuons_track++;
 	      hTrackAngle_mu_MRD->Fill(unit_z.Angle(ds->GetMC()->GetMCParticle(iCh)->GetMomentum())); 
 	      muTrack_start = vMuTrack.front();
 	      muTrack_end = vMuTrack.back();
-	      hMuVertex_proj_x->Fill(muTrack_start.X());
-	      hMuVertex_proj_y->Fill(muTrack_start.Y());
-	      hMuVertex_proj_z->Fill(muTrack_start.Z());
 	      hTrackLength_mu->Fill((muTrack_end - muTrack_start).Mag());
 	      hEdep_muTrack->Fill(vMuTrack_Edep.front() - vMuTrack_Edep.back()); // deposited Edep of track is KEfinal-KEinitial
 	      // 	cout << "Muon track length: " << (muTrack_end - muTrack_start).Mag() << endl;
