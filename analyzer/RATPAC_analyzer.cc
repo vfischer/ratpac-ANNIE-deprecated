@@ -180,7 +180,7 @@ void Analyzer::Loop() {
     interest_volumes_neu.push_back("detector_fiducial");
     interest_volumes_neu.push_back("detector_fiducial_muon");
     interest_volumes_neuEdep.push_back("detector_fiducial");
-    interest_volumes_neuEdep.push_back("detector");
+//     interest_volumes_neuEdep.push_back("detector");
     interest_volumes_neuEdep.push_back("detector_fiducial_muon");
   }
   
@@ -500,7 +500,7 @@ void Analyzer::Loop() {
 // 	     if (is_cut_mu_track) { // with a tagged muon having a track longer than the threshold cut
 // 	      Nneutrons_cap_mucut++;
 	      //if( std::find(interest_volumes_neu.begin(), interest_volumes_neu.end(), node->GetVolume()) != interest_volumes_neu.end() ) { // in the good volumes
-	      if(TMath::Sqrt(TMath::Power(node->GetEndpoint().X(), 2) + TMath::Power(node->GetEndpoint().Z()-1724, 2)) < 1150. && node->GetEndpoint().Y() < 1500. && node->GetEndpoint().Y() > -1500.) {
+	      if(TMath::Sqrt(TMath::Power(node->GetEndpoint().X(), 2) + TMath::Power(node->GetEndpoint().Z()-1724, 2)) < 1150. && node->GetEndpoint().Y() < 1600. && node->GetEndpoint().Y() > -1400.) {
 		Nneutrons_cap_vol++;
 	      }
 // 	     }
