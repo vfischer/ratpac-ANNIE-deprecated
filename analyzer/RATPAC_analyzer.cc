@@ -170,7 +170,7 @@ void Analyzer::Loop() {
   if (job_run2) {
     interest_volumes_mu_vertex.push_back("detector_fiducial_muon");
     interest_volumes_mu_vertex.push_back("detector_fiducial");
-//     interest_volumes_mu_vertex.push_back("detector");
+    interest_volumes_mu_vertex.push_back("detector");
     interest_volumes_mu_water.push_back("detector");
     interest_volumes_mu_water.push_back("detector_fiducial");
     interest_volumes_mu_water.push_back("detector_fiducial_muon");
@@ -179,8 +179,9 @@ void Analyzer::Loop() {
     interest_volumes_mu_track.push_back("mrd_scint_vert_1");
     interest_volumes_neu.push_back("detector_fiducial");
     interest_volumes_neu.push_back("detector_fiducial_muon");
+    interest_volumes_neu.push_back("detector");
     interest_volumes_neuEdep.push_back("detector_fiducial");
-//     interest_volumes_neuEdep.push_back("detector");
+    //     interest_volumes_neuEdep.push_back("detector");
     interest_volumes_neuEdep.push_back("detector_fiducial_muon");
   }
   
@@ -229,7 +230,7 @@ void Analyzer::Loop() {
     //PMT loop
     for( size_t iPMT = 0; iPMT < ds->GetMC()->GetMCPMTCount(); iPMT++ ){
       if (!binary_search(broken_pmt_vec.begin(), broken_pmt_vec.end(), ds->GetMC()->GetMCPMT(iPMT)->GetID()+1)){
-// 	if (job_run1 && (ds->GetMC()->GetMCPMT(iPMT)->GetID()+1 == 61 || ds->GetMC()->GetMCPMT(iPMT)->GetID()+1 == 62)) { continue;}
+	// 	if (job_run1 && (ds->GetMC()->GetMCPMT(iPMT)->GetID()+1 == 61 || ds->GetMC()->GetMCPMT(iPMT)->GetID()+1 == 62)) { continue;}
 	
 	hPMTID->Fill(ds->GetMC()->GetMCPMT(iPMT)->GetID()+1);
 	
@@ -248,8 +249,8 @@ void Analyzer::Loop() {
 	    hNumPE_NCV1->Fill(ds->GetMC()->GetMCPMT(iPMT)->GetMCPhotonCount());
 	    for(size_t iPhot = 0; iPhot < ds->GetMC()->GetMCPMT(iPMT)->GetMCPhotonCount(); iPhot++){
 	      cout << ds->GetMC()->GetMCPMT(iPMT)->GetMCPhoton(iPhot)->GetPosition().X() << " "
-	           << ds->GetMC()->GetMCPMT(iPMT)->GetMCPhoton(iPhot)->GetPosition().Y() << " "
-	           << ds->GetMC()->GetMCPMT(iPMT)->GetMCPhoton(iPhot)->GetPosition().Z() << endl;
+	      << ds->GetMC()->GetMCPMT(iPMT)->GetMCPhoton(iPhot)->GetPosition().Y() << " "
+	      << ds->GetMC()->GetMCPMT(iPMT)->GetMCPhoton(iPhot)->GetPosition().Z() << endl;
 	    }
 	  }
 	  if (ds->GetMC()->GetMCPMT(iPMT)->GetID()+1 == 62) {
@@ -378,7 +379,7 @@ void Analyzer::Loop() {
     ////////////////////////////////////////////////////////
     //************ Primary muon search loop **************//
     ////////////////////////////////////////////////////////
-//     cout << "New event --->\n";
+    //     cout << "New event --->\n";
     if(cursor->ChildCount()){ // if particles associated to parents
       
       for(size_t iCh = 0; iCh<ds->GetMC()->GetMCParticleCount(); iCh++){
@@ -387,8 +388,8 @@ void Analyzer::Loop() {
 	}
       }
       if (has_pion) {
-// 	node->Clear();
-//  	delete cursor;
+	// 	node->Clear();
+	//  	delete cursor;
 	nav->Clear(); delete nav;
 	continue; // continue alone creates a memory leak..
       }
@@ -396,7 +397,7 @@ void Analyzer::Loop() {
 	if(ds->GetMC()->GetMCParticle(iCh)->GetParticleName() == "mu-" || ds->GetMC()->GetMCParticle(iCh)->GetParticleName() == "mu+")  {
 	  hTrackAngle_mu->Fill(unit_z.Angle(ds->GetMC()->GetMCParticle(iCh)->GetMomentum()));
 	}
-
+	
 	cursor->GoChild(iCh); // go to particle
 	node = cursor->Here(); // "attach" node to this particle
 	if( std::find(interest_volumes_mu_water.begin(), interest_volumes_mu_water.end(), node->GetVolume()) != interest_volumes_mu_water.end() ) { // only interaction in volumes of interest
@@ -404,28 +405,28 @@ void Analyzer::Loop() {
 	  if (node->GetParticleName() == "mu-" || node->GetParticleName() == "mu+") { // if muon
 	    Nmuons_tot++;
 	    if( std::find(interest_volumes_mu_vertex.begin(), interest_volumes_mu_vertex.end(), node->GetVolume()) != interest_volumes_mu_vertex.end() ) { // only interaction in volumes of interest 
-	    Nmuons_fidu++; // only fill this once per event
-	    is_mu_tag = true;	    
-	    for(size_t jCh = 1; jCh<cursor->StepCount(); jCh++){ //loop on each step (starts at 1 for some reason)
-// 	      cout << jCh << " " << node->GetVolume() << " " << node->GetKE() << " " << node->GetProcess() << " " << node->GetEndpoint().X() << " " << node->GetEndpoint().Y() << " " << node->GetEndpoint().Z() << endl;
-	      node = cursor->GoStep(jCh); // go to step
-	      vMuTrack_volume.push_back(node->GetVolume()); //fills a vector with all the volumes the muon went through
-	      vMuTrack.push_back(node->GetEndpoint()); // fills the vectors of node position (front() and back() are first and last node in volumes (track) )
-	      vMuTrack_Edep.push_back(node->GetKE()); // record current KE of muon at each step of the track
-	      for (std::vector<TString>::iterator it = vMuTrack_volume.begin() ; it != vMuTrack_volume.end(); ++it) {
-		if (*it == interest_volumes_mu_track.back()) {
+	      Nmuons_fidu++; // only fill this once per event
+	      is_mu_tag = true;	    
+	      for(size_t jCh = 1; jCh<cursor->StepCount(); jCh++){ //loop on each step (starts at 1 for some reason)
+		// 	      cout << jCh << " " << node->GetVolume() << " " << node->GetKE() << " " << node->GetProcess() << " " << node->GetEndpoint().X() << " " << node->GetEndpoint().Y() << " " << node->GetEndpoint().Z() << endl;
+		node = cursor->GoStep(jCh); // go to step
+		vMuTrack_volume.push_back(node->GetVolume()); //fills a vector with all the volumes the muon went through
+		vMuTrack.push_back(node->GetEndpoint()); // fills the vectors of node position (front() and back() are first and last node in volumes (track) )
+		vMuTrack_Edep.push_back(node->GetKE()); // record current KE of muon at each step of the track
+		for (std::vector<TString>::iterator it = vMuTrack_volume.begin() ; it != vMuTrack_volume.end(); ++it) {
+		  if (*it == interest_volumes_mu_track.back()) {
 		    MRD_hit = true;
-		 }
+		  }
+		}
+		
+		// 	      if ( std::find(interest_volumes_mu_track.begin(), interest_volumes_mu_track.end(), node->GetVolume()) != interest_volumes_mu_track.end() ) { // is node is in the volume you want
+		// 		vMuTrack.push_back(node->GetEndpoint()); // fills the vectors of node position (front() and back() are first and last node in volumes (track) )
+		// 		vMuTrack_Edep.push_back(node->GetKE()); // record current KE of muon at each step of the track
+		// 	      }
 	      }
 	      
-// 	      if ( std::find(interest_volumes_mu_track.begin(), interest_volumes_mu_track.end(), node->GetVolume()) != interest_volumes_mu_track.end() ) { // is node is in the volume you want
-// 		vMuTrack.push_back(node->GetEndpoint()); // fills the vectors of node position (front() and back() are first and last node in volumes (track) )
-// 		vMuTrack_Edep.push_back(node->GetKE()); // record current KE of muon at each step of the track
-// 	      }
-	    }
 	      
-	      
-// 	    if (MRD_hit){
+	      // 	    if (MRD_hit){
 	      Nmuons_track++;
 	      hTrackAngle_mu_MRD->Fill(unit_z.Angle(ds->GetMC()->GetMCParticle(iCh)->GetMomentum())); 
 	      muTrack_start = vMuTrack.front();
@@ -437,16 +438,16 @@ void Analyzer::Loop() {
 	      hMuVertex_proj_y->Fill(muTrack_start.Y());
 	      hMuVertex_proj_z->Fill(muTrack_start.Z());
 	      // 	cout << "Muon track length: " << (muTrack_end - muTrack_start).Mag() << endl;
-// 	      if ((muTrack_end - muTrack_start).Mag() > cut_mu_track){ //muon track length cut
-// 		Nmuons_cut++; is_cut_mu_track = true;
-// 	      }
-// 	    } else {
+	      // 	      if ((muTrack_end - muTrack_start).Mag() > cut_mu_track){ //muon track length cut
+	      // 		Nmuons_cut++; is_cut_mu_track = true;
+	      // 	      }
+	      // 	    } else {
 	      // 	  cout << "No muon track in this volume\n";
-// 	    }
+	      // 	    }
+	    }
+	    
 	  }
-	  
 	}
-      }
 	if (node->GetParticleName() == "neutron") { // put all primary neutrons trackIDs in an array
 	  pparticles_trackID.push_back(node->GetTrackID());	
 	}
@@ -490,112 +491,112 @@ void Analyzer::Loop() {
 	}	  
       }
       
-//                   cout << node->GetParticleName() << " " << node->GetPDGCode() << " " << node->GetVolume() << " " << node->GetProcess() << " " << node->GetKE() << " " << is_mu_tag << endl; 
+      //                   cout << node->GetParticleName() << " " << node->GetPDGCode() << " " << node->GetVolume() << " " << node->GetProcess() << " " << node->GetKE() << " " << is_mu_tag << endl; 
       
       if (node->GetProcess() == "nCapture" ) { // capture	
 	if (TPMERegexp("1000[0-9][0-9][0-9][0-9][0-9][0-9]").Match(Form("%d",node->GetPDGCode()))) { // capture on an atom
 	  Nneutrons_cap_tot++; // capture only occurs on atoms right ? so we'll increment the total nb of cap. counter
 	  if (MRD_hit) { // with a tagged muon
 	    Nneutrons_cap_mu++;
-// 	     if (is_cut_mu_track) { // with a tagged muon having a track longer than the threshold cut
-// 	      Nneutrons_cap_mucut++;
-	      //if( std::find(interest_volumes_neu.begin(), interest_volumes_neu.end(), node->GetVolume()) != interest_volumes_neu.end() ) { // in the good volumes
-	      if(TMath::Sqrt(TMath::Power(node->GetEndpoint().X(), 2) + TMath::Power(node->GetEndpoint().Z()-1724, 2)) < 1150. && node->GetEndpoint().Y() < 1600. && node->GetEndpoint().Y() > -1400.) {
-		Nneutrons_cap_vol++;
-	      }
-// 	     }
+	    // 	     if (is_cut_mu_track) { // with a tagged muon having a track longer than the threshold cut
+	    // 	      Nneutrons_cap_mucut++;
+	    //if( std::find(interest_volumes_neu.begin(), interest_volumes_neu.end(), node->GetVolume()) != interest_volumes_neu.end() ) { // in the good volumes
+	    if(TMath::Sqrt(TMath::Power(node->GetEndpoint().X(), 2) + TMath::Power(node->GetEndpoint().Z()-1724, 2)) < 1150. && node->GetEndpoint().Y() < 1600. && node->GetEndpoint().Y() > -1400.) {
+	      Nneutrons_cap_vol++;
+	    }
+	    // 	     }
 	  }
 	}
 	if (is_mu_tag) { // with a tagged muon
-// 	    Nneutrons_cap_mu++;
-// 	    if (is_cut_mu_track) { // with a tagged muon having a track longer than the threshold cut
-// 	      Nneutrons_cap_mucut++;
-// 	      if( std::find(interest_volumes_neu.begin(), interest_volumes_neu.end(), node->GetVolume()) != interest_volumes_neu.end() ) { // in the good volumes
-// 	      if(TMath::Sqrt(TMath::Power(node->GetEndpoint().X(), 2) + TMath::Power(node->GetEndpoint().Z()-1724, 2)) < 1150. && node->GetEndpoint().Y() < 1500. && node->GetEndpoint().Y() > -1500.) {
-// 	      Nneutrons_cap_vol++;
-	    
-	    if (parenttrackID != cursor->Parent()->GetTrackID() ) {
-	      if (is_nGd) { // if next neutron as parent, fill info related to this neutron
-		parenttrackID = cursor->Parent()->GetTrackID();
-		hEdep_muTrack_nCap->Fill(Edep_capture);
-		if(Edep_capture > 4.) {
-		  hNeutronMu_cap_point_Edep->Fill(muTrack_start.Z(),muTrack_start.X());
-		  hNeutronMu_cap_point_Edep_3D->Fill(muTrack_start.Z(),muTrack_start.X(),muTrack_start.Y());
-		}
-		if (Edep_capture > cut_cap_edep) {
-		  is_cut_cap_edep = true;
-		}
-		if(is_cut_cap_edep && is_cut_mu_cap_DR && is_cut_mu_cap_DT) {
-		  Nneutrons_cap_allcut++;
-		}
-		if (is_cut_cap_edep && is_cut_mu_cap_DT) {
-		  Nneutrons_cap_DT++;
-		}
-		if (is_cut_cap_edep) {
-		  Nneutrons_cap_Ecut++;
-		}
-// 		cout << "fill edep a: " << Edep_capture << endl;
-		Edep_capture = 0; is_nGd = false; is_cut_cap_edep = false; is_cut_mu_cap_DR = false; is_cut_mu_cap_DT = false; 
-	      } else {
-		Edep_capture = 0; is_nGd = false; is_cut_cap_edep = false; is_cut_mu_cap_DR = false; is_cut_mu_cap_DT = false; 
+	  // 	    Nneutrons_cap_mu++;
+	  // 	    if (is_cut_mu_track) { // with a tagged muon having a track longer than the threshold cut
+	  // 	      Nneutrons_cap_mucut++;
+	  // 	      if( std::find(interest_volumes_neu.begin(), interest_volumes_neu.end(), node->GetVolume()) != interest_volumes_neu.end() ) { // in the good volumes
+	  // 	      if(TMath::Sqrt(TMath::Power(node->GetEndpoint().X(), 2) + TMath::Power(node->GetEndpoint().Z()-1724, 2)) < 1150. && node->GetEndpoint().Y() < 1500. && node->GetEndpoint().Y() > -1500.) {
+	  // 	      Nneutrons_cap_vol++;
+	  
+	  if (parenttrackID != cursor->Parent()->GetTrackID() ) {
+	    if (is_nGd) { // if next neutron as parent, fill info related to this neutron
+	      parenttrackID = cursor->Parent()->GetTrackID();
+	      hEdep_muTrack_nCap->Fill(Edep_capture);
+	      if(Edep_capture > 4.) {
+		hNeutronMu_cap_point_Edep->Fill(muTrack_start.Z(),muTrack_start.X());
+		hNeutronMu_cap_point_Edep_3D->Fill(muTrack_start.Z(),muTrack_start.X(),muTrack_start.Y());
 	      }
+	      if (Edep_capture > cut_cap_edep) {
+		is_cut_cap_edep = true;
+	      }
+	      if(is_cut_cap_edep && is_cut_mu_cap_DR && is_cut_mu_cap_DT) {
+		Nneutrons_cap_allcut++;
+	      }
+	      if (is_cut_cap_edep && is_cut_mu_cap_DT) {
+		Nneutrons_cap_DT++;
+	      }
+	      if (is_cut_cap_edep) {
+		Nneutrons_cap_Ecut++;
+	      }
+	      // 		cout << "fill edep a: " << Edep_capture << endl;
+	      Edep_capture = 0; is_nGd = false; is_cut_cap_edep = false; is_cut_mu_cap_DR = false; is_cut_mu_cap_DT = false; 
+	    } else {
+	      Edep_capture = 0; is_nGd = false; is_cut_cap_edep = false; is_cut_mu_cap_DR = false; is_cut_mu_cap_DT = false; 
 	    }
-	    
-	    if (TPMERegexp("1000[0-9][0-9][0-9][0-9][0-9][0-9]").Match(Form("%d",node->GetPDGCode()))) { // capture on an atom (no gammas from nCapture))
-	      is_nGd = false; is_nH = false;
-	      //  	    cout << "atom: " << node->GetPDGCode() << " " << node->GetTrackID() << endl;
-	      // 	    cout << "atom parent: " << cursor->Parent()->GetPDGCode() << " " << cursor->Parent()->GetTrackID() << endl;
-	      if (TPMERegexp("100064[0-9][0-9][0-9][0-9]").Match(Form("%d",node->GetPDGCode()))) { // PDGCode (Int) casted as a TString, look for Gd
-		is_nGd = true;
-		Nneutrons_cap_gd++;
-		Ncaptures_perevt++; // nb of ncaptures after muon (per evt)
-		if(std::find(pparticles_trackID.begin(), pparticles_trackID.end(), cursor->Parent()->GetTrackID()) != pparticles_trackID.end()) { // if the parent neutron is a primary particle
-		  Npneutrons_cap_gd++;
-		  Npcaptures_perevt++; // nb of primary ncaptures after muon 
-		}
-		nCapture_pos = node->GetEndpoint();
-		distance_nCap_muTrack = ((nCapture_pos-muTrack_start).Cross(nCapture_pos-muTrack_end)).Mag()/(muTrack_end - muTrack_start).Mag();
-		distance_nCap_muStart = (nCapture_pos-muTrack_start).Mag();
-		if (distance_nCap_muTrack < cut_mu_cap_DR){
-		  is_cut_mu_cap_DR = true;
-		}
-		hDist_nCap_muTrack->Fill(distance_nCap_muTrack);
-		hDist_nCap_muStart->Fill(distance_nCap_muStart);
-		if (node->GetGlobalTime() < cut_mu_cap_DT){
-		  is_cut_mu_cap_DT = true;
-		}
-		hTime_nCap_muTrack->Fill(node->GetGlobalTime());
-		
-		hNeutronCap_proj_x->Fill(nCapture_pos.X());
-		hNeutronCap_proj_y->Fill(nCapture_pos.Y());
-		hNeutronCap_proj_z->Fill(nCapture_pos.Z());
-		hNeutronCap_disp_x->Fill(nCapture_pos.X()-muTrack_start.X());
-		hNeutronCap_disp_y->Fill(nCapture_pos.Y()-muTrack_start.Y());
-		hNeutronCap_disp_z->Fill(nCapture_pos.Z()-muTrack_start.Z());
-		
-		hNeutronMu_cap_point->Fill(muTrack_start.Z(),muTrack_start.X());
-		hNeutronMu_cap_point_3D->Fill(muTrack_start.Z(),muTrack_start.X(),muTrack_start.Y());
-		
-	      } else if (TPMERegexp("100001[0-9][0-9][0-9][0-9]").Match(Form("%d",node->GetPDGCode()))) { //  look for H
-		is_nH = true;
-		// for now do nothing if n-H
-	      } else {
-		// nothing either
+	  }
+	  
+	  if (TPMERegexp("1000[0-9][0-9][0-9][0-9][0-9][0-9]").Match(Form("%d",node->GetPDGCode()))) { // capture on an atom (no gammas from nCapture))
+	    is_nGd = false; is_nH = false;
+	    //  	    cout << "atom: " << node->GetPDGCode() << " " << node->GetTrackID() << endl;
+	    // 	    cout << "atom parent: " << cursor->Parent()->GetPDGCode() << " " << cursor->Parent()->GetTrackID() << endl;
+	    if (TPMERegexp("100064[0-9][0-9][0-9][0-9]").Match(Form("%d",node->GetPDGCode()))) { // PDGCode (Int) casted as a TString, look for Gd
+	      is_nGd = true;
+	      Nneutrons_cap_gd++;
+	      Ncaptures_perevt++; // nb of ncaptures after muon (per evt)
+	      if(std::find(pparticles_trackID.begin(), pparticles_trackID.end(), cursor->Parent()->GetTrackID()) != pparticles_trackID.end()) { // if the parent neutron is a primary particle
+		Npneutrons_cap_gd++;
+		Npcaptures_perevt++; // nb of primary ncaptures after muon 
 	      }
-	    } else if (node->GetParticleName() == "gamma"){
-	      //  	    cout << "gamma: " << node->GetPDGCode() << " " << node->GetTrackID() << " " << node->GetKE() << endl;
-	      // 	    cout << "gamma parent: " << cursor->Parent()->GetPDGCode() << " " << cursor->Parent()->GetTrackID() << endl;
-	      for( Int_t iStep = 1; iStep < cursor->StepCount(); iStep++ ){
-		if(std::find(interest_volumes_neuEdep.begin(), interest_volumes_neuEdep.end(), cursor->Step(iStep)->GetVolume()) != interest_volumes_neuEdep.end()){
-		  Edep_capture += cursor->Step(iStep-1)->GetKE() - cursor->Step(iStep)->GetKE();
-		  // 		cout << "stepE: " << cursor->Step(iStep-1)->GetKE() - cursor->Step(iStep)->GetKE() << endl;
-		}
+	      nCapture_pos = node->GetEndpoint();
+	      distance_nCap_muTrack = ((nCapture_pos-muTrack_start).Cross(nCapture_pos-muTrack_end)).Mag()/(muTrack_end - muTrack_start).Mag();
+	      distance_nCap_muStart = (nCapture_pos-muTrack_start).Mag();
+	      if (distance_nCap_muTrack < cut_mu_cap_DR){
+		is_cut_mu_cap_DR = true;
 	      }
+	      hDist_nCap_muTrack->Fill(distance_nCap_muTrack);
+	      hDist_nCap_muStart->Fill(distance_nCap_muStart);
+	      if (node->GetGlobalTime() < cut_mu_cap_DT){
+		is_cut_mu_cap_DT = true;
+	      }
+	      hTime_nCap_muTrack->Fill(node->GetGlobalTime());
 	      
+	      hNeutronCap_proj_x->Fill(nCapture_pos.X());
+	      hNeutronCap_proj_y->Fill(nCapture_pos.Y());
+	      hNeutronCap_proj_z->Fill(nCapture_pos.Z());
+	      hNeutronCap_disp_x->Fill(nCapture_pos.X()-muTrack_start.X());
+	      hNeutronCap_disp_y->Fill(nCapture_pos.Y()-muTrack_start.Y());
+	      hNeutronCap_disp_z->Fill(nCapture_pos.Z()-muTrack_start.Z());
+	      
+	      hNeutronMu_cap_point->Fill(muTrack_start.Z(),muTrack_start.X());
+	      hNeutronMu_cap_point_3D->Fill(muTrack_start.Z(),muTrack_start.X(),muTrack_start.Y());
+	      
+	    } else if (TPMERegexp("100001[0-9][0-9][0-9][0-9]").Match(Form("%d",node->GetPDGCode()))) { //  look for H
+	      is_nH = true;
+	      // for now do nothing if n-H
+	    } else {
+	      // nothing either
 	    }
-	    parenttrackID = cursor->Parent()->GetTrackID();
-// 	  }	
-// 	}
+	  } else if (node->GetParticleName() == "gamma"){
+	    //  	    cout << "gamma: " << node->GetPDGCode() << " " << node->GetTrackID() << " " << node->GetKE() << endl;
+	    // 	    cout << "gamma parent: " << cursor->Parent()->GetPDGCode() << " " << cursor->Parent()->GetTrackID() << endl;
+	    for( Int_t iStep = 1; iStep < cursor->StepCount(); iStep++ ){
+	      if(std::find(interest_volumes_neuEdep.begin(), interest_volumes_neuEdep.end(), cursor->Step(iStep)->GetVolume()) != interest_volumes_neuEdep.end()){
+		Edep_capture += cursor->Step(iStep-1)->GetKE() - cursor->Step(iStep)->GetKE();
+		// 		cout << "stepE: " << cursor->Step(iStep-1)->GetKE() - cursor->Step(iStep)->GetKE() << endl;
+	      }
+	    }
+	    
+	  }
+	  parenttrackID = cursor->Parent()->GetTrackID();
+	  // 	  }	
+	  // 	}
 	}
       }
     }
@@ -618,7 +619,7 @@ void Analyzer::Loop() {
       if (is_cut_cap_edep) {
 	Nneutrons_cap_Ecut++;
       }
-//       cout << "fill edep b: " << Edep_capture << endl;
+      //       cout << "fill edep b: " << Edep_capture << endl;
       Edep_capture = 0; is_nGd = false; is_cut_cap_edep = false; is_cut_mu_cap_DR = false; is_cut_mu_cap_DT = false; 
     } else {
       Edep_capture = 0; is_nGd = false; is_cut_cap_edep = false; is_cut_mu_cap_DR = false; is_cut_mu_cap_DT = false; 
@@ -869,6 +870,11 @@ Bool_t Analyzer::SetSaveFile() {
     opt += "files_";
   }
   
+  if (suffix_name != "") { // test if a suffix is set, not that it makes a difference since it's set to "" in this case
+    opt += suffix_name;
+    opt += "_";
+  }
+  
   TPMERegexp FileName("([^/]+)$");
   if (FileName.Match(save)) { save = "Analyzer_" + opt + FileName[0];}
   else {
@@ -903,10 +909,9 @@ Bool_t Analyzer::SetSaveFile() {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //constructor
-Analyzer::Analyzer(vector<TString> InFiles, const TString jobtype, const TString outputdir):
-InputFiles(InFiles), job(jobtype), output_dir(outputdir)
+Analyzer::Analyzer(vector<TString> InFiles, const TString jobtype, const TString outputdir, const TString suffix):
+InputFiles(InFiles), job(jobtype), output_dir(outputdir), suffix_name(suffix)
 {
-  
   job_simu = false;
   
   if ( job == "run1" ){

@@ -49,16 +49,16 @@
 #include <utility>
 
 // Header file for the classes stored in the TTree if any.
- #include <RAT/DS/Root.hh>
- #include <RAT/DS/MC.hh>
- #include <RAT/DS/Calib.hh>
- #include <RAT/DS/EV.hh>
- #include <RAT/DS/PMT.hh>
- #include <RAT/DSReader.hh>
- #include <RAT/TrackNav.hh>
- #include <RAT/TrackCursor.hh>
- #include <RAT/TrackNode.hh>
- 
+#include <RAT/DS/Root.hh>
+#include <RAT/DS/MC.hh>
+#include <RAT/DS/Calib.hh>
+#include <RAT/DS/EV.hh>
+#include <RAT/DS/PMT.hh>
+#include <RAT/DSReader.hh>
+#include <RAT/TrackNav.hh>
+#include <RAT/TrackCursor.hh>
+#include <RAT/TrackNode.hh>
+
 
 class Evt {
 public:
@@ -127,7 +127,7 @@ public:
 
 class Analyzer {
 public:
-  Analyzer(std::vector<TString> InFiles, const TString jobtype, const TString outputdir);
+  Analyzer(std::vector<TString> InFiles, const TString jobtype, const TString outputdir, const TString suffix);
   virtual 	~Analyzer();
   void		Initialization();
   void		Finalize();
@@ -135,7 +135,7 @@ public:
   void		Convert2reco();
   
 private:
-    
+  
   // Internal function
   Bool_t 	SetSaveFile();
   
@@ -153,6 +153,7 @@ private:
   std::vector<TString> InputFiles;
   std::vector<TString>::iterator itIF;
   TString output_dir;
+  TString suffix_name;
   
   // job booleans
   TString job;
@@ -172,7 +173,7 @@ private:
   
   // Capture infos
   TString nucl_cap_pdg_code;
-//   TRegexp pdg_nucl, pdg_gd, pdg_h;
+  //   TRegexp pdg_nucl, pdg_gd, pdg_h;
   Int_t Npneutrons, Npcaptures, Npcaptures_h, Npcaptures_gd, Npcaptures_c, Npcaptures_si, Npcaptures_fe, Npinelastic, Npdecay;
   
   // PMT infos histos
@@ -249,125 +250,125 @@ private:
   TChain *chain;
   
   // Fixed size dimensions of array or collections stored in the TTree if any.
-   static const Int_t kMaxprocResult = 4;
-   static const Int_t kMaxmc = 1;
-   static const Int_t kMaxcalib = 1;
-   static const Int_t kMaxev = 1;
+  static const Int_t kMaxprocResult = 4;
+  static const Int_t kMaxmc = 1;
+  static const Int_t kMaxcalib = 1;
+  static const Int_t kMaxev = 1;
   
-   RAT::DSReader *dsReader;
-   RAT::DS::Root   *ds;
-   
-   RAT::TrackNav *nav;
-   RAT::TrackCursor *cursor;
-   RAT::TrackNode *node;
-   RAT::TrackTest *TrackTest_neutron, *TrackTest_gamma;
-   RAT::TrackTest *TrackTest_notelectron;
-   
-   std::vector<TString> interest_volumes_mu_vertex, interest_volumes_mu_track, interest_volumes_mu_water, interest_volumes_neu, interest_volumes_neuEdep; // volumes where to look for mu tracks, neutron captures, etc...
-   
-   // TVectors
-   TVector3 init_pos;
-   TVector3 fin_pos;
-   TVector3 muTrack_start, muTrack_end, nCapture_pos;
-   TVector3 n_start, n_end;
-   TVector3 unit_z;
-   std::vector<TVector3> vMuTrack;
-   std::vector<Double_t> vMuTrack_Edep;
-   std::vector<TString> vMuTrack_volume;
-   
-//    UInt_t          fUniqueID;
-//    UInt_t          fBits;
-//    Int_t           runID;
-//    std::string         ratVersion;
-//    Int_t           procResult_;
-//    std::string          procResult_first[kMaxprocResult];
-//    Int_t           procResult_second[kMaxprocResult];   //[procResult_]
-//    Int_t           mc_;
-//    UInt_t          mc_fUniqueID[kMaxmc];   //[mc_]
-//    UInt_t          mc_fBits[kMaxmc];   //[mc_]
-//    Int_t           mc_id[kMaxmc];   //[mc_]
-//    Int_t           mc_numPE[kMaxmc];   //[mc_]
-//    Int_t           mc_numDarkHits[kMaxmc];   //[mc_]
-//    Int_t           mc_utc_fSec[kMaxmc];   //[mc_]
-//    Int_t           mc_utc_fNanoSec[kMaxmc];   //[mc_]
-//  std::vector<RAT::DS::MCSummary> mc_summary[kMaxmc];
-//    std::vector<RAT::DS::MCParticle> mc_particle[kMaxmc];
-//    std::vector<RAT::DS::MCParticle> mc_parent[kMaxmc];
-//    std::vector<RAT::DS::MCTrack> mc_track[kMaxmc];
-//    std::vector<RAT::DS::MCPMT>   mc_pmt[kMaxmc];
-//    Int_t           calib_;
-//    UInt_t          calib_fUniqueID[kMaxcalib];   //[calib_]
-//    UInt_t          calib_fBits[kMaxcalib];   //[calib_]
-//    Int_t           calib_id[kMaxcalib];   //[calib_]
-//    Int_t           calib_mode[kMaxcalib];   //[calib_]
-//    Float_t         calib_intensity[kMaxcalib];   //[calib_]
-//    std::string          calib_name[kMaxcalib];
-//    Int_t           calib_utc_fSec[kMaxcalib];   //[calib_]
-//    Int_t           calib_utc_fNanoSec[kMaxcalib];   //[calib_]
-//    UInt_t          calib_pos_fUniqueID[kMaxcalib];   //[calib_]
-//    UInt_t          calib_pos_fBits[kMaxcalib];   //[calib_]
-//    Double_t        calib_pos_fX[kMaxcalib];   //[calib_]
-//    Double_t        calib_pos_fY[kMaxcalib];   //[calib_]
-//    Double_t        calib_pos_fZ[kMaxcalib];   //[calib_]
-//    Int_t           ev_;
-//    UInt_t          ev_fUniqueID[kMaxev];   //[ev_]
-//    UInt_t          ev_fBits[kMaxev];   //[ev_]
-//    Int_t           ev_id[kMaxev];   //[ev_]
-//    Float_t         ev_qTotal[kMaxev];   //[ev_]
-//    Float_t         ev_calibratedTriggerTime[kMaxev];   //[ev_]
-//    Float_t         ev_deltat[kMaxev];   //[ev_]
-//    Int_t           ev_utc_fSec[kMaxev];   //[ev_]
-//    Int_t           ev_utc_fNanoSec[kMaxev];   //[ev_]
-//    std::vector<RAT::DS::PMT>     ev_pmt[kMaxev];
-// //  std::vector<Centroid> ev_centroid[kMaxev];
-// //  std::vector<PathFit> ev_pathfit[kMaxev];
-//    std::vector<double>  user;
-
-//    // List of branches
-//    TBranch        *b_ds_fUniqueID;   //!
-//    TBranch        *b_ds_fBits;   //!
-//    TBranch        *b_ds_runID;   //!
-//    TBranch        *b_ds_ratVersion;   //!
-//    TBranch        *b_ds_procResult_;   //!
-//    TBranch        *b_procResult_first;   //!
-//    TBranch        *b_procResult_second;   //!
-//    TBranch        *b_ds_mc_;   //!
-//    TBranch        *b_mc_fUniqueID;   //!
-//    TBranch        *b_mc_fBits;   //!
-//    TBranch        *b_mc_id;   //!
-//    TBranch        *b_mc_numPE;   //!
-//    TBranch        *b_mc_numDarkHits;   //!
-//    TBranch        *b_mc_utc_fSec;   //!
-//    TBranch        *b_mc_utc_fNanoSec;   //!
-//    TBranch        *b_mc_particle;   //!
-//    TBranch        *b_mc_parent;   //!
-//    TBranch        *b_mc_track;   //!
-//    TBranch        *b_mc_pmt;   //!
-//    TBranch        *b_ds_calib_;   //!
-//    TBranch        *b_calib_fUniqueID;   //!
-//    TBranch        *b_calib_fBits;   //!
-//    TBranch        *b_calib_id;   //!
-//    TBranch        *b_calib_mode;   //!
-//    TBranch        *b_calib_intensity;   //!
-//    TBranch        *b_calib_name;   //!
-//    TBranch        *b_calib_utc_fSec;   //!
-//    TBranch        *b_calib_utc_fNanoSec;   //!
-//    TBranch        *b_calib_pos_fUniqueID;   //!
-//    TBranch        *b_calib_pos_fBits;   //!
-//    TBranch        *b_calib_pos_fX;   //!
-//    TBranch        *b_calib_pos_fY;   //!
-//    TBranch        *b_calib_pos_fZ;   //!
-//    TBranch        *b_ds_ev_;   //!
-//    TBranch        *b_ev_fUniqueID;   //!
-//    TBranch        *b_ev_fBits;   //!
-//    TBranch        *b_ev_id;   //!
-//    TBranch        *b_ev_qTotal;   //!
-//    TBranch        *b_ev_calibratedTriggerTime;   //!
-//    TBranch        *b_ev_deltat;   //!
-//    TBranch        *b_ev_utc_fSec;   //!
-//    TBranch        *b_ev_utc_fNanoSec;   //!
-//    TBranch        *b_ev_pmt;   //!
-//    TBranch        *b_ds_user;   //!
+  RAT::DSReader *dsReader;
+  RAT::DS::Root   *ds;
+  
+  RAT::TrackNav *nav;
+  RAT::TrackCursor *cursor;
+  RAT::TrackNode *node;
+  RAT::TrackTest *TrackTest_neutron, *TrackTest_gamma;
+  RAT::TrackTest *TrackTest_notelectron;
+  
+  std::vector<TString> interest_volumes_mu_vertex, interest_volumes_mu_track, interest_volumes_mu_water, interest_volumes_neu, interest_volumes_neuEdep; // volumes where to look for mu tracks, neutron captures, etc...
+  
+  // TVectors
+  TVector3 init_pos;
+  TVector3 fin_pos;
+  TVector3 muTrack_start, muTrack_end, nCapture_pos;
+  TVector3 n_start, n_end;
+  TVector3 unit_z;
+  std::vector<TVector3> vMuTrack;
+  std::vector<Double_t> vMuTrack_Edep;
+  std::vector<TString> vMuTrack_volume;
+  
+  //    UInt_t          fUniqueID;
+  //    UInt_t          fBits;
+  //    Int_t           runID;
+  //    std::string         ratVersion;
+  //    Int_t           procResult_;
+  //    std::string          procResult_first[kMaxprocResult];
+  //    Int_t           procResult_second[kMaxprocResult];   //[procResult_]
+  //    Int_t           mc_;
+  //    UInt_t          mc_fUniqueID[kMaxmc];   //[mc_]
+  //    UInt_t          mc_fBits[kMaxmc];   //[mc_]
+  //    Int_t           mc_id[kMaxmc];   //[mc_]
+  //    Int_t           mc_numPE[kMaxmc];   //[mc_]
+  //    Int_t           mc_numDarkHits[kMaxmc];   //[mc_]
+  //    Int_t           mc_utc_fSec[kMaxmc];   //[mc_]
+  //    Int_t           mc_utc_fNanoSec[kMaxmc];   //[mc_]
+  //  std::vector<RAT::DS::MCSummary> mc_summary[kMaxmc];
+  //    std::vector<RAT::DS::MCParticle> mc_particle[kMaxmc];
+  //    std::vector<RAT::DS::MCParticle> mc_parent[kMaxmc];
+  //    std::vector<RAT::DS::MCTrack> mc_track[kMaxmc];
+  //    std::vector<RAT::DS::MCPMT>   mc_pmt[kMaxmc];
+  //    Int_t           calib_;
+  //    UInt_t          calib_fUniqueID[kMaxcalib];   //[calib_]
+  //    UInt_t          calib_fBits[kMaxcalib];   //[calib_]
+  //    Int_t           calib_id[kMaxcalib];   //[calib_]
+  //    Int_t           calib_mode[kMaxcalib];   //[calib_]
+  //    Float_t         calib_intensity[kMaxcalib];   //[calib_]
+  //    std::string          calib_name[kMaxcalib];
+  //    Int_t           calib_utc_fSec[kMaxcalib];   //[calib_]
+  //    Int_t           calib_utc_fNanoSec[kMaxcalib];   //[calib_]
+  //    UInt_t          calib_pos_fUniqueID[kMaxcalib];   //[calib_]
+  //    UInt_t          calib_pos_fBits[kMaxcalib];   //[calib_]
+  //    Double_t        calib_pos_fX[kMaxcalib];   //[calib_]
+  //    Double_t        calib_pos_fY[kMaxcalib];   //[calib_]
+  //    Double_t        calib_pos_fZ[kMaxcalib];   //[calib_]
+  //    Int_t           ev_;
+  //    UInt_t          ev_fUniqueID[kMaxev];   //[ev_]
+  //    UInt_t          ev_fBits[kMaxev];   //[ev_]
+  //    Int_t           ev_id[kMaxev];   //[ev_]
+  //    Float_t         ev_qTotal[kMaxev];   //[ev_]
+  //    Float_t         ev_calibratedTriggerTime[kMaxev];   //[ev_]
+  //    Float_t         ev_deltat[kMaxev];   //[ev_]
+  //    Int_t           ev_utc_fSec[kMaxev];   //[ev_]
+  //    Int_t           ev_utc_fNanoSec[kMaxev];   //[ev_]
+  //    std::vector<RAT::DS::PMT>     ev_pmt[kMaxev];
+  // //  std::vector<Centroid> ev_centroid[kMaxev];
+  // //  std::vector<PathFit> ev_pathfit[kMaxev];
+  //    std::vector<double>  user;
+  
+  //    // List of branches
+  //    TBranch        *b_ds_fUniqueID;   //!
+  //    TBranch        *b_ds_fBits;   //!
+  //    TBranch        *b_ds_runID;   //!
+  //    TBranch        *b_ds_ratVersion;   //!
+  //    TBranch        *b_ds_procResult_;   //!
+  //    TBranch        *b_procResult_first;   //!
+  //    TBranch        *b_procResult_second;   //!
+  //    TBranch        *b_ds_mc_;   //!
+  //    TBranch        *b_mc_fUniqueID;   //!
+  //    TBranch        *b_mc_fBits;   //!
+  //    TBranch        *b_mc_id;   //!
+  //    TBranch        *b_mc_numPE;   //!
+  //    TBranch        *b_mc_numDarkHits;   //!
+  //    TBranch        *b_mc_utc_fSec;   //!
+  //    TBranch        *b_mc_utc_fNanoSec;   //!
+  //    TBranch        *b_mc_particle;   //!
+  //    TBranch        *b_mc_parent;   //!
+  //    TBranch        *b_mc_track;   //!
+  //    TBranch        *b_mc_pmt;   //!
+  //    TBranch        *b_ds_calib_;   //!
+  //    TBranch        *b_calib_fUniqueID;   //!
+  //    TBranch        *b_calib_fBits;   //!
+  //    TBranch        *b_calib_id;   //!
+  //    TBranch        *b_calib_mode;   //!
+  //    TBranch        *b_calib_intensity;   //!
+  //    TBranch        *b_calib_name;   //!
+  //    TBranch        *b_calib_utc_fSec;   //!
+  //    TBranch        *b_calib_utc_fNanoSec;   //!
+  //    TBranch        *b_calib_pos_fUniqueID;   //!
+  //    TBranch        *b_calib_pos_fBits;   //!
+  //    TBranch        *b_calib_pos_fX;   //!
+  //    TBranch        *b_calib_pos_fY;   //!
+  //    TBranch        *b_calib_pos_fZ;   //!
+  //    TBranch        *b_ds_ev_;   //!
+  //    TBranch        *b_ev_fUniqueID;   //!
+  //    TBranch        *b_ev_fBits;   //!
+  //    TBranch        *b_ev_id;   //!
+  //    TBranch        *b_ev_qTotal;   //!
+  //    TBranch        *b_ev_calibratedTriggerTime;   //!
+  //    TBranch        *b_ev_deltat;   //!
+  //    TBranch        *b_ev_utc_fSec;   //!
+  //    TBranch        *b_ev_utc_fNanoSec;   //!
+  //    TBranch        *b_ev_pmt;   //!
+  //    TBranch        *b_ds_user;   //!
   
   ULong64_t entry;
   ULong64_t NbEntries;

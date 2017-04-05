@@ -23,7 +23,8 @@ Int_t main(Int_t argc, Char_t** argv)
   TString inpath;
   TString outpath;
   TString indir="./";
-//   TString outdir="./";
+  TString suffix;
+  //   TString outdir="./";
   TString *outdir=0;
   
   if (argc <= 1)
@@ -33,6 +34,7 @@ Int_t main(Int_t argc, Char_t** argv)
     << "-t [type]  : type of analysis: run1, run1_hefty, run2 \n"
     << "   OPTIONAL:\n"
     << "-i [inpath]: path to the input (not implemented yet)\n"
+    << "-s [suffix]: suffix (additional info in output name)\n"
     << "-p [outpath]: path to the output\n"
     << std::endl;
     exit(-1);  
@@ -42,7 +44,7 @@ Int_t main(Int_t argc, Char_t** argv)
   vector<TString> InputFiles;
   struct stat buf;
   
-  while ((option = getopt(argc,argv,"-ip:t:")) != -1)
+  while ((option = getopt(argc,argv,"-i:s:p:t:")) != -1)
   {
     switch (option) {
       case 't':
@@ -51,6 +53,10 @@ Int_t main(Int_t argc, Char_t** argv)
 	break;
       case 'i':
 	indir = optarg;
+	NbFiles -=2;
+	break;
+      case 's':
+	suffix = optarg;
 	NbFiles -=2;
 	break;
       case 'p':
@@ -64,12 +70,12 @@ Int_t main(Int_t argc, Char_t** argv)
     }
   }
   
-    if (outdir == 0) {
+  if (outdir == 0) {
     outdir = new TString(getenv("PWD"));
   }
   
   if (!TPMERegexp("/$").Match(*outdir)) {*outdir = *outdir + "/";}
-    
+  
   // filling files vectors
   if (NbFiles > 0) { InputFiles.reserve(NbFiles); 
     cout << NbFiles << " files to analyze" << endl;}
@@ -94,33 +100,33 @@ Int_t main(Int_t argc, Char_t** argv)
     Analyzer * Ana;
     
     if ( type == "run1" ) {
-      Ana = new Analyzer(InputFiles, "run1", *outdir);
-	Ana->Initialization();
-	Ana->Loop();
-	Ana->Finalize();  
+      Ana = new Analyzer(InputFiles, "run1", *outdir, suffix);
+      Ana->Initialization();
+      Ana->Loop();
+      Ana->Finalize();  
     } else 
       
-    if ( type == "run1_hefty" ) {
-      Ana = new Analyzer(InputFiles, "run1_hefty", *outdir);
+      if ( type == "run1_hefty" ) {
+	Ana = new Analyzer(InputFiles, "run1_hefty", *outdir, suffix);
 	Ana->Initialization();
 	Ana->Loop();
 	Ana->Finalize();  
-    } else 
-    
-    if ( type == "run2" ) {
-      Ana = new Analyzer(InputFiles, "run2", *outdir);
-	Ana->Initialization();
-	Ana->Loop();
-	Ana->Finalize();  
-    } else {
-      std::cerr << "\n *** Say what? Invalid type..." << std::endl; abort();
-    }
+      } else 
 	
-    delete Ana;
+	if ( type == "run2" ) {
+	  Ana = new Analyzer(InputFiles, "run2", *outdir, suffix);
+	  Ana->Initialization();
+	  Ana->Loop();
+	  Ana->Finalize();  
+	} else {
+	  std::cerr << "\n *** Say what? Invalid type..." << std::endl; abort();
+	}
+	
+	delete Ana;
 	InputFiles.clear();
 	delete outdir;
-    
-    std::cout << "\n ... End of analysis \n" << std::endl;
-    return 0;
-    
+	
+	std::cout << "\n ... End of analysis \n" << std::endl;
+	return 0;
+	
 }
