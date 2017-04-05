@@ -71,13 +71,13 @@ void Analyzer::Initialization(){
   
   hNeutronCap_proj_x = new TH1F("hNeutronCap_proj_x","Projection of neutron capture point on x axis (mm)",600,-3000,3000);
   hNeutronCap_proj_y = new TH1F("hNeutronCap_proj_y","Projection of neutron capture point on y axis (mm)",600,-3000,3000);
-  hNeutronCap_proj_z = new TH1F("hNeutronCap_proj_z","Projection of neutron capture point on z axis (mm)",600,-1000,5000);
+  hNeutronCap_proj_z = new TH1F("hNeutronCap_proj_z","Projection of neutron capture point on z axis (mm)",800,-3000,5000);
   hNeutronCap_disp_x = new TH1F("hNeutronCap_disp_x","Displacement of neutron capture point on x axis (mm)",600,-3000,3000);
   hNeutronCap_disp_y = new TH1F("hNeutronCap_disp_y","Displacement of neutron capture point on y axis (mm)",600,-3000,3000);
   hNeutronCap_disp_z = new TH1F("hNeutronCap_disp_z","Displacement of neutron capture point on z axis (mm)",600,-3000,3000);
   hMuVertex_proj_x = new TH1F("hMuVertex_proj_x","Projection of muon vertex on x axis (mm)",600,-3000,3000);
   hMuVertex_proj_y = new TH1F("hMuVertex_proj_y","Projection of muon vertex on y axis (mm)",600,-3000,3000);
-  hMuVertex_proj_z = new TH1F("hMuVertex_proj_z","Projection of muon vertex on z axis (mm)",600,-1000,5000);
+  hMuVertex_proj_z = new TH1F("hMuVertex_proj_z","Projection of muon vertex on z axis (mm)",800,-3000,5000);
   
   hNeutron_eff_tank = new TH2F("hNeutron_eff_tank","Rho,y plot of the neutron capture efficiency in the tank",10,0,2000,30,-3000,3000);
   hNeutron_eff_tank_NPE = new TH2F("hNeutron_eff_tank_NPE","Rho,y plot of the neutron capture (energy cut) efficiency in the tank",10,0,2000,30,-3000,3000);
