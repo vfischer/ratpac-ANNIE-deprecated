@@ -170,6 +170,7 @@ private:
   Int_t test_counter;
   Int_t Nmuons, Nmuons_cut, Nneutrons_cap_gd, Npneutrons_cap_gd, Nneutrons_cap_Ecut, Ninteractions_tot, Nneutrons_cap_tot, Nneutrons_cap_vol, Nneutrons_cap_mucut, Nneutrons_cap_mu, Nneutrons_cap_DT, Nneutrons_cap_allcut;
   Int_t Nneutrons_track_tot, Nmuons_tot, Nmuons_fidu, Nmuons_track;
+  Int_t counter, nb_inelas;
   
   // Capture infos
   TString nucl_cap_pdg_code;
@@ -198,6 +199,7 @@ private:
   TH1F *hDist_nCap_muTrack;
   TH1F *hDist_nCap_muStart;
   TH1F *hTrackLength_mu;
+  TH1F *hTrackAngle_neutron;
   TH1F *hTrackAngle_mu;
   TH1F *hTrackAngle_mu_MRD;
   TH1F *hTime_nCap_muTrack;

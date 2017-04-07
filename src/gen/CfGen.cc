@@ -87,7 +87,7 @@ namespace RAT {
 				p.pz());
 	particle->SetMass(neutron->GetPDGMass()); // Apparently this is useful in IBD code.
 	vertex->SetPrimary(particle);
-	event->AddPrimaryVertex(vertex);
+	//event->AddPrimaryVertex(vertex);
 
 #ifdef DEBUG
 	G4cout << "RAT::CfGen::GenerateEvent: "

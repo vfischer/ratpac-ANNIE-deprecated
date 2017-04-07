@@ -130,7 +130,7 @@ int rat2reco(char *filename) {
   int pmt_card_array_run1[] = {3,3,3,3,4,4,4,4,5,5,5,5,6,6,6,6,8,8,8,8,9,9,9,9,10,10,10,10,11,11,11,11,13,13,13,13,14,14,14,14,15,15,15,15,16,16,16,16,18,18,18,18,19,19,19,19,20,20,20,20};
   int pmt_channel_array_run1[] = {0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3};
   
-  for(ULong64_t entry=0; entry<NbEntries; ++entry){
+  for(ULong64_t entry=0; entry<10; ++entry){
     ds = dsReader->GetEvent(entry);
     
     // Some initilizations

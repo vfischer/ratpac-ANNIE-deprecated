@@ -62,6 +62,7 @@ void Analyzer::Initialization(){
   hDist_nCap_muStart = new TH1F("hDist_nCap_muStart","Distance between neutron capture and neutrino interaction (mm)",100,0,5000); 
   hTime_nCap_muTrack = new TH1F("hTime_nCap_muTrack","Time between neutron capture and muon track (ns)",1000,0,1000000);
   hTrackLength_mu = new TH1F("hTrackLength_mu","Muon track length (mm)",200,0,10000);
+  hTrackAngle_neutron = new TH1F("hTrackAngle_neutron","Neutron track angle (rad)",100,0,4);
   hTrackAngle_mu = new TH1F("hTrackAngle_mu","Muon track angle (rad)",100,0,4);
   hTrackAngle_mu_MRD = new TH1F("hTrackAngle_mu_MRD","Muon track angle (rad) when going through MRD",100,0,4);
   hEdep_muTrack = new TH1F("hEdep_muTrack","Muon track deposited energy (MeV)",500,0,5000);
@@ -379,7 +380,7 @@ void Analyzer::Loop() {
     ////////////////////////////////////////////////////////
     //************ Primary muon search loop **************//
     ////////////////////////////////////////////////////////
-    //     cout << "New event --->\n";
+    cout << "New event --->\n";
     if(cursor->ChildCount()){ // if particles associated to parents
       
       for(size_t iCh = 0; iCh<ds->GetMC()->GetMCParticleCount(); iCh++){
@@ -483,11 +484,33 @@ void Analyzer::Loop() {
       // // 	    N_inelastic++;
       // 	  }
       //       }
-      if (node->GetParticleName() == "neutron" && node->GetProcess() != "neutronInelastic"){ // loop on all neutron tracks
+      if (node->GetParticleName() == "neutron" ){ // loop on all neutron tracks
 	Nneutrons_track_tot++;
+	nb_inelas = 0;
 	if (is_mu_tag) {
+	  cout << "Proc: " << node->GetProcess() <<  ", KE: " << node->GetKE() << ", ID: " << node->GetTrackID() << endl;
+	  for (size_t j = 0; j<cursor->TrackChildCount(); j++) {
+	  cout << "Proc: " << node->GetProcess() <<  ", KE: " << node->GetKE() << ", ID: " << node->GetTrackID() << ", ChildID: " << cursor->TrackChild(j)->GetTrackID() << ", ChildPart: " << cursor->TrackChild(j)->GetParticleName() << ", ChildProc: " << cursor->TrackChild(j)->GetProcess() << endl;
+	  }
+	  for (size_t j = 0; j<cursor->TrackChildCount(); j++) {
+	    if (cursor->TrackChild(j)->GetParticleName() == "neutron" && cursor->TrackChild(j)->GetProcess() == "neutronInelastic") {
+	      nb_inelas++;
+	    }
+	  }
+	  cout << nb_inelas << endl;
+	  if (node->GetProcess() != "neutronInelastic"){
 	  hNeutronMu_start_point->Fill(muTrack_start.Z(),muTrack_start.X());
 	  hNeutronMu_start_point_3D->Fill(muTrack_start.Z(),muTrack_start.X(),muTrack_start.Y());
+	  hTrackAngle_neutron->Fill(unit_z.Angle(node->GetMomentum()));
+	  cout << "Neutron generated !!\n" << endl;
+	  } else if (nb_inelas > 1 ) {
+	    for (size_t j = 0; j<nb_inelas-1; j++) {
+	    hNeutronMu_start_point->Fill(muTrack_start.Z(),muTrack_start.X());
+	  hNeutronMu_start_point_3D->Fill(muTrack_start.Z(),muTrack_start.X(),muTrack_start.Y());
+	  hTrackAngle_neutron->Fill(unit_z.Angle(node->GetMomentum()));
+	  cout << "Neutron generated !!\n" << endl;
+	    }
+	  }
 	}	  
       }
       
