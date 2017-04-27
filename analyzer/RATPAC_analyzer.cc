@@ -82,19 +82,30 @@ void Analyzer::Initialization(){
   
   hNeutron_eff_tank = new TH2F("hNeutron_eff_tank","Rho,y plot of the neutron capture efficiency in the tank",10,0,2000,30,-3000,3000);
   hNeutron_eff_tank_NPE = new TH2F("hNeutron_eff_tank_NPE","Rho,y plot of the neutron capture (energy cut) efficiency in the tank",10,0,2000,30,-3000,3000);
+  hNeutron_eff_tank_NPE_3D = new TH3F("hNeutron_eff_tank_NPE_3D","3D plot of the neutron capture (energy cut) efficiency in the tank",25,0,5000,30,-3000,3000,30,-3000,3000);
+  
   hNeutronMu_eff_tank = new TH2F("hNeutronMu_eff_tank","z,y plot of the neutron capture after muons efficiency in the tank",25,0,5000,30,-3000,3000);
   hNeutronMu_eff_tank_Edep = new TH2F("hNeutronMu_eff_tank_Edep","z,y plot of the neutron capture after muons efficiency in the tank, edep cut",25,0,5000,30,-3000,3000);
+  hNeutronMu_eff_tank_NPE = new TH2F("hNeutronMu_eff_tank_NPE","z,y plot of the neutron capture after muons efficiency in the tank, NPE cut",25,0,5000,30,-3000,3000);
   hNeutronMu_eff_tank_3D = new TH3F("hNeutronMu_eff_tank_3D","3D plot of the neutron capture after muons efficiency in the tank",25,0,5000,30,-3000,3000,30,-3000,3000);
+  
   hNeutronMu_eff_tank_Edep_3D = new TH3F("hNeutronMu_eff_tank_Edep_3D","3D plot of the neutron capture after muons efficiency in the tank, edep cut",25,0,5000,30,-3000,3000,30,-3000,3000);
+  hNeutronMu_eff_tank_NPE_3D = new TH3F("hNeutronMu_eff_tank_NPE_3D","3D plot of the neutron capture after muons efficiency in the tank, NPE cut",25,0,5000,30,-3000,3000,30,-3000,3000);
   
   hNeutron_captured_tank = new TH2F("hNeutron_captured_tank","Rho,y plot of the number of neutrons captured in the tank",10,0,2000,30,-3000,3000);
   hNeutron_captured_tank_NPE = new TH2F("hNeutron_captured_tank_NPE","Rho,y plot of the number of neutrons captured (energy cut) in the tank",10,0,2000,30,-3000,3000);
+  hNeutron_captured_tank_NPE_3D = new TH3F("hNeutron_captured_tank_NPE_3D","3D plot of the number of neutrons captured (energy cut) in the tank",25,0,5000,30,-3000,3000,30,-3000,3000);
   hNeutron_shot_tank = new TH2F("hNeutron_shot_tank","Rho,y plot of the number of neutrons shot in the tank",10,0,2000,30,-3000,3000);
+  hNeutron_shot_tank_3D = new TH3F("hNeutron_shot_tank_3D","3D plot of the number of neutrons shot in the tank",25,0,5000,30,-3000,3000,30,-3000,3000);
+  
   hNeutronMu_cap_point = new TH2F("hNeutronMu_cap_point","z,y plot of the neutron after muons capture point",25,0,5000,30,-3000,3000);
   hNeutronMu_cap_point_Edep = new TH2F("hNeutronMu_cap_point_Edep","z,y plot of the neutron after muons capture point, edep cut",25,0,5000,30,-3000,3000);
+  hNeutronMu_cap_point_NPE = new TH2F("hNeutronMu_cap_point_NPE","z,y plot of the neutron after muons capture point, NPE cut",25,0,5000,30,-3000,3000);
   hNeutronMu_start_point = new TH2F("hNeutronMu_start_point","z,y plot of the neutron after muons start point",25,0,5000,30,-3000,3000);
+  
   hNeutronMu_cap_point_3D = new TH3F("hNeutronMu_cap_point_3D","3D plot of the neutron after muons capture point",25,0,5000,30,-3000,3000,30,-3000,3000);
   hNeutronMu_cap_point_Edep_3D = new TH3F("hNeutronMu_cap_point_Edep_3D","3D plot of the neutron after muons capture point, edep cut",25,0,5000,30,-3000,3000,30,-3000,3000);
+  hNeutronMu_cap_point_NPE_3D = new TH3F("hNeutronMu_cap_point_NPE_3D","3D plot of the neutron after muons capture point, NPE cut",25,0,5000,30,-3000,3000,30,-3000,3000);
   hNeutronMu_start_point_3D = new TH3F("hNeutronMu_start_point_3D","3D plot of the neutron after muons start point",25,0,5000,30,-3000,3000,30,-3000,3000);
   
   // Energy infos
@@ -375,12 +386,20 @@ void Analyzer::Loop() {
     //       cout << "Proper: " << node->GetProperTime() << endl;
     //       hTrackDuration->Fill(node->GetGlobalTime());
     //     }
+   
+//    for (int iTr = 0; iTr < ds->GetMC()->GetMCTrackCount(); iTr++){
+//       //---- IDVector[ID] gives the Track Number                                                                                                             
+//       //---- TrackVector[TrackNumber] gives the Track ID                                                                                                     
+//       IDVector.insert(std::make_pair(ds->GetMC()->GetMCTrack(iTr)->GetID(),iTr));
+//       TrackVector.insert(std::make_pair(iTr,ds->GetMC()->GetMCTrack(iTr)->GetID()));
+//     }
+   
     
     
     ////////////////////////////////////////////////////////
-    //************ Primary muon search loop **************//
+    //============ Primary muon search loop ==============//
     ////////////////////////////////////////////////////////
-    cout << "New event --->\n";
+    //     cout << "New event --->\n";
     if(cursor->ChildCount()){ // if particles associated to parents
       
       for(size_t iCh = 0; iCh<ds->GetMC()->GetMCParticleCount(); iCh++){
@@ -458,7 +477,7 @@ void Analyzer::Loop() {
     
     
     /////////////////////////////////////////////////////////
-    //********** Secondary neutron search loop ************//
+    //========== Secondary neutron search loop ============//
     /////////////////////////////////////////////////////////
     //     for(size_t iCh = 0; iCh<ds->GetMC()->GetMCTrackCount(); ++iCh){ // Loop on all tracks in that event
     while(node != 0){
@@ -468,9 +487,9 @@ void Analyzer::Loop() {
       //       cout << ds->GetMC()->GetMCTrack(iCh)->GetParticleName() << " " << ds->GetMC()->GetMCTrack(iCh)->GetLastMCTrackStep()->GetProcess()  << endl;
       //       if (ds->GetMC()->GetMCTrack(iCh)->GetPDGCode() == 2112){ //look for neutrons, all neutrons
       // 	Nneutrons_tot++;
-      // 	if (ds->GetMC()->GetMCTrack(iCh)->GetLastMCTrackStep()->GetProcess() == "nCapture" /*&& 
+      // 	if (ds->GetMC()->GetMCTrack(iCh)->GetLastMCTrackStep()->GetProcess() == "nCapture" && 
       // 	  std::find(interest_volumes.begin(), interest_volumes.end(), ds->GetMC()->GetMCTrack(iCh)->GetLastMCTrackStep()->GetVolume()) != interest_volumes.end() &&
-      // 	  is_mu_tag*/) {
+      // 	  is_mu_tag) {
       // 	  cout << ds->GetMC()->GetMCTrack(iCh+1)->GetPDGCode() << " " << ds->GetMC()->GetMCTrack(iCh+1)->GetLastMCTrackStep()->GetProcess() << endl;
       // 	  Nneutrons_cut++;
       // 	  NCaptures_perevt++; // nb of ncaptures after muon
@@ -484,35 +503,49 @@ void Analyzer::Loop() {
       // // 	    N_inelastic++;
       // 	  }
       //       }
-      if (node->GetParticleName() == "neutron" ){ // loop on all neutron tracks
+      
+      
+      if (node->GetParticleName() == "neutron" && node->GetProcess() != "neutronInelastic"){ // loop on all neutron tracks
 	Nneutrons_track_tot++;
-	nb_inelas = 0;
-	if (is_mu_tag) {
-	  cout << "Proc: " << node->GetProcess() <<  ", KE: " << node->GetKE() << ", ID: " << node->GetTrackID() << endl;
-	  for (size_t j = 0; j<cursor->TrackChildCount(); j++) {
-	  cout << "Proc: " << node->GetProcess() <<  ", KE: " << node->GetKE() << ", ID: " << node->GetTrackID() << ", ChildID: " << cursor->TrackChild(j)->GetTrackID() << ", ChildPart: " << cursor->TrackChild(j)->GetParticleName() << ", ChildProc: " << cursor->TrackChild(j)->GetProcess() << endl;
-	  }
-	  for (size_t j = 0; j<cursor->TrackChildCount(); j++) {
-	    if (cursor->TrackChild(j)->GetParticleName() == "neutron" && cursor->TrackChild(j)->GetProcess() == "neutronInelastic") {
-	      nb_inelas++;
-	    }
-	  }
-	  cout << nb_inelas << endl;
-	  if (node->GetProcess() != "neutronInelastic"){
+	if (MRD_hit) {
+	  hNeutronMu_start_point->Fill(muTrack_start.Z(),muTrack_start.X());
 	  hNeutronMu_start_point->Fill(muTrack_start.Z(),muTrack_start.X());
 	  hNeutronMu_start_point_3D->Fill(muTrack_start.Z(),muTrack_start.X(),muTrack_start.Y());
 	  hTrackAngle_neutron->Fill(unit_z.Angle(node->GetMomentum()));
-	  cout << "Neutron generated !!\n" << endl;
-	  } else if (nb_inelas > 1 ) {
-	    for (size_t j = 0; j<nb_inelas-1; j++) {
-	    hNeutronMu_start_point->Fill(muTrack_start.Z(),muTrack_start.X());
-	  hNeutronMu_start_point_3D->Fill(muTrack_start.Z(),muTrack_start.X(),muTrack_start.Y());
-	  hTrackAngle_neutron->Fill(unit_z.Angle(node->GetMomentum()));
-	  cout << "Neutron generated !!\n" << endl;
-	    }
-	  }
-	}	  
+	}          
       }
+      
+      
+      /*
+            if (node->GetParticleName() == "neutron" ){ // loop on all neutron tracks
+        Nneutrons_track_tot++;
+        nb_inelas = 0;
+        if (is_mu_tag) {
+         cout << "Proc: " << node->GetProcess() <<  ", KE: " << node->GetKE() << ", ID: " << node->GetTrackID();
+         for (size_t j = 0; j<cursor->TrackChildCount(); j++) {
+         cout << "Proc: " << node->GetProcess() <<  ", KE: " << node->GetKE() << ", ID: " << node->GetTrackID() << ", ChildID: " << cursor->TrackChild(j)->GetTrackID() << ", ChildPart: " << cursor->TrackChild(j)->GetParticleName() << ", ChildProc: " << cursor->TrackChild(j)->GetProcess() << endl;
+    }
+    for (size_t j = 0; j<cursor->TrackChildCount(); j++) {
+      if (cursor->TrackChild(j)->GetParticleName() == "neutron" && cursor->TrackChild(j)->GetProcess() == "neutronInelastic") {
+	nb_inelas++;
+    }
+    }
+    cout << nb_inelas << endl;
+    if (node->GetProcess() != "neutronInelastic"){
+      hNeutronMu_start_point->Fill(muTrack_start.Z(),muTrack_start.X());
+      hNeutronMu_start_point_3D->Fill(muTrack_start.Z(),muTrack_start.X(),muTrack_start.Y());
+      hTrackAngle_neutron->Fill(unit_z.Angle(node->GetMomentum()));
+      cout << "Neutron generated !!\n" << endl;
+    } else if (nb_inelas > 1 ) {
+      for (size_t j = 0; j<nb_inelas-1; j++) {
+	hNeutronMu_start_point->Fill(muTrack_start.Z(),muTrack_start.X());
+	hNeutronMu_start_point_3D->Fill(muTrack_start.Z(),muTrack_start.X(),muTrack_start.Y());
+	hTrackAngle_neutron->Fill(unit_z.Angle(node->GetMomentum()));
+	cout << "Neutron generated !!\n" << endl;
+    }
+    }
+    }	  
+    }*/
       
       //                   cout << node->GetParticleName() << " " << node->GetPDGCode() << " " << node->GetVolume() << " " << node->GetProcess() << " " << node->GetKE() << " " << is_mu_tag << endl; 
       
@@ -655,7 +688,7 @@ void Analyzer::Loop() {
     
     
     ///////////////////////////////////////////////////////
-    //********** Primary neutron search loop ************//
+    //=========== Primary neutron search loop ===========//
     ///////////////////////////////////////////////////////
     cursor->GoParent(); cursor->GoParent(); // because apparently I moved down two levels on the track tree before..
     node = cursor->Here();
@@ -664,6 +697,8 @@ void Analyzer::Loop() {
       for(size_t iCh = 0; iCh<ds->GetMC()->GetMCParticleCount(); iCh++){ // Loop on all particles in that event
 	cursor->GoChild(iCh); // go to particle
 	node = cursor->Here(); // "attach" node to this particle
+	// 	if(node->GetPDGCode() == 2112){ cout << "KE= " << node->GetKE() << endl;}
+	// 	cout << node->GetParticleName() << " " << node->GetProcess() << " " << node->GetKE() << " " << node->GetTrackID() << endl;
 	if(node->GetPDGCode() == 2112){ // only for neutrons, beginning of tracking loop
 	  node = cursor->GoStep(cursor->StepCount()-1); // go to last step (the only one we care about here)
 	  if(node->GetProcess() == "nCapture"){
@@ -677,7 +712,9 @@ void Analyzer::Loop() {
 	    //  	    cout << node->GetVolume() << endl;
 	    // 	    cout << "Primary -- " << node->GetPDGCode() << endl;
 	    nucl_cap_pdg_code = to_string(node->GetPDGCode());
-	    hTrackDuration->Fill(node->GetGlobalTime());
+	    if (ds->GetMC()->GetMCSummary()->GetTotalScintEdep() > 2) {
+	      hTrackDuration->Fill(node->GetGlobalTime());
+	    }
 	    hTrackLength->Fill(n_end.Mag() - n_start.Mag());
 	    if (TPMERegexp("100001[0-9][0-9][0-9][0-9]").Match(nucl_cap_pdg_code)) {
 	      Npcaptures_h++;
@@ -701,6 +738,7 @@ void Analyzer::Loop() {
 	      hNeutron_captured_tank->Fill(Hypot(n_start.X(),n_start.Z()-1724),n_start.Y());
 	      if (ds->GetMC()->GetNumPE() > 10) {
 		hNeutron_captured_tank_NPE->Fill(Hypot(n_start.X(),n_start.Z()-1724),n_start.Y());
+		hNeutron_captured_tank_NPE_3D->Fill(n_start.Z(),n_start.X(),n_start.Y());
 	      }
 	    }   
 	    if (TPMERegexp("100006[0-9][0-9][0-9][0-9]").Match(nucl_cap_pdg_code)) {
@@ -737,6 +775,7 @@ void Analyzer::Loop() {
 	  //       cout << ds->GetMC()->GetMCTrack(0)->GetMCTrackStep(0)->GetVolume() << endl;
 	  
 	  hNeutron_shot_tank->Fill(Hypot(n_start.X(),n_start.Z()-1724),n_start.Y());
+	  hNeutron_shot_tank_3D->Fill(n_start.Z(),n_start.X(),n_start.Y());
 	  
 	} // end of tracking loop
 	cursor->GoParent();
@@ -786,10 +825,13 @@ void Analyzer::Finalize(){
   
   hNeutron_eff_tank->Divide(hNeutron_captured_tank,hNeutron_shot_tank);
   hNeutron_eff_tank_NPE->Divide(hNeutron_captured_tank_NPE,hNeutron_shot_tank);
+  hNeutron_eff_tank_NPE_3D->Divide(hNeutron_captured_tank_NPE_3D,hNeutron_shot_tank_3D);
   hNeutronMu_eff_tank->Divide(hNeutronMu_cap_point,hNeutronMu_start_point);
   hNeutronMu_eff_tank_Edep->Divide(hNeutronMu_cap_point_Edep,hNeutronMu_start_point);
+  hNeutronMu_eff_tank_NPE->Divide(hNeutronMu_cap_point_NPE,hNeutronMu_start_point);
   hNeutronMu_eff_tank_3D->Divide(hNeutronMu_cap_point_3D,hNeutronMu_start_point_3D);
   hNeutronMu_eff_tank_Edep_3D->Divide(hNeutronMu_cap_point_Edep_3D,hNeutronMu_start_point_3D);
+  hNeutronMu_eff_tank_NPE_3D->Divide(hNeutronMu_cap_point_NPE_3D,hNeutronMu_start_point_3D);
   
   // Plotting  
   c1 = new TCanvas("c1", "Charge and amp infos", 0,0, 1200, 1000);

@@ -219,8 +219,9 @@ private:
   TH1F *hEdep_muTrack_nCap;
   
   TH2F *hNeutron_eff_tank, *hNeutron_eff_tank_NPE, *hNeutron_shot_tank, *hNeutron_captured_tank, *hNeutron_captured_tank_NPE;
-  TH2F *hNeutronMu_cap_point, *hNeutronMu_cap_point_Edep, *hNeutronMu_start_point, *hNeutronMu_eff_tank, *hNeutronMu_eff_tank_Edep;
-  TH3F *hNeutronMu_cap_point_3D, *hNeutronMu_cap_point_Edep_3D, *hNeutronMu_start_point_3D, *hNeutronMu_eff_tank_3D, *hNeutronMu_eff_tank_Edep_3D;
+  TH2F *hNeutronMu_cap_point, *hNeutronMu_cap_point_Edep, *hNeutronMu_cap_point_NPE,*hNeutronMu_start_point, *hNeutronMu_eff_tank, *hNeutronMu_eff_tank_Edep, *hNeutronMu_eff_tank_NPE;
+  TH3F *hNeutronMu_cap_point_3D, *hNeutronMu_cap_point_Edep_3D, *hNeutronMu_cap_point_NPE_3D, *hNeutronMu_start_point_3D, *hNeutronMu_eff_tank_3D, *hNeutronMu_eff_tank_Edep_3D, *hNeutronMu_eff_tank_NPE_3D;
+  TH3F *hNeutron_eff_tank_NPE_3D, *hNeutron_shot_tank_3D, *hNeutron_captured_tank_NPE_3D;
   
   // Variables
   Double_t init_time, fin_time;
@@ -246,6 +247,7 @@ private:
   int pmt_channel_array_run2[NbPMT_run2];
   std::vector<int> broken_pmt_vec; // in terms of pmtid (starting at 1)
   std::vector<int> ncv_pmt_vec; // in terms of pmtid (starting at 1)
+  std::map<int,int> IDVector, TrackVector;
   
   // TTrees, TChains and all that ROOT stuff
   TTree *nutri;

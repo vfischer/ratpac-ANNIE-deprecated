@@ -21,6 +21,7 @@
 #include <G4UnitsTable.hh>
 
 #include <CLHEP/Vector/LorentzVector.h>
+#include <CLHEP/Vector/ThreeVector.h>
 
 #include <cstring>
 
@@ -84,8 +85,16 @@ namespace RAT {
 	  new G4PrimaryParticle(neutron,
 				p.px(), 
 				p.py(), 
-				p.pz());
+				p.pz(),
+				sqrt(p.px()*p.px() + p.py()*p.py() + p.pz()*p.pz())
+ 			      );
 	particle->SetMass(neutron->GetPDGMass()); // Apparently this is useful in IBD code.
+// 	G4cout << "Mass=" << G4BestUnit(neutron->GetPDGMass(),"Energy") << G4endl;
+// 	G4cout << "GenKE= " << G4BestUnit(sqrt(p.px()*p.px() + p.py()*p.py() + p.pz()*p.pz()),"Energy") << G4endl;
+// 	G4cout << "GenMom= " << G4BestUnit(p,"Energy") << G4endl;
+// 	G4cout << "Get GenKE= " << G4BestUnit(particle->GetKineticEnergy(),"Energy") << " Get GenE= " << G4BestUnit(particle->GetTotalEnergy(),"Energy") << G4endl;
+// 	G4cout << "Get GenMass= " << G4BestUnit(particle->GetMass(),"Energy") << " Get GenMom= " << G4BestUnit(particle->GetTotalMomentum(),"Energy") << G4endl;
+// 	G4cout << "Get GenPx= " << G4BestUnit(particle->GetPx(),"Energy") << " Get GenPy= " << G4BestUnit(particle->GetPy(),"Energy") << " Get GenPz= " << G4BestUnit(particle->GetPz(),"Energy") << G4endl;
 	vertex->SetPrimary(particle);
 	event->AddPrimaryVertex(vertex);
 

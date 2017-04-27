@@ -141,7 +141,9 @@ namespace RAT {
       for (int nn=0; nn<Nneutron; nn++)
 	{
 	  double neutronKE = fGenerate->shoot() * (fhigh - flow) + flow;
+// 	  G4cout << "neutronKE = " << neutronKE*CLHEP::MeV << G4endl;
 	  double energy = massNeutron + neutronKE;
+// 	  G4cout << "energy = " << energy*CLHEP::MeV << G4endl;
 	  // Generate momentum direction uniformly in phi and cos(theta).
 	  double phi = CLHEP::RandFlat::shoot(0.,M_PI);
 	  double cosTheta = CLHEP::RandFlat::shoot(-1.,1.);
@@ -149,6 +151,7 @@ namespace RAT {
 	  double px = neutronKE * sinTheta * cos(phi);
 	  double py = neutronKE * sinTheta * sin(phi);
 	  double pz = neutronKE * cosTheta;
+// 	  G4cout << "momen " << px*CLHEP::MeV << " " << py*CLHEP::MeV << " " << pz*CLHEP::MeV << G4endl;
 #ifdef DEBUG
 	  std::cout << "CfSource::CfSource() - neutron energy " 
 		    << nn << " = " << energy

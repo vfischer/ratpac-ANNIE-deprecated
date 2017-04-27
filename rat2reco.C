@@ -89,7 +89,7 @@ int rat2reco(char *filename) {
   // Create output file
   TFile outputfile(Form("rat2reco_%s", inputfile.GetName() ),"RECREATE");
   
-  // Tree and branhces
+  // Tree and branches
   TTree *PMTData = new TTree("PMTData","PMT Data tree");
   long LastSync ,StartCount, TriggerCount;
   Int_t SequenceID, StartTimeSec, StartTimeNSec, TriggerNumber, CardID, Channel, BufferSize, Trigger, PMTID, PMTx, PMTy, PMTz, PMTf;
