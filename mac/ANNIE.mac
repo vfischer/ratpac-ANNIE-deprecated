@@ -5,7 +5,7 @@
 
 /tracking/storeTrajectory 1
 #/tracking/discardParticleTrajectory opticalphoton
-/tracking/discardParticleTrajectory e-
+#/tracking/discardParticleTrajectory e-
 
 /rat/db/set DETECTOR experiment "ANNIE"
 /rat/db/set DETECTOR geo_file "ANNIE/ANNIE_run2_config6.geo"
@@ -45,7 +45,7 @@
 /rat/proc fitcentroid
 /rat/proc prune
 #/rat/procset prune "mc.track:opticalphoton"
-/rat/procset prune "mc.track:e-"
+#/rat/procset prune "mc.track:e-"
 
 # Use IO.default_output_filename
 /rat/proclast outroot
@@ -56,7 +56,7 @@
 /generator/pos/set 0 0 1724
 #/generator/pos/set 0 0 -133.3
 
-/run/beamOn 5
+/run/beamOn 10
 
 #END EVENT LOOP
 #####################

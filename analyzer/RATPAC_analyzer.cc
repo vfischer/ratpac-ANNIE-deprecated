@@ -232,9 +232,11 @@ void Analyzer::Loop() {
     }
     
     // reset some counters
-    charge_tot = 0, Ncaptures_perevt = 0, Npcaptures_perevt = 0, parenttrackID = 0, Edep_capture = 0;;
+    charge_tot = 0, Ncaptures_perevt = 0, Npcaptures_perevt = 0, parenttrackID = 0, Edep_capture = 0;
+    number_PE = 0, from_neutron = false;
     is_nGd = false, is_nH = false, is_mu_tag = false, is_cut_mu_track = false, is_cut_cap_edep = false, is_cut_mu_cap_DT = false, is_cut_mu_cap_DR = false, is_mu_fiducial = false, MRD_hit = false, has_pion = false;
     vMuTrack.clear(), vMuTrack_Edep.clear(), vMuTrack_volume.clear(), pparticles_trackID.clear();
+    IDVector.clear(), TrackVector.clear();
     
     // Analysis part
     //     cout << entry << " " << ds->GetMC()->GetMCSummary()->GetTotalScintEdep()  << " " << ds->GetMC()->GetNumPE() <<  endl;
@@ -387,13 +389,32 @@ void Analyzer::Loop() {
     //       hTrackDuration->Fill(node->GetGlobalTime());
     //     }
    
-//    for (int iTr = 0; iTr < ds->GetMC()->GetMCTrackCount(); iTr++){
-//       //---- IDVector[ID] gives the Track Number                                                                                                             
-//       //---- TrackVector[TrackNumber] gives the Track ID                                                                                                     
-//       IDVector.insert(std::make_pair(ds->GetMC()->GetMCTrack(iTr)->GetID(),iTr));
-//       TrackVector.insert(std::make_pair(iTr,ds->GetMC()->GetMCTrack(iTr)->GetID()));
-//     }
-   
+   for (int iTr = 0; iTr < ds->GetMC()->GetMCTrackCount(); iTr++){
+      //---- IDVector[ID] gives the Track Number                                                                                                             
+      //---- TrackVector[TrackNumber] gives the Track ID                                                                                                     
+      IDVector.insert(std::make_pair(ds->GetMC()->GetMCTrack(iTr)->GetID(),iTr));
+      TrackVector.insert(std::make_pair(iTr,ds->GetMC()->GetMCTrack(iTr)->GetID()));
+    }
+    cout << "New evt" << endl;
+    for(size_t iPmt = 0; iPmt<ds->GetMC()->GetMCPMTCount(); iPmt++){
+      for(size_t iPh = 0; iPh<ds->GetMC()->GetMCPMT(iPmt)->GetMCPhotonCount(); iPh++){
+	photon_ID = ds->GetMC()->GetMCPMT(iPmt)->GetMCPhoton(iPh)->GetTrackID();
+	cout << ds->GetMC()->GetMCTrack(IDVector.at(photon_ID))->GetID() << " " << ds->GetMC()->GetMCTrack(IDVector.at(photon_ID))->GetParticleName() << endl;
+	parent_ID = ds->GetMC()->GetMCTrack(IDVector.at(photon_ID))->GetParentID();
+	from_neutron = false;
+	while (!from_neutron && ds->GetMC()->GetMCTrack(IDVector.at(parent_ID))->GetID() != 0) {
+	  cout << ds->GetMC()->GetMCTrack(IDVector.at(parent_ID))->GetID() << " " << ds->GetMC()->GetMCTrack(IDVector.at(parent_ID))->GetParticleName() << endl;
+	  parent_ID = ds->GetMC()->GetMCTrack(IDVector.at(parent_ID))->GetParentID();
+	  if (ds->GetMC()->GetMCTrack(IDVector.at(parent_ID))->GetParticleName() == "neutron") {
+	   from_neutron = true; 
+	   number_PE++;
+	  }
+	}
+	
+      }
+    }
+      
+    cout << "Number of PE for neutron: " << number_PE << endl;
     
     
     ////////////////////////////////////////////////////////
@@ -507,7 +528,8 @@ void Analyzer::Loop() {
       
       if (node->GetParticleName() == "neutron" && node->GetProcess() != "neutronInelastic"){ // loop on all neutron tracks
 	Nneutrons_track_tot++;
-	if (MRD_hit) {
+// 	if (MRD_hit) {
+	if (is_mu_tag) {
 	  hNeutronMu_start_point->Fill(muTrack_start.Z(),muTrack_start.X());
 	  hNeutronMu_start_point->Fill(muTrack_start.Z(),muTrack_start.X());
 	  hNeutronMu_start_point_3D->Fill(muTrack_start.Z(),muTrack_start.X(),muTrack_start.Y());

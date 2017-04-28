@@ -167,6 +167,7 @@ private:
   Bool_t is_nGd, is_nH, is_mu_tag, is_cut_mu_track, is_cut_cap_edep, is_cut_mu_cap_DT, is_cut_mu_cap_DR, is_mu_fiducial;
   Bool_t MRD_hit;
   Bool_t has_pion;
+  Bool_t from_neutron;
   Int_t test_counter;
   Int_t Nmuons, Nmuons_cut, Nneutrons_cap_gd, Npneutrons_cap_gd, Nneutrons_cap_Ecut, Ninteractions_tot, Nneutrons_cap_tot, Nneutrons_cap_vol, Nneutrons_cap_mucut, Nneutrons_cap_mu, Nneutrons_cap_DT, Nneutrons_cap_allcut;
   Int_t Nneutrons_track_tot, Nmuons_tot, Nmuons_fidu, Nmuons_track;
@@ -235,6 +236,8 @@ private:
   std::vector<Int_t> pparticles_trackID;
   Double_t Ek_nu;
   Double_t cut_mu_track, cut_cap_edep, cut_mu_cap_DT, cut_mu_cap_DR;
+  Int_t photon_ID, parent_ID;
+  Int_t number_PE;
   
   // Arrays
   int pmt_x_array_run1[NbPMT_run1];
