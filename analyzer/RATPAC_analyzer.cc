@@ -81,8 +81,8 @@ void Analyzer::Initialization(){
   hMuVertex_proj_y = new TH1F("hMuVertex_proj_y","Projection of muon vertex on y axis (mm)",600,-3000,3000);
   hMuVertex_proj_z = new TH1F("hMuVertex_proj_z","Projection of muon vertex on z axis (mm)",800,-3000,5000);
   
-  hNeutron_eff_tank = new TH2F("hNeutron_eff_tank","Rho,y plot of the neutron capture efficiency in the tank",10,0,2000,30,-3000,3000);
-  hNeutron_eff_tank_NPE = new TH2F("hNeutron_eff_tank_NPE","Rho,y plot of the neutron capture (energy cut) efficiency in the tank",10,0,2000,30,-3000,3000);
+  hNeutron_eff_tank = new TH2F("hNeutron_eff_tank","Rhosquare,y plot of the neutron capture efficiency in the tank",10,0,4000000,30,-3000,3000);
+  hNeutron_eff_tank_NPE = new TH2F("hNeutron_eff_tank_NPE","Rhosquare,y plot of the neutron capture (energy cut) efficiency in the tank",10,0,4000000,30,-3000,3000);
   hNeutron_eff_tank_NPE_3D = new TH3F("hNeutron_eff_tank_NPE_3D","3D plot of the neutron capture (energy cut) efficiency in the tank",25,0,5000,30,-3000,3000,30,-3000,3000);
   
   hNeutronMu_eff_tank = new TH2F("hNeutronMu_eff_tank","z,y plot of the neutron capture after muons efficiency in the tank",25,0,5000,30,-3000,3000);
@@ -93,10 +93,10 @@ void Analyzer::Initialization(){
   hNeutronMu_eff_tank_Edep_3D = new TH3F("hNeutronMu_eff_tank_Edep_3D","3D plot of the neutron capture after muons efficiency in the tank, edep cut",25,0,5000,30,-3000,3000,30,-3000,3000);
   hNeutronMu_eff_tank_NPE_3D = new TH3F("hNeutronMu_eff_tank_NPE_3D","3D plot of the neutron capture after muons efficiency in the tank, NPE cut",25,0,5000,30,-3000,3000,30,-3000,3000);
   
-  hNeutron_captured_tank = new TH2F("hNeutron_captured_tank","Rho,y plot of the number of neutrons captured in the tank",10,0,2000,30,-3000,3000);
-  hNeutron_captured_tank_NPE = new TH2F("hNeutron_captured_tank_NPE","Rho,y plot of the number of neutrons captured (energy cut) in the tank",10,0,2000,30,-3000,3000);
+  hNeutron_captured_tank = new TH2F("hNeutron_captured_tank","Rhosquare,y plot of the number of neutrons captured in the tank",10,0,4000000,30,-3000,3000);
+  hNeutron_captured_tank_NPE = new TH2F("hNeutron_captured_tank_NPE","Rhosquare,y plot of the number of neutrons captured (energy cut) in the tank",10,0,4000000,30,-3000,3000);
   hNeutron_captured_tank_NPE_3D = new TH3F("hNeutron_captured_tank_NPE_3D","3D plot of the number of neutrons captured (energy cut) in the tank",25,0,5000,30,-3000,3000,30,-3000,3000);
-  hNeutron_shot_tank = new TH2F("hNeutron_shot_tank","Rho,y plot of the number of neutrons shot in the tank",10,0,2000,30,-3000,3000);
+  hNeutron_shot_tank = new TH2F("hNeutron_shot_tank","Rhosquare,y plot of the number of neutrons shot in the tank",10,0,4000000,30,-3000,3000);
   hNeutron_shot_tank_3D = new TH3F("hNeutron_shot_tank_3D","3D plot of the number of neutrons shot in the tank",25,0,5000,30,-3000,3000,30,-3000,3000);
   
   hNeutronMu_cap_point = new TH2F("hNeutronMu_cap_point","z,y plot of the neutron after muons capture point",25,0,5000,30,-3000,3000);
@@ -799,9 +799,9 @@ void Analyzer::Loop() {
 		  hNHit_Gd->Fill(ds->GetMC()->GetMCPMT(jPMT)->GetMCPhotonCount());
 		}
 	      }
-	      hNeutron_captured_tank->Fill(Hypot(n_start.X(),n_start.Z()-1724),n_start.Y());
+	      hNeutron_captured_tank->Fill(Hypot(n_start.X(),n_start.Z()-1724)*Hypot(n_start.X(),n_start.Z()-1724),n_start.Y());
 	      if (ds->GetMC()->GetNumPE() > 10) {
-		hNeutron_captured_tank_NPE->Fill(Hypot(n_start.X(),n_start.Z()-1724),n_start.Y());
+		hNeutron_captured_tank_NPE->Fill(Hypot(n_start.X(),n_start.Z()-1724)*Hypot(n_start.X(),n_start.Z()-1724),n_start.Y());
 		hNeutron_captured_tank_NPE_3D->Fill(n_start.Z(),n_start.X(),n_start.Y());
 	      }
 	    }   
@@ -838,7 +838,7 @@ void Analyzer::Loop() {
 	  //       cout << ds->GetMC()->GetMCSummary()->GetEnergyLossByVolume("ncv_liquid") << endl;
 	  //       cout << ds->GetMC()->GetMCTrack(0)->GetMCTrackStep(0)->GetVolume() << endl;
 	  
-	  hNeutron_shot_tank->Fill(Hypot(n_start.X(),n_start.Z()-1724),n_start.Y());
+	  hNeutron_shot_tank->Fill(Hypot(n_start.X(),n_start.Z()-1724)*Hypot(n_start.X(),n_start.Z()-1724),n_start.Y());
 	  hNeutron_shot_tank_3D->Fill(n_start.Z(),n_start.X(),n_start.Y());
 	  
 	} // end of tracking loop
