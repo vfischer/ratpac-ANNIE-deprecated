@@ -2,7 +2,7 @@
 // ANNIE detector geometry for Phase 2 
 // 
 // Config 2: - 20 LUX 10inch PMTs at bottom (long bases)
-//	     - 5 rows 9 PMTs on the sides (45 10inch HQE Watchboy)
+//	     - 5 rows 9 PMTs on the sides (45 10inch Watchboy)
 //           - 22 11 inch ETEL PMT on top (not waterproof)
 //
 // Author: V. Fischer <vfischer@ucdavis.edu>
@@ -517,7 +517,7 @@ pos_table: "PMTINFO_run2_topgrid", //generated on the fly
 orientation: "manual",
 } 
 
-// Side ring 1 (lower), r7081 HQE
+// Side ring 1 (lower), r7081 
 { 
 name: "GEO", 
 index: "side_ring_1_pmts", 
@@ -526,7 +526,7 @@ valid_begin: [0, 0],
 valid_end: [0, 0], 
 mother: "detector", 
 type: "pmtarray", 
-pmt_model: "r7081_hqe", // Watchboy
+pmt_model: "r7081", // Watchboy
 pmt_detector_type: "idpmt",
 sensitive_detector: "/mydet/pmt/inner", 
 efficiency_correction: 1.000,  
@@ -547,7 +547,7 @@ valid_begin: [0, 0],
 valid_end: [0, 0], 
 mother: "detector", 
 type: "pmtarray", 
-pmt_model: "r7081_hqe",
+pmt_model: "r7081",
 pmt_detector_type: "idpmt",
 sensitive_detector: "/mydet/pmt/inner", 
 efficiency_correction: 1.000,  
@@ -568,7 +568,7 @@ valid_begin: [0, 0],
 valid_end: [0, 0], 
 mother: "detector", 
 type: "pmtarray", 
-pmt_model: "r7081_hqe",
+pmt_model: "r7081",
 pmt_detector_type: "idpmt",
 sensitive_detector: "/mydet/pmt/inner", 
 efficiency_correction: 1.000,  
@@ -589,7 +589,7 @@ valid_begin: [0, 0],
 valid_end: [0, 0], 
 mother: "detector", 
 type: "pmtarray", 
-pmt_model: "r7081_hqe",
+pmt_model: "r7081",
 pmt_detector_type: "idpmt",
 sensitive_detector: "/mydet/pmt/inner", 
 efficiency_correction: 1.000,  
@@ -610,7 +610,7 @@ valid_begin: [0, 0],
 valid_end: [0, 0], 
 mother: "detector", 
 type: "pmtarray", 
-pmt_model: "r7081_hqe",
+pmt_model: "r7081",
 pmt_detector_type: "idpmt",
 sensitive_detector: "/mydet/pmt/inner", 
 efficiency_correction: 1.000,  

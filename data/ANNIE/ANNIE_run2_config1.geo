@@ -2,7 +2,7 @@
 // ANNIE detector geometry for Phase 2 
 // 
 // Config 1: - 60 SK PMTs (8inch) at bottom (same as in Run1)
-//	     - 7 rows of 10 PMTs on the sides (2 rows of 10inch LUX, 2 rows of 11" ETEL, 3 rows of 10inch HQE Watchboy)
+//	     - 7 rows of 10 PMTs on the sides (2 rows of 10inch LUX, 2 rows of 11" ETEL, 3 rows of 10inch Watchboy)
 //           - Nothing on top  
 //
 // Author: V. Fischer <vfischer@ucdavis.edu>
@@ -101,7 +101,7 @@ drawstyle: "solid"
 
 
 ///////////////////////// PMT arrays //////////////////////////////
-// PMTS: 60 r5912 (phase 1 bottom), 20 11" d784kflb (LBNE), 20 10" r7081 (LUX), 30 10" r7081 HQE (Watchboy)
+// PMTS: 60 r5912 (phase 1 bottom), 20 11" d784kflb (LBNE), 20 10" r7081 (LUX), 30 10" r7081 (Watchboy)
 
 // Bottom array (same as phase 1), 60 8" R5912
 { 
@@ -215,7 +215,7 @@ valid_begin: [0, 0],
 valid_end: [0, 0], 
 mother: "detector", 
 type: "pmtarray", 
-pmt_model: "r7081_hqe",
+pmt_model: "r7081",
 pmt_detector_type: "idpmt",
 sensitive_detector: "/mydet/pmt/inner", 
 efficiency_correction: 1.000,  
@@ -236,7 +236,7 @@ valid_begin: [0, 0],
 valid_end: [0, 0], 
 mother: "detector", 
 type: "pmtarray", 
-pmt_model: "r7081_hqe",
+pmt_model: "r7081",
 pmt_detector_type: "idpmt",
 sensitive_detector: "/mydet/pmt/inner", 
 efficiency_correction: 1.000,  
@@ -257,7 +257,7 @@ valid_begin: [0, 0],
 valid_end: [0, 0], 
 mother: "detector", 
 type: "pmtarray", 
-pmt_model: "r7081_hqe",
+pmt_model: "r7081",
 pmt_detector_type: "idpmt",
 sensitive_detector: "/mydet/pmt/inner", 
 efficiency_correction: 1.000,  
