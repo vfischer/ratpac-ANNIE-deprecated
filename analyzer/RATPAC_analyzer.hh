@@ -235,9 +235,10 @@ private:
   Int_t parenttrackID;
   std::vector<Int_t> pparticles_trackID;
   Double_t Ek_nu;
-  Double_t cut_mu_track, cut_cap_edep, cut_mu_cap_DT, cut_mu_cap_DR;
+  Double_t cut_mu_track, cut_cap_edep, cut_mu_cap_DT, cut_mu_cap_DR, cut_cap_npe;
   Int_t photon_ID, parent_ID;
   Int_t number_PE;
+  Int_t cap_npe_bigger_cut;
   
   // Arrays
   int pmt_x_array_run1[NbPMT_run1];
@@ -250,7 +251,8 @@ private:
   int pmt_channel_array_run2[NbPMT_run2];
   std::vector<int> broken_pmt_vec; // in terms of pmtid (starting at 1)
   std::vector<int> ncv_pmt_vec; // in terms of pmtid (starting at 1)
-  std::map<int,int> IDVector, TrackVector;
+  std::vector<int> NeutronTrackVector;
+  std::map<int,int> IDVector, TrackVector, NeutronPEMap;
   
   // TTrees, TChains and all that ROOT stuff
   TTree *nutri;
@@ -269,7 +271,7 @@ private:
   RAT::TrackCursor *cursor;
   RAT::TrackNode *node;
   RAT::TrackTest *TrackTest_neutron, *TrackTest_gamma;
-  RAT::TrackTest *TrackTest_notelectron;
+  RAT::TrackTest *TrackTest_notelectron, *TrackTest_notphoton;
   
   std::vector<TString> interest_volumes_mu_vertex, interest_volumes_mu_track, interest_volumes_mu_water, interest_volumes_neu, interest_volumes_neuEdep; // volumes where to look for mu tracks, neutron captures, etc...
   

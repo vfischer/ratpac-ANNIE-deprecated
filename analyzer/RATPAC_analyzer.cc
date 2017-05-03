@@ -27,6 +27,7 @@ void Analyzer::Initialization(){
   TrackTest_neutron = new RAT::TrackTest_Particle("neutron");
   TrackTest_gamma = new RAT::TrackTest_Particle("gamma");
   TrackTest_notelectron = new RAT::TrackTest_NotParticle("e-");
+  TrackTest_notphoton = new RAT::TrackTest_NotParticle("opticalphoton");
   
   // Capture nuclei PDG codes
   //   pdg_nucl("1000[0-9][0-9][0-9][0-9][0-9]");
@@ -202,6 +203,7 @@ void Analyzer::Loop() {
   cut_mu_cap_DT = 100000.; // [ns] value of cut on the time difference between muon (start of event) and neutron capture
   cut_mu_cap_DR = 2000.; // [mm] value of cut on the spatial difference between muon track and neutron capture
   cut_mu_track = 500.; // [mm] value of cut on the muon track length
+  cut_cap_npe = 10.; // number of PE required for a n capture
   
   
   TH1::SetDefaultSumw2(kTRUE);
@@ -233,10 +235,11 @@ void Analyzer::Loop() {
     
     // reset some counters
     charge_tot = 0, Ncaptures_perevt = 0, Npcaptures_perevt = 0, parenttrackID = 0, Edep_capture = 0;
+    cap_npe_bigger_cut = 0;
     number_PE = 0, from_neutron = false;
     is_nGd = false, is_nH = false, is_mu_tag = false, is_cut_mu_track = false, is_cut_cap_edep = false, is_cut_mu_cap_DT = false, is_cut_mu_cap_DR = false, is_mu_fiducial = false, MRD_hit = false, has_pion = false;
     vMuTrack.clear(), vMuTrack_Edep.clear(), vMuTrack_volume.clear(), pparticles_trackID.clear();
-    IDVector.clear(), TrackVector.clear();
+    IDVector.clear(), TrackVector.clear(), NeutronTrackVector.clear(), NeutronPEMap.clear();
     
     // Analysis part
     //     cout << entry << " " << ds->GetMC()->GetMCSummary()->GetTotalScintEdep()  << " " << ds->GetMC()->GetNumPE() <<  endl;
@@ -308,8 +311,8 @@ void Analyzer::Loop() {
     //       }
     //     }
     
-    nav = new RAT::TrackNav(ds);
-    cursor = new RAT::TrackCursor(nav->RAT::TrackNav::Cursor(false));  //toggle human readable cursor
+//     nav = new RAT::TrackNav(ds);
+//     cursor = new RAT::TrackCursor(nav->RAT::TrackNav::Cursor(false));  //toggle human readable cursor
     
     //     cout << "Parents = " << ds->GetMC()->GetMCParentCount() << endl;
     //     for(size_t iCh = 0; iCh<ds->GetMC()->GetMCParentCount(); iCh++){ cout << ds->GetMC()->GetMCParent(iCh)->GetParticleName() << endl;}
@@ -390,50 +393,77 @@ void Analyzer::Loop() {
     //     }
    
    for (int iTr = 0; iTr < ds->GetMC()->GetMCTrackCount(); iTr++){
+//      cout << iTr << endl;
       //---- IDVector[ID] gives the Track Number                                                                                                             
       //---- TrackVector[TrackNumber] gives the Track ID                                                                                                     
       IDVector.insert(std::make_pair(ds->GetMC()->GetMCTrack(iTr)->GetID(),iTr));
       TrackVector.insert(std::make_pair(iTr,ds->GetMC()->GetMCTrack(iTr)->GetID()));
+      if (ds->GetMC()->GetMCTrack(iTr)->GetParticleName() == "neutron") {
+	NeutronTrackVector.push_back(ds->GetMC()->GetMCTrack(iTr)->GetID());
+	NeutronPEMap.insert(std::make_pair(ds->GetMC()->GetMCTrack(iTr)->GetID(),0));
+      }
     }
-    cout << "New evt" << endl;
+    if (NeutronTrackVector.size() == 0) {
+      cout << "No neutrons in the event, let's continue...\n";
+      continue;
+    }
+
     for(size_t iPmt = 0; iPmt<ds->GetMC()->GetMCPMTCount(); iPmt++){
       for(size_t iPh = 0; iPh<ds->GetMC()->GetMCPMT(iPmt)->GetMCPhotonCount(); iPh++){
 	photon_ID = ds->GetMC()->GetMCPMT(iPmt)->GetMCPhoton(iPh)->GetTrackID();
-	cout << ds->GetMC()->GetMCTrack(IDVector.at(photon_ID))->GetID() << " " << ds->GetMC()->GetMCTrack(IDVector.at(photon_ID))->GetParticleName() << endl;
+// 	cout << ds->GetMC()->GetMCTrack(IDVector.at(photon_ID))->GetID() << " " << ds->GetMC()->GetMCTrack(IDVector.at(photon_ID))->GetParticleName() << endl;
 	parent_ID = ds->GetMC()->GetMCTrack(IDVector.at(photon_ID))->GetParentID();
-	from_neutron = false;
-	while (!from_neutron && ds->GetMC()->GetMCTrack(IDVector.at(parent_ID))->GetID() != 0) {
-	  cout << ds->GetMC()->GetMCTrack(IDVector.at(parent_ID))->GetID() << " " << ds->GetMC()->GetMCTrack(IDVector.at(parent_ID))->GetParticleName() << endl;
+// 	from_neutron = false;
+	while ( ds->GetMC()->GetMCTrack(IDVector.at(parent_ID))->GetID() != 0 ) {
+// 	  if (ds->GetMC()->GetMCTrack(IDVector.at(parent_ID))->GetID() == 0) { break; }
+// 	  cout << ds->GetMC()->GetMCTrack(IDVector.at(parent_ID))->GetID() << " " << ds->GetMC()->GetMCTrack(IDVector.at(parent_ID))->GetParticleName() << endl;
 	  parent_ID = ds->GetMC()->GetMCTrack(IDVector.at(parent_ID))->GetParentID();
-	  if (ds->GetMC()->GetMCTrack(IDVector.at(parent_ID))->GetParticleName() == "neutron") {
-	   from_neutron = true; 
-	   number_PE++;
+	  if (parent_ID == 0) { break; }
+	  if (std::find(NeutronTrackVector.begin(), NeutronTrackVector.end(), parent_ID) != NeutronTrackVector.end()) {
+// 	    from_neutron = true; 
+	    std::map<int, int>::iterator it = NeutronPEMap.find(parent_ID); 
+	    if (it != NeutronPEMap.end()) {
+	      it->second = it->second +1;
+	    }
+// 	    number_PE++;
+	    break;
 	  }
 	}
-	
       }
     }
       
-    cout << "Number of PE for neutron: " << number_PE << endl;
+//     cout << "Number of PE for neutron: " << number_PE << endl;
+//     cout << "Number of PE for neutron map: " << NeutronPEMap.at(0).first << endl;
+//     cout << "Number of PE for neutron map: " << NeutronPEMap.at(1).second << endl;
+    for (std::map<int,int>::iterator it=NeutronPEMap.begin(); it!=NeutronPEMap.end(); ++it){
+      if (it->second > cut_cap_npe) {
+	cap_npe_bigger_cut++;
+      }
+    std::cout << it->first << " => " << it->second << '\n';
+  }
+  
+  if (cap_npe_bigger_cut == 0) {
+      cout << "No captures led to more than " << cut_cap_npe << " PE detected, let's continue...\n";
+      continue;
+    }
     
-    
+    for(size_t iCh = 0; iCh<ds->GetMC()->GetMCParticleCount(); iCh++){
+	if (ds->GetMC()->GetMCParticle(iCh)->GetPDGCode() == 111 || TMath::Abs(ds->GetMC()->GetMCParticle(iCh)->GetPDGCode()) == 211) { // look for pions (0,+,-)
+	  has_pion = true;
+	  continue;
+	}
+      }
+  
+
+  nav = new RAT::TrackNav(ds);
+  cursor = new RAT::TrackCursor(nav->RAT::TrackNav::Cursor(false));  //toggle human readable cursor  
+
     ////////////////////////////////////////////////////////
     //============ Primary muon search loop ==============//
     ////////////////////////////////////////////////////////
     //     cout << "New event --->\n";
     if(cursor->ChildCount()){ // if particles associated to parents
       
-      for(size_t iCh = 0; iCh<ds->GetMC()->GetMCParticleCount(); iCh++){
-	if (ds->GetMC()->GetMCParticle(iCh)->GetPDGCode() == 111 || TMath::Abs(ds->GetMC()->GetMCParticle(iCh)->GetPDGCode()) == 211) { // look for pions (0,+,-)
-	  has_pion = true;
-	}
-      }
-      if (has_pion) {
-	// 	node->Clear();
-	//  	delete cursor;
-	nav->Clear(); delete nav;
-	continue; // continue alone creates a memory leak..
-      }
       for(size_t iCh = 0; iCh<ds->GetMC()->GetMCParticleCount(); iCh++){ // Loop on all particles in that event
 	if(ds->GetMC()->GetMCParticle(iCh)->GetParticleName() == "mu-" || ds->GetMC()->GetMCParticle(iCh)->GetParticleName() == "mu+")  {
 	  hTrackAngle_mu->Fill(unit_z.Angle(ds->GetMC()->GetMCParticle(iCh)->GetMomentum()));
@@ -496,14 +526,25 @@ void Analyzer::Loop() {
       }
     }
     
+    if (is_mu_tag) {
+      for (std::map<int,int>::iterator it=NeutronPEMap.begin(); it!=NeutronPEMap.end(); ++it){
+	hNeutronMu_start_point->Fill(muTrack_start.Z(),muTrack_start.X());
+	hNeutronMu_start_point_3D->Fill(muTrack_start.Z(),muTrack_start.X(),muTrack_start.Y());
+	if (it->second > cut_cap_npe) {
+	  hNeutronMu_cap_point_NPE->Fill(muTrack_start.Z(),muTrack_start.X());
+	  hNeutronMu_cap_point_NPE_3D->Fill(muTrack_start.Z(),muTrack_start.X(),muTrack_start.Y());
+	}
+      }
+    }
     
+/*
     /////////////////////////////////////////////////////////
     //========== Secondary neutron search loop ============//
     /////////////////////////////////////////////////////////
     //     for(size_t iCh = 0; iCh<ds->GetMC()->GetMCTrackCount(); ++iCh){ // Loop on all tracks in that event
     while(node != 0){
       node = cursor->FindNextTrack(); // go to the track
-      if(node == NULL){break;} // break the loop if no more non-electron tracks
+      if(node == NULL){break;} // break the loop if no more tracks
       
       //       cout << ds->GetMC()->GetMCTrack(iCh)->GetParticleName() << " " << ds->GetMC()->GetMCTrack(iCh)->GetLastMCTrackStep()->GetProcess()  << endl;
       //       if (ds->GetMC()->GetMCTrack(iCh)->GetPDGCode() == 2112){ //look for neutrons, all neutrons
@@ -525,12 +566,11 @@ void Analyzer::Loop() {
       // 	  }
       //       }
       
-      
+
       if (node->GetParticleName() == "neutron" && node->GetProcess() != "neutronInelastic"){ // loop on all neutron tracks
 	Nneutrons_track_tot++;
 // 	if (MRD_hit) {
 	if (is_mu_tag) {
-	  hNeutronMu_start_point->Fill(muTrack_start.Z(),muTrack_start.X());
 	  hNeutronMu_start_point->Fill(muTrack_start.Z(),muTrack_start.X());
 	  hNeutronMu_start_point_3D->Fill(muTrack_start.Z(),muTrack_start.X(),muTrack_start.Y());
 	  hTrackAngle_neutron->Fill(unit_z.Angle(node->GetMomentum()));
@@ -538,39 +578,41 @@ void Analyzer::Loop() {
       }
       
       
-      /*
-            if (node->GetParticleName() == "neutron" ){ // loop on all neutron tracks
-        Nneutrons_track_tot++;
-        nb_inelas = 0;
-        if (is_mu_tag) {
-         cout << "Proc: " << node->GetProcess() <<  ", KE: " << node->GetKE() << ", ID: " << node->GetTrackID();
-         for (size_t j = 0; j<cursor->TrackChildCount(); j++) {
-         cout << "Proc: " << node->GetProcess() <<  ", KE: " << node->GetKE() << ", ID: " << node->GetTrackID() << ", ChildID: " << cursor->TrackChild(j)->GetTrackID() << ", ChildPart: " << cursor->TrackChild(j)->GetParticleName() << ", ChildProc: " << cursor->TrackChild(j)->GetProcess() << endl;
-    }
-    for (size_t j = 0; j<cursor->TrackChildCount(); j++) {
-      if (cursor->TrackChild(j)->GetParticleName() == "neutron" && cursor->TrackChild(j)->GetProcess() == "neutronInelastic") {
-	nb_inelas++;
-    }
-    }
-    cout << nb_inelas << endl;
-    if (node->GetProcess() != "neutronInelastic"){
-      hNeutronMu_start_point->Fill(muTrack_start.Z(),muTrack_start.X());
-      hNeutronMu_start_point_3D->Fill(muTrack_start.Z(),muTrack_start.X(),muTrack_start.Y());
-      hTrackAngle_neutron->Fill(unit_z.Angle(node->GetMomentum()));
-      cout << "Neutron generated !!\n" << endl;
-    } else if (nb_inelas > 1 ) {
-      for (size_t j = 0; j<nb_inelas-1; j++) {
-	hNeutronMu_start_point->Fill(muTrack_start.Z(),muTrack_start.X());
-	hNeutronMu_start_point_3D->Fill(muTrack_start.Z(),muTrack_start.X(),muTrack_start.Y());
-	hTrackAngle_neutron->Fill(unit_z.Angle(node->GetMomentum()));
-	cout << "Neutron generated !!\n" << endl;
-    }
-    }
-    }	  
-    }*/
       
-      //                   cout << node->GetParticleName() << " " << node->GetPDGCode() << " " << node->GetVolume() << " " << node->GetProcess() << " " << node->GetKE() << " " << is_mu_tag << endl; 
+//             if (node->GetParticleName() == "neutron" ){ // loop on all neutron tracks
+//         Nneutrons_track_tot++;
+//         nb_inelas = 0;
+//         if (is_mu_tag) {
+//          cout << "Proc: " << node->GetProcess() <<  ", KE: " << node->GetKE() << ", ID: " << node->GetTrackID();
+//          for (size_t j = 0; j<cursor->TrackChildCount(); j++) {
+//          cout << "Proc: " << node->GetProcess() <<  ", KE: " << node->GetKE() << ", ID: " << node->GetTrackID() << ", ChildID: " << cursor->TrackChild(j)->GetTrackID() << ", ChildPart: " << cursor->TrackChild(j)->GetParticleName() << ", ChildProc: " << cursor->TrackChild(j)->GetProcess() << endl;
+//     }
+//     for (size_t j = 0; j<cursor->TrackChildCount(); j++) {
+//       if (cursor->TrackChild(j)->GetParticleName() == "neutron" && cursor->TrackChild(j)->GetProcess() == "neutronInelastic") {
+// 	nb_inelas++;
+//     }
+//     }
+//     cout << nb_inelas << endl;
+//     if (node->GetProcess() != "neutronInelastic"){
+//       hNeutronMu_start_point->Fill(muTrack_start.Z(),muTrack_start.X());
+//       hNeutronMu_start_point_3D->Fill(muTrack_start.Z(),muTrack_start.X(),muTrack_start.Y());
+//       hTrackAngle_neutron->Fill(unit_z.Angle(node->GetMomentum()));
+//       cout << "Neutron generated !!\n" << endl;
+//     } else if (nb_inelas > 1 ) {
+//       for (size_t j = 0; j<nb_inelas-1; j++) {
+// 	hNeutronMu_start_point->Fill(muTrack_start.Z(),muTrack_start.X());
+// 	hNeutronMu_start_point_3D->Fill(muTrack_start.Z(),muTrack_start.X(),muTrack_start.Y());
+// 	hTrackAngle_neutron->Fill(unit_z.Angle(node->GetMomentum()));
+// 	cout << "Neutron generated !!\n" << endl;
+//     }
+//     }
+//     }	  
+//     }
       
+      if (node->GetParticleName() != "opticalphoton") {
+      cout << node->GetParticleName() << " " << node->GetPDGCode() << " " << node->GetVolume() << " " << node->GetProcess() << " " << node->GetKE() << " " << is_mu_tag << endl; 
+      }
+
       if (node->GetProcess() == "nCapture" ) { // capture	
 	if (TPMERegexp("1000[0-9][0-9][0-9][0-9][0-9][0-9]").Match(Form("%d",node->GetPDGCode()))) { // capture on an atom
 	  Nneutrons_cap_tot++; // capture only occurs on atoms right ? so we'll increment the total nb of cap. counter
@@ -678,7 +720,7 @@ void Analyzer::Loop() {
 	}
       }
     }
-    
+
     if (is_nGd) { // fills the last Edep_capture information or the only one if only 1 gamma
       hEdep_muTrack_nCap->Fill(Edep_capture);
       if(Edep_capture > 4.) {
@@ -707,7 +749,7 @@ void Analyzer::Loop() {
       hNCaptures_perevt->Fill(Ncaptures_perevt);
       hNpCaptures_perevt->Fill(Npcaptures_perevt);
     }
-    
+ */   
     
     ///////////////////////////////////////////////////////
     //=========== Primary neutron search loop ===========//

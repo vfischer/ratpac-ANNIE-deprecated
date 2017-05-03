@@ -82,7 +82,7 @@ r_max: 1522.0,
 size_z: 1979.2,
 position: [0.0, 0.0, 0.0],
 material: "water_gdS_0p2",
-color: [0.4, 0.4, 0.6, 0.3],
+color: [0.2, 0.7, 0.9, 0.6],
 drawstyle: "solid",
 }
 
