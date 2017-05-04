@@ -459,11 +459,11 @@ void Analyzer::Loop() {
 	  if( std::find(interest_volumes_mu_vertex.begin(), interest_volumes_mu_vertex.end(), ds->GetMC()->GetMCTrack(iTr)->GetMCTrackStep(0)->GetVolume()) != interest_volumes_mu_vertex.end() ) {
 	    cout << "Good muon" << endl;
 	    for (std::map<int,int>::iterator it=NeutronPEMap.begin(); it!=NeutronPEMap.end(); ++it){
-	hNeutronMu_start_point->Fill(muTrack_start.Z(),muTrack_start.X());
-	hNeutronMu_start_point_3D->Fill(muTrack_start.Z(),muTrack_start.X(),muTrack_start.Y());
+	hNeutronMu_start_point->Fill(ds->GetMC()->GetMCTrack(iTr)->GetMCTrackStep(0)->GetEndpoint().Z(),ds->GetMC()->GetMCTrack(iTr)->GetMCTrackStep(0)->GetEndpoint().X());
+	hNeutronMu_start_point_3D->Fill(ds->GetMC()->GetMCTrack(iTr)->GetMCTrackStep(0)->GetEndpoint().Z(),ds->GetMC()->GetMCTrack(iTr)->GetMCTrackStep(0)->GetEndpoint().X(),ds->GetMC()->GetMCTrack(iTr)->GetMCTrackStep(0)->GetEndpoint().Y());
 	if (it->second > cut_cap_npe) {
-	  hNeutronMu_cap_point_NPE->Fill(muTrack_start.Z(),muTrack_start.X());
-	  hNeutronMu_cap_point_NPE_3D->Fill(muTrack_start.Z(),muTrack_start.X(),muTrack_start.Y());
+	  hNeutronMu_cap_point_NPE->Fill(ds->GetMC()->GetMCTrack(iTr)->GetMCTrackStep(0)->GetEndpoint().Z(),ds->GetMC()->GetMCTrack(iTr)->GetMCTrackStep(0)->GetEndpoint().X());
+	  hNeutronMu_cap_point_NPE_3D->Fill(ds->GetMC()->GetMCTrack(iTr)->GetMCTrackStep(0)->GetEndpoint().Z(),ds->GetMC()->GetMCTrack(iTr)->GetMCTrackStep(0)->GetEndpoint().X(),ds->GetMC()->GetMCTrack(iTr)->GetMCTrackStep(0)->GetEndpoint().Y());
 	}
       }
 	  }
