@@ -398,7 +398,7 @@ void Analyzer::Loop() {
       //---- TrackVector[TrackNumber] gives the Track ID                                                                                                     
       IDVector.insert(std::make_pair(ds->GetMC()->GetMCTrack(iTr)->GetID(),iTr));
       TrackVector.insert(std::make_pair(iTr,ds->GetMC()->GetMCTrack(iTr)->GetID()));
-      if (ds->GetMC()->GetMCTrack(iTr)->GetParticleName() == "neutron") {
+      if (ds->GetMC()->GetMCTrack(iTr)->GetParticleName() == "neutron" && ds->GetMC()->GetMCTrack(iTr)->GetLastMCTrackStep()->GetProcess() == "nCapture") {
 	NeutronTrackVector.push_back(ds->GetMC()->GetMCTrack(iTr)->GetID());
 	NeutronPEMap.insert(std::make_pair(ds->GetMC()->GetMCTrack(iTr)->GetID(),0));
       }
@@ -453,8 +453,24 @@ void Analyzer::Loop() {
 	  continue;
 	}
       }
+      
+      for (int iTr = 0; iTr < ds->GetMC()->GetMCTrackCount(); iTr++){
+	if(ds->GetMC()->GetMCTrack(iTr)->GetParticleName() == "mu-" || ds->GetMC()->GetMCTrack(iTr)->GetParticleName() == "mu+")  {
+	  if( std::find(interest_volumes_mu_vertex.begin(), interest_volumes_mu_vertex.end(), ds->GetMC()->GetMCTrack(iTr)->GetMCTrackStep(0)->GetVolume()) != interest_volumes_mu_vertex.end() ) {
+	    cout << "Good muon" << endl;
+	    for (std::map<int,int>::iterator it=NeutronPEMap.begin(); it!=NeutronPEMap.end(); ++it){
+	hNeutronMu_start_point->Fill(muTrack_start.Z(),muTrack_start.X());
+	hNeutronMu_start_point_3D->Fill(muTrack_start.Z(),muTrack_start.X(),muTrack_start.Y());
+	if (it->second > cut_cap_npe) {
+	  hNeutronMu_cap_point_NPE->Fill(muTrack_start.Z(),muTrack_start.X());
+	  hNeutronMu_cap_point_NPE_3D->Fill(muTrack_start.Z(),muTrack_start.X(),muTrack_start.Y());
+	}
+      }
+	  }
+	}
+      }
   
-
+/*
   nav = new RAT::TrackNav(ds);
   cursor = new RAT::TrackCursor(nav->RAT::TrackNav::Cursor(false));  //toggle human readable cursor  
 
@@ -537,7 +553,7 @@ void Analyzer::Loop() {
       }
     }
     
-/*
+
     /////////////////////////////////////////////////////////
     //========== Secondary neutron search loop ============//
     /////////////////////////////////////////////////////////
@@ -749,7 +765,7 @@ void Analyzer::Loop() {
       hNCaptures_perevt->Fill(Ncaptures_perevt);
       hNpCaptures_perevt->Fill(Npcaptures_perevt);
     }
- */   
+    
     
     ///////////////////////////////////////////////////////
     //=========== Primary neutron search loop ===========//
@@ -850,7 +866,7 @@ void Analyzer::Loop() {
     node->Clear();
     delete cursor;
     nav->Clear(); delete nav;
-  }
+*/  }
 }
 
 
