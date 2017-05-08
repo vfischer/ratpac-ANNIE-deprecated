@@ -203,7 +203,7 @@ void Analyzer::Loop() {
   cut_mu_cap_DT = 100000.; // [ns] value of cut on the time difference between muon (start of event) and neutron capture
   cut_mu_cap_DR = 2000.; // [mm] value of cut on the spatial difference between muon track and neutron capture
   cut_mu_track = 500.; // [mm] value of cut on the muon track length
-  cut_cap_npe = 10.; // number of PE required for a n capture
+  cut_cap_npe = 5.; // number of PE required for a n capture
   
   
   TH1::SetDefaultSumw2(kTRUE);
