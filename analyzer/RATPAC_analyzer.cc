@@ -391,7 +391,7 @@ void Analyzer::Loop() {
     //       cout << "Proper: " << node->GetProperTime() << endl;
     //       hTrackDuration->Fill(node->GetGlobalTime());
     //     }
-   
+ /*  
    for (int iTr = 0; iTr < ds->GetMC()->GetMCTrackCount(); iTr++){
 //      cout << iTr << endl;
       //---- IDVector[ID] gives the Track Number                                                                                                             
@@ -469,8 +469,8 @@ void Analyzer::Loop() {
 	  }
 	}
       }
-  
-/*
+ */ 
+
   nav = new RAT::TrackNav(ds);
   cursor = new RAT::TrackCursor(nav->RAT::TrackNav::Cursor(false));  //toggle human readable cursor  
 
@@ -625,9 +625,9 @@ void Analyzer::Loop() {
 //     }	  
 //     }
       
-      if (node->GetParticleName() != "opticalphoton") {
-      cout << node->GetParticleName() << " " << node->GetPDGCode() << " " << node->GetVolume() << " " << node->GetProcess() << " " << node->GetKE() << " " << is_mu_tag << endl; 
-      }
+//       if (node->GetParticleName() != "opticalphoton") {
+//       cout << node->GetParticleName() << " " << node->GetPDGCode() << " " << node->GetVolume() << " " << node->GetProcess() << " " << node->GetKE() << " " << is_mu_tag << endl; 
+//       }
 
       if (node->GetProcess() == "nCapture" ) { // capture	
 	if (TPMERegexp("1000[0-9][0-9][0-9][0-9][0-9][0-9]").Match(Form("%d",node->GetPDGCode()))) { // capture on an atom
@@ -815,11 +815,11 @@ void Analyzer::Loop() {
 		  hNHit_Gd->Fill(ds->GetMC()->GetMCPMT(jPMT)->GetMCPhotonCount());
 		}
 	      }
-	      hNeutron_captured_tank->Fill(Hypot(n_start.X(),n_start.Z()-1724)*Hypot(n_start.X(),n_start.Z()-1724),n_start.Y());
-	      if (ds->GetMC()->GetNumPE() > 10) {
-		hNeutron_captured_tank_NPE->Fill(Hypot(n_start.X(),n_start.Z()-1724)*Hypot(n_start.X(),n_start.Z()-1724),n_start.Y());
-		hNeutron_captured_tank_NPE_3D->Fill(n_start.Z(),n_start.X(),n_start.Y());
-	      }
+// 	      hNeutron_captured_tank->Fill(Hypot(n_start.X(),n_start.Z()-1724)*Hypot(n_start.X(),n_start.Z()-1724),n_start.Y());
+// 	      if (ds->GetMC()->GetNumPE() > cut_cap_npe) {
+// 		hNeutron_captured_tank_NPE->Fill(Hypot(n_start.X(),n_start.Z()-1724)*Hypot(n_start.X(),n_start.Z()-1724),n_start.Y());
+// 		hNeutron_captured_tank_NPE_3D->Fill(n_start.Z(),n_start.X(),n_start.Y());
+// 	      }
 	    }   
 	    if (TPMERegexp("100006[0-9][0-9][0-9][0-9]").Match(nucl_cap_pdg_code)) {
 	      Npcaptures_c++;
@@ -830,6 +830,11 @@ void Analyzer::Loop() {
 	    if (TPMERegexp("100026[0-9][0-9][0-9][0-9]").Match(nucl_cap_pdg_code)) {
 	      Npcaptures_fe++;
 	    }
+	    hNeutron_captured_tank->Fill(Hypot(n_start.X(),n_start.Z()-1724)*Hypot(n_start.X(),n_start.Z()-1724),n_start.Y());
+	      if (ds->GetMC()->GetNumPE() > cut_cap_npe) {
+		hNeutron_captured_tank_NPE->Fill(Hypot(n_start.X(),n_start.Z()-1724)*Hypot(n_start.X(),n_start.Z()-1724),n_start.Y());
+		hNeutron_captured_tank_NPE_3D->Fill(n_start.Z(),n_start.X(),n_start.Y());
+	      }
 	    cursor->GoParent();
 	    Npcaptures++;
 	  } else if (node->GetProcess() == "neutronInelastic") { // look for inelastic that would cause the tracking to lose the neutron (dumm GEANT4..)
@@ -866,7 +871,7 @@ void Analyzer::Loop() {
     node->Clear();
     delete cursor;
     nav->Clear(); delete nav;
-*/  }
+  }
 }
 
 
