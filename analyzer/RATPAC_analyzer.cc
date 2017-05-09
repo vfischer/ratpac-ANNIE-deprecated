@@ -293,7 +293,7 @@ void Analyzer::Loop() {
       if (ds->GetMC()->GetMCTrack(iTr)->GetParticleName() == "neutron" && 
 	ds->GetMC()->GetMCTrack(iTr)->GetLastMCTrackStep()->GetProcess() == "nCapture" && 
 	Abs(ds->GetMC()->GetMCTrack(iTr)->GetLastMCTrackStep()->GetEndpoint().Y()) < 1150 &&
-	Hypot(ds->GetMC()->GetMCTrack(iTr)->GetLastMCTrackStep()->GetEndpoint().X(),ds->GetMC()->GetMCTrack(iTr)->GetLastMCTrackStep()->GetEndpoint().Z()-1724)*Hypot(ds->GetMC()->GetMCTrack(iTr)->GetLastMCTrackStep()->GetEndpoint().X(),ds->GetMC()->GetMCTrack(iTr)->GetLastMCTrackStep()->GetEndpoint().Z()-1724) < 1500 ) {
+	Hypot(ds->GetMC()->GetMCTrack(iTr)->GetLastMCTrackStep()->GetEndpoint().X(),ds->GetMC()->GetMCTrack(iTr)->GetLastMCTrackStep()->GetEndpoint().Z()-1724) < 1500 ) {
 	  hNumPE->Fill(ds->GetMC()->GetNumPE());
       }
     }
