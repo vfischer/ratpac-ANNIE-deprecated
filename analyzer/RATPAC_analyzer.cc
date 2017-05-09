@@ -478,7 +478,7 @@ void Analyzer::Loop() {
 	}
       }
  */ 
-
+/*
   nav = new RAT::TrackNav(ds);
   cursor = new RAT::TrackCursor(nav->RAT::TrackNav::Cursor(false));  //toggle human readable cursor  
 
@@ -879,7 +879,7 @@ void Analyzer::Loop() {
     node->Clear();
     delete cursor;
     nav->Clear(); delete nav;
-  }
+ */ }
 }
 
 
