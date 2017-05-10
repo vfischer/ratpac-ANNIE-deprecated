@@ -499,7 +499,7 @@ void Analyzer::Loop() {
 
   nav = new RAT::TrackNav(ds);
   cursor = new RAT::TrackCursor(nav->RAT::TrackNav::Cursor(false));  //toggle human readable cursor  
-
+/*
     ////////////////////////////////////////////////////////
     //============ Primary muon search loop ==============//
     ////////////////////////////////////////////////////////
@@ -791,7 +791,7 @@ void Analyzer::Loop() {
       hNCaptures_perevt->Fill(Ncaptures_perevt);
       hNpCaptures_perevt->Fill(Npcaptures_perevt);
     }
-    
+    */
     
     ///////////////////////////////////////////////////////
     //=========== Primary neutron search loop ===========//
