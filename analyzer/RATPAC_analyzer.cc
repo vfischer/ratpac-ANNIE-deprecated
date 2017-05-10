@@ -117,6 +117,7 @@ void Analyzer::Initialization(){
   
   // Energy infos
   hNumPE  = new TH1F("hNumPE","Num of PE (PMT summed)",1000,0,1000);
+  hNumPE_Ncap  = new TH1F("hNumPE_Ncap","Num of PE (PMT summed) for n captures",1000,0,1000);
   hNHit = new TH1F("hNHit","Num of hits (summed)", 1000,0,1000);
   hNHit_Gd = new TH1F("hNHit_Gd","Num of hits for n-Gd (summed)", 1000,0,1000);
   hNHit_H = new TH1F("hNHit_H","Num of hits for n-H (summed)", 1000,0,1000);
@@ -406,7 +407,7 @@ void Analyzer::Loop() {
     //       cout << "Proper: " << node->GetProperTime() << endl;
     //       hTrackDuration->Fill(node->GetGlobalTime());
     //     }
-   
+   /*
    for (int iTr = 0; iTr < ds->GetMC()->GetMCTrackCount(); iTr++){
 //      cout << iTr << endl;
       //---- IDVector[ID] gives the Track Number                                                                                                             
@@ -454,6 +455,7 @@ void Analyzer::Loop() {
 //     cout << "Number of PE for neutron map: " << NeutronPEMap.at(0).first << endl;
 //     cout << "Number of PE for neutron map: " << NeutronPEMap.at(1).second << endl;
     for (std::map<int,int>::iterator it=NeutronPEMap.begin(); it!=NeutronPEMap.end(); ++it){
+      hNumPE_Ncap->Fill(it->second);
       if (it->second > cut_cap_npe) {
 	cap_npe_bigger_cut++;
       }
@@ -461,34 +463,40 @@ void Analyzer::Loop() {
   }
   
   if (cap_npe_bigger_cut == 0) {
-      cout << "No captures led to more than " << cut_cap_npe << " PE detected, let's continue...\n";
+    cout << "No captures led to more than " << cut_cap_npe << " PE detected, let's continue...\n";
+    continue;
+  }
+  
+  for(size_t iCh = 0; iCh<ds->GetMC()->GetMCParticleCount(); iCh++){
+    if (ds->GetMC()->GetMCParticle(iCh)->GetPDGCode() == 111 || TMath::Abs(ds->GetMC()->GetMCParticle(iCh)->GetPDGCode()) == 211) { // look for pions (0,+,-)
+      has_pion = true;
       continue;
     }
-    
-    for(size_t iCh = 0; iCh<ds->GetMC()->GetMCParticleCount(); iCh++){
-	if (ds->GetMC()->GetMCParticle(iCh)->GetPDGCode() == 111 || TMath::Abs(ds->GetMC()->GetMCParticle(iCh)->GetPDGCode()) == 211) { // look for pions (0,+,-)
-	  has_pion = true;
-	  continue;
-	}
-      }
-      
-      for (int iTr = 0; iTr < ds->GetMC()->GetMCTrackCount(); iTr++){
-	if(ds->GetMC()->GetMCTrack(iTr)->GetParticleName() == "mu-" || ds->GetMC()->GetMCTrack(iTr)->GetParticleName() == "mu+")  {
-	  if( std::find(interest_volumes_mu_vertex.begin(), interest_volumes_mu_vertex.end(), ds->GetMC()->GetMCTrack(iTr)->GetMCTrackStep(0)->GetVolume()) != interest_volumes_mu_vertex.end() ) {
-	    cout << "Good muon" << endl;
-	    for (std::map<int,int>::iterator it=NeutronPEMap.begin(); it!=NeutronPEMap.end(); ++it){
-	hNeutronMu_start_point->Fill(ds->GetMC()->GetMCTrack(iTr)->GetMCTrackStep(0)->GetEndpoint().Z(),ds->GetMC()->GetMCTrack(iTr)->GetMCTrackStep(0)->GetEndpoint().X());
-	hNeutronMu_start_point_3D->Fill(ds->GetMC()->GetMCTrack(iTr)->GetMCTrackStep(0)->GetEndpoint().Z(),ds->GetMC()->GetMCTrack(iTr)->GetMCTrackStep(0)->GetEndpoint().X(),ds->GetMC()->GetMCTrack(iTr)->GetMCTrackStep(0)->GetEndpoint().Y());
-	if (it->second > cut_cap_npe) {
-	  hNeutronMu_cap_point_NPE->Fill(ds->GetMC()->GetMCTrack(iTr)->GetMCTrackStep(0)->GetEndpoint().Z(),ds->GetMC()->GetMCTrack(iTr)->GetMCTrackStep(0)->GetEndpoint().X());
-	  hNeutronMu_cap_point_NPE_3D->Fill(ds->GetMC()->GetMCTrack(iTr)->GetMCTrackStep(0)->GetEndpoint().Z(),ds->GetMC()->GetMCTrack(iTr)->GetMCTrackStep(0)->GetEndpoint().X(),ds->GetMC()->GetMCTrack(iTr)->GetMCTrackStep(0)->GetEndpoint().Y());
-	}
-      }
+  }
+  
+  for (int iTr = 0; iTr < ds->GetMC()->GetMCTrackCount(); iTr++){
+    if(ds->GetMC()->GetMCTrack(iTr)->GetParticleName() == "mu-" || ds->GetMC()->GetMCTrack(iTr)->GetParticleName() == "mu+")  {
+      if( std::find(interest_volumes_mu_vertex.begin(), interest_volumes_mu_vertex.end(), ds->GetMC()->GetMCTrack(iTr)->GetMCTrackStep(0)->GetVolume()) != interest_volumes_mu_vertex.end() ) {
+	cout << "Good muon" << endl;
+	for (std::map<int,int>::iterator it=NeutronPEMap.begin(); it!=NeutronPEMap.end(); ++it){
+	  hNeutronMu_start_point->Fill(ds->GetMC()->GetMCTrack(iTr)->GetMCTrackStep(0)->GetEndpoint().Z(),ds->GetMC()->GetMCTrack(iTr)->GetMCTrackStep(0)->GetEndpoint().X());
+	  hNeutronMu_start_point_3D->Fill(ds->GetMC()->GetMCTrack(iTr)->GetMCTrackStep(0)->GetEndpoint().Z(),ds->GetMC()->GetMCTrack(iTr)->GetMCTrackStep(0)->GetEndpoint().X(),ds->GetMC()->GetMCTrack(iTr)->GetMCTrackStep(0)->GetEndpoint().Y());
+	  if (Abs(ds->GetMC()->GetMCTrack(iTr)->GetMCTrackStep(0)->GetEndpoint().Y()) < 1000) {
+	    hNeutronMu_start_point_noMuCap->Fill(ds->GetMC()->GetMCTrack(iTr)->GetMCTrackStep(0)->GetEndpoint().Z(),ds->GetMC()->GetMCTrack(iTr)->GetMCTrackStep(0)->GetEndpoint().X());
+	  }
+	  if (it->second > cut_cap_npe) {
+	    hNeutronMu_cap_point_NPE->Fill(ds->GetMC()->GetMCTrack(iTr)->GetMCTrackStep(0)->GetEndpoint().Z(),ds->GetMC()->GetMCTrack(iTr)->GetMCTrackStep(0)->GetEndpoint().X());
+	    hNeutronMu_cap_point_NPE_3D->Fill(ds->GetMC()->GetMCTrack(iTr)->GetMCTrackStep(0)->GetEndpoint().Z(),ds->GetMC()->GetMCTrack(iTr)->GetMCTrackStep(0)->GetEndpoint().X(),ds->GetMC()->GetMCTrack(iTr)->GetMCTrackStep(0)->GetEndpoint().Y());
+	   if (Abs(ds->GetMC()->GetMCTrack(iTr)->GetMCTrackStep(0)->GetEndpoint().Y()) < 1000) {
+	    hNeutronMu_cap_point_NPE_noMuCap->Fill(ds->GetMC()->GetMCTrack(iTr)->GetMCTrackStep(0)->GetEndpoint().Z(),ds->GetMC()->GetMCTrack(iTr)->GetMCTrackStep(0)->GetEndpoint().X());
+	   }
 	  }
 	}
       }
-  
-/*
+    }
+  }
+  */
+
   nav = new RAT::TrackNav(ds);
   cursor = new RAT::TrackCursor(nav->RAT::TrackNav::Cursor(false));  //toggle human readable cursor  
 
@@ -889,7 +897,7 @@ void Analyzer::Loop() {
     node->Clear();
     delete cursor;
     nav->Clear(); delete nav;
- */ }
+  }
 }
 
 

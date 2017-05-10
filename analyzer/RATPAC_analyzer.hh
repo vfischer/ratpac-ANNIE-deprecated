@@ -184,7 +184,7 @@ private:
   TH1F *hCharge, *hCharge_tot;
   TH1F *hCharge_perPMT_run1[NbPMT_run1];
   TH1F *hCharge_perPMT_run2[NbPMT_run2];
-  TH1F *hNumPE, *hNumPE_NCV1, *hNumPE_NCV2;
+  TH1F *hNumPE, *hNumPE_Ncap, *hNumPE_NCV1, *hNumPE_NCV2;
   TH1F *hNHit, *hNHit_Gd, *hNHit_H; // number of photons hits 
   TH1F *hNbPMThit; // number of PMTs hit per events
   TH2F *hCharge_XZ;
@@ -223,6 +223,7 @@ private:
   TH2F *hNeutronMu_cap_point, *hNeutronMu_cap_point_Edep, *hNeutronMu_cap_point_NPE, *hNeutronMu_cap_point_NPE_noMuCap, *hNeutronMu_start_point, *hNeutronMu_start_point_noMuCap, *hNeutronMu_eff_tank, *hNeutronMu_eff_tank_Edep, *hNeutronMu_eff_tank_NPE, *hNeutronMu_eff_tank_NPE_noMuCap;
   TH3F *hNeutronMu_cap_point_3D, *hNeutronMu_cap_point_Edep_3D, *hNeutronMu_cap_point_NPE_3D, *hNeutronMu_cap_point_NPE_noMuCap_3D, *hNeutronMu_start_point_3D, *hNeutronMu_start_point_noMuCap_3D, *hNeutronMu_eff_tank_3D, *hNeutronMu_eff_tank_Edep_3D, *hNeutronMu_eff_tank_NPE_3D, *hNeutronMu_eff_tank_NPE_noMuCap_3D;
   TH3F *hNeutron_eff_tank_NPE_3D, *hNeutron_shot_tank_3D, *hNeutron_captured_tank_NPE_3D;
+
   
   // Variables
   Double_t init_time, fin_time;
