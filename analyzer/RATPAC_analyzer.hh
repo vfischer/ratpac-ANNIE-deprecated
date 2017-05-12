@@ -220,9 +220,15 @@ private:
   TH1F *hEdep_muTrack_nCap;
   
   TH2F *hNeutron_eff_tank, *hNeutron_eff_tank_NPE, *hNeutron_shot_tank, *hNeutron_captured_tank, *hNeutron_captured_tank_NPE;
-  TH2F *hNeutronMu_cap_point, *hNeutronMu_cap_point_Edep, *hNeutronMu_cap_point_NPE, *hNeutronMu_cap_point_NPE_noMuCap, *hNeutronMu_start_point, *hNeutronMu_start_point_noMuCap, *hNeutronMu_eff_tank, *hNeutronMu_eff_tank_Edep, *hNeutronMu_eff_tank_NPE, *hNeutronMu_eff_tank_NPE_noMuCap;
-  TH3F *hNeutronMu_cap_point_3D, *hNeutronMu_cap_point_Edep_3D, *hNeutronMu_cap_point_NPE_3D, *hNeutronMu_cap_point_NPE_noMuCap_3D, *hNeutronMu_start_point_3D, *hNeutronMu_start_point_noMuCap_3D, *hNeutronMu_eff_tank_3D, *hNeutronMu_eff_tank_Edep_3D, *hNeutronMu_eff_tank_NPE_3D, *hNeutronMu_eff_tank_NPE_noMuCap_3D;
   TH3F *hNeutron_eff_tank_NPE_3D, *hNeutron_shot_tank_3D, *hNeutron_captured_tank_NPE_3D;
+  
+  TH2F *hNeutronMu_cap_point, *hNeutronMu_cap_point_Edep, *hNeutronMu_cap_point_NPE, *hNeutronMu_cap_point_NPE_noMuCap, *hNeutronMu_cap_point_NPE_RhoY; 
+  TH2F *hNeutronMu_start_point, *hNeutronMu_start_point_noMuCap, *hNeutronMu_start_point_RhoY;
+  TH2F *hNeutronMu_eff_tank, *hNeutronMu_eff_tank_Edep, *hNeutronMu_eff_tank_NPE, *hNeutronMu_eff_tank_NPE_noMuCap, *hNeutronMu_eff_tank_NPE_RhoY;
+  
+  TH3F *hNeutronMu_cap_point_3D, *hNeutronMu_cap_point_Edep_3D, *hNeutronMu_cap_point_NPE_3D, *hNeutronMu_cap_point_NPE_noMuCap_3D;
+  TH3F *hNeutronMu_start_point_3D, *hNeutronMu_start_point_noMuCap_3D;
+  TH3F *hNeutronMu_eff_tank_3D, *hNeutronMu_eff_tank_Edep_3D, *hNeutronMu_eff_tank_NPE_3D, *hNeutronMu_eff_tank_NPE_noMuCap_3D;
 
   
   // Variables
