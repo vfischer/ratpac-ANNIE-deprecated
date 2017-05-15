@@ -453,7 +453,7 @@ void Analyzer::Loop() {
 	}
       }
     }
-      
+  /*    
 //     cout << "Number of PE for neutron: " << number_PE << endl;
 //     cout << "Number of PE for neutron map: " << NeutronPEMap.at(0).first << endl;
 //     cout << "Number of PE for neutron map: " << NeutronPEMap.at(1).second << endl;
@@ -500,8 +500,8 @@ void Analyzer::Loop() {
       }
     }
   }
-  
-/*
+  */
+
   nav = new RAT::TrackNav(ds);
   cursor = new RAT::TrackCursor(nav->RAT::TrackNav::Cursor(false));  //toggle human readable cursor  
 
@@ -902,7 +902,7 @@ void Analyzer::Loop() {
     node->Clear();
     delete cursor;
     nav->Clear(); delete nav;
- */ }
+  }
 }
 
 
