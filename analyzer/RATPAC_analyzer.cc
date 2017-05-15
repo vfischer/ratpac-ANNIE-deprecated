@@ -410,7 +410,7 @@ void Analyzer::Loop() {
     //       cout << "Proper: " << node->GetProperTime() << endl;
     //       hTrackDuration->Fill(node->GetGlobalTime());
     //     }
-   
+   /*
    for (int iTr = 0; iTr < ds->GetMC()->GetMCTrackCount(); iTr++){
 //      cout << iTr << endl;
       //---- IDVector[ID] gives the Track Number                                                                                                             
@@ -453,7 +453,7 @@ void Analyzer::Loop() {
 	}
       }
     }
-  /*    
+      
 //     cout << "Number of PE for neutron: " << number_PE << endl;
 //     cout << "Number of PE for neutron map: " << NeutronPEMap.at(0).first << endl;
 //     cout << "Number of PE for neutron map: " << NeutronPEMap.at(1).second << endl;
