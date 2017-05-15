@@ -213,7 +213,7 @@ void Analyzer::Loop() {
   cut_mu_cap_DT = 100000.; // [ns] value of cut on the time difference between muon (start of event) and neutron capture
   cut_mu_cap_DR = 2000.; // [mm] value of cut on the spatial difference between muon track and neutron capture
   cut_mu_track = 500.; // [mm] value of cut on the muon track length
-  cut_cap_npe = 5.; // number of PE required for a n capture
+  cut_cap_npe = 10.; // number of PE required for a n capture
   
   
   TH1::SetDefaultSumw2(kTRUE);
@@ -410,7 +410,7 @@ void Analyzer::Loop() {
     //       cout << "Proper: " << node->GetProperTime() << endl;
     //       hTrackDuration->Fill(node->GetGlobalTime());
     //     }
-   /*
+   
    for (int iTr = 0; iTr < ds->GetMC()->GetMCTrackCount(); iTr++){
 //      cout << iTr << endl;
       //---- IDVector[ID] gives the Track Number                                                                                                             
@@ -500,8 +500,8 @@ void Analyzer::Loop() {
       }
     }
   }
-  */
-
+  
+/*
   nav = new RAT::TrackNav(ds);
   cursor = new RAT::TrackCursor(nav->RAT::TrackNav::Cursor(false));  //toggle human readable cursor  
 
@@ -902,7 +902,7 @@ void Analyzer::Loop() {
     node->Clear();
     delete cursor;
     nav->Clear(); delete nav;
-  }
+ */ }
 }
 
 
