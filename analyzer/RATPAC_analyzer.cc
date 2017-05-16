@@ -410,7 +410,7 @@ void Analyzer::Loop() {
     //       cout << "Proper: " << node->GetProperTime() << endl;
     //       hTrackDuration->Fill(node->GetGlobalTime());
     //     }
-   
+   /*
    for (int iTr = 0; iTr < ds->GetMC()->GetMCTrackCount(); iTr++){
 //      cout << iTr << endl;
       //---- IDVector[ID] gives the Track Number                                                                                                             
@@ -500,8 +500,8 @@ void Analyzer::Loop() {
       }
     }
   }
-  
-/*
+  */
+
   nav = new RAT::TrackNav(ds);
   cursor = new RAT::TrackCursor(nav->RAT::TrackNav::Cursor(false));  //toggle human readable cursor  
 
@@ -861,10 +861,10 @@ void Analyzer::Loop() {
 	    if (TPMERegexp("100026[0-9][0-9][0-9][0-9]").Match(nucl_cap_pdg_code)) {
 	      Npcaptures_fe++;
 	    }
-	    hNeutron_captured_tank->Fill(Hypot(n_start.X(),n_start.Z()-1724)*Hypot(n_start.X(),n_start.Z()-1724),n_start.Y());
+	    hNeutron_captured_tank->Fill(Hypot(n_end.X(),n_end.Z()-1724)*Hypot(n_end.X(),n_end.Z()-1724),n_end.Y());
 	      if (ds->GetMC()->GetNumPE() > cut_cap_npe) {
-		hNeutron_captured_tank_NPE->Fill(Hypot(n_start.X(),n_start.Z()-1724)*Hypot(n_start.X(),n_start.Z()-1724),n_start.Y());
-		hNeutron_captured_tank_NPE_3D->Fill(n_start.Z(),n_start.X(),n_start.Y());
+		hNeutron_captured_tank_NPE->Fill(Hypot(n_end.X(),n_end.Z()-1724)*Hypot(n_end.X(),n_end.Z()-1724),n_end.Y());
+		hNeutron_captured_tank_NPE_3D->Fill(n_end.Z(),n_end.X(),n_end.Y());
 	      }
 	    cursor->GoParent();
 	    Npcaptures++;
@@ -890,8 +890,8 @@ void Analyzer::Loop() {
 	  //       cout << ds->GetMC()->GetMCSummary()->GetEnergyLossByVolume("ncv_liquid") << endl;
 	  //       cout << ds->GetMC()->GetMCTrack(0)->GetMCTrackStep(0)->GetVolume() << endl;
 	  
-	  hNeutron_shot_tank->Fill(Hypot(n_start.X(),n_start.Z()-1724)*Hypot(n_start.X(),n_start.Z()-1724),n_start.Y());
-	  hNeutron_shot_tank_3D->Fill(n_start.Z(),n_start.X(),n_start.Y());
+	  hNeutron_shot_tank->Fill(Hypot(n_end.X(),n_end.Z()-1724)*Hypot(n_end.X(),n_end.Z()-1724),n_end.Y());
+	  hNeutron_shot_tank_3D->Fill(n_end.Z(),n_end.X(),n_end.Y());
 	  
 	} // end of tracking loop
 	cursor->GoParent();
@@ -902,7 +902,7 @@ void Analyzer::Loop() {
     node->Clear();
     delete cursor;
     nav->Clear(); delete nav;
- */ }
+  }
 }
 
 
