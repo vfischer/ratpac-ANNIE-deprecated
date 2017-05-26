@@ -519,25 +519,25 @@ orientation: "manual",
 } 
 
 // Side ring 1 (lower)
-{ 
-name: "GEO", 
-index: "side_ring_1_pmts", 
-enable: 1,
-valid_begin: [0, 0], 
-valid_end: [0, 0], 
-mother: "detector", 
-type: "pmtarray", 
-pmt_model: "r5912", // SK 8inch
-pmt_detector_type: "idpmt",
-sensitive_detector: "/mydet/pmt/inner", 
-efficiency_correction: 1.000,  
-pos_table: "PMTINFO_config4_side_ring_1", //generated on the fly
-// start_idx: 60, //index of first inner pmt
-// end_idx: 69, //index of last inner pmt
-orientation: "point",
-orient_point: [0.0, 0.0, -1069.4],
-// orient_point: [0.0, 0.0, -133.3], 
-} 
+// { 
+// name: "GEO", 
+// index: "side_ring_1_pmts", 
+// enable: 1,
+// valid_begin: [0, 0], 
+// valid_end: [0, 0], 
+// mother: "detector", 
+// type: "pmtarray", 
+// pmt_model: "r5912", // SK 8inch
+// pmt_detector_type: "idpmt",
+// sensitive_detector: "/mydet/pmt/inner", 
+// efficiency_correction: 1.000,  
+// pos_table: "PMTINFO_config4_side_ring_1", //generated on the fly
+// // start_idx: 60, //index of first inner pmt
+// // end_idx: 69, //index of last inner pmt
+// orientation: "point",
+// orient_point: [0.0, 0.0, -1069.4],
+// // orient_point: [0.0, 0.0, -133.3], 
+// } 
 
 // Side ring 2 
 { 
@@ -569,7 +569,7 @@ valid_begin: [0, 0],
 valid_end: [0, 0], 
 mother: "detector", 
 type: "pmtarray", 
-pmt_model: "r5912", // SK 8inch
+pmt_model: "r7081", // SK 8inch
 pmt_detector_type: "idpmt",
 sensitive_detector: "/mydet/pmt/inner", 
 efficiency_correction: 1.000,  
@@ -603,25 +603,25 @@ orient_point: [0.0, 0.0, -152.6],
 } 
 
 // Side ring 5
-{ 
-name: "GEO", 
-index: "side_ring_5_pmts", 
-enable: 1,
-valid_begin: [0, 0], 
-valid_end: [0, 0], 
-mother: "detector", 
-type: "pmtarray", 
-pmt_model: "r5912", // SK 8inch
-pmt_detector_type: "idpmt",
-sensitive_detector: "/mydet/pmt/inner", 
-efficiency_correction: 1.000,  
-pos_table: "PMTINFO_config4_side_ring_5", //generated on the fly
-// start_idx: 100, //index of first inner pmt
-// end_idx: 109, //index of last inner pmt
-orientation: "point",
-orient_point: [0.0, 0.0, 153.0],
-// orient_point: [0.0, 0.0, -133.3],  
-} 
+// { 
+// name: "GEO", 
+// index: "side_ring_5_pmts", 
+// enable: 1,
+// valid_begin: [0, 0], 
+// valid_end: [0, 0], 
+// mother: "detector", 
+// type: "pmtarray", 
+// pmt_model: "r7081", // SK 8inch
+// pmt_detector_type: "idpmt",
+// sensitive_detector: "/mydet/pmt/inner", 
+// efficiency_correction: 1.000,  
+// pos_table: "PMTINFO_config4_side_ring_5", //generated on the fly
+// // start_idx: 100, //index of first inner pmt
+// // end_idx: 109, //index of last inner pmt
+// orientation: "point",
+// orient_point: [0.0, 0.0, 153.0],
+// // orient_point: [0.0, 0.0, -133.3],  
+// } 
 
 // Side ring 6
 { 
@@ -653,7 +653,7 @@ valid_begin: [0, 0],
 valid_end: [0, 0], 
 mother: "detector", 
 type: "pmtarray", 
-pmt_model: "r5912", // SK 8inch
+pmt_model: "r7081", // SK 8inch
 pmt_detector_type: "idpmt",
 sensitive_detector: "/mydet/pmt/inner", 
 efficiency_correction: 1.000,  
@@ -687,25 +687,25 @@ orient_point: [0.0, 0.0, 1069.8],
 } 
 
 // Side ring 9 (higher)
-{ 
-name: "GEO", 
-index: "side_ring_9_pmts", 
-enable: 1,
-valid_begin: [0, 0], 
-valid_end: [0, 0], 
-mother: "detector", 
-type: "pmtarray", 
-pmt_model: "r5912", // SK 8inch
-pmt_detector_type: "idpmt",
-sensitive_detector: "/mydet/pmt/inner", 
-efficiency_correction: 1.000,  
-pos_table: "PMTINFO_config4_side_ring_9", //generated on the fly
-// start_idx: 100, //index of first inner pmt
-// end_idx: 109, //index of last inner pmt
-orientation: "point",
-orient_point: [0.0, 0.0, 1375.4],
-// orient_point: [0.0, 0.0, -133.3],  
-} 
+// { 
+// name: "GEO", 
+// index: "side_ring_9_pmts", 
+// enable: 1,
+// valid_begin: [0, 0], 
+// valid_end: [0, 0], 
+// mother: "detector", 
+// type: "pmtarray", 
+// pmt_model: "r5912", // SK 8inch
+// pmt_detector_type: "idpmt",
+// sensitive_detector: "/mydet/pmt/inner", 
+// efficiency_correction: 1.000,  
+// pos_table: "PMTINFO_config4_side_ring_9", //generated on the fly
+// // start_idx: 100, //index of first inner pmt
+// // end_idx: 109, //index of last inner pmt
+// orientation: "point",
+// orient_point: [0.0, 0.0, 1375.4],
+// // orient_point: [0.0, 0.0, -133.3],  
+// } 
 /////////////////////////////////////////////////////////////////////
 ///////////********** End of PMT arrays ***********//////////////////
 /////////////////////////////////////////////////////////////////////
