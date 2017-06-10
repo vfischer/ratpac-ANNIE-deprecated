@@ -42,3 +42,25 @@ rho_edge: [ 0.0, 122.1, 143.0, 122.1, 46.48, 46.48 ], // unknown dimensions, I j
 z_origin: [ -40.0, 0.0, 0.0, 40.0, -142.0 ],
 
 }
+
+{
+name: "PMT",
+index: "r5912_hqe",
+valid_begin: [0,0],
+valid_end: [0,0],
+
+dynode_material: "stainless_steel",
+glass_material: "glass",
+pmt_vacuum_material: "pmt_vacuum", // dilute air
+photocathode_surface: "photocathode_R7081_hqe",
+mirror_surface: "mirror",
+dynode_surface: "stainless_steel",
+
+dynode_radius: 27.5, // mm
+dynode_top:   -30.0, // mm
+wall_thickness: 3.0, // mm
+
+z_edge:   [ 75.00, 53.06,   0.00, -53.06, -73.86,  -85.00, -215.00],
+rho_edge: [  0.00, 72.58, 101.00,  72.58,  44.32,   42.00, 42.00],
+z_origin: [-56.00,  0.00,   0.00,  56.00, -85.00, -215.00],
+}
