@@ -1,6 +1,6 @@
 /** \file CfSource.cc
- *  CfSource C++ file.  Implements the constructor, copy 
- *  constructor, and overloaded = operator and defines the 
+ *  CfSource C++ file.  Implements the constructor, copy
+ *  constructor, and overloaded = operator and defines the
  *  Cf252NeutronSpectrum function.
  *
  *  Author: Matthew Worcester
@@ -112,7 +112,7 @@ namespace RAT {
 	    }
 
 #endif
-	} 
+	}
 
       //
       // neutron multiplicity distribution (via Los Alamo manual)
@@ -122,7 +122,7 @@ namespace RAT {
 
       // pick a neutron multiplicity
       bool passed = false;
-	
+
       while(!passed){
 	float r = CLHEP::RandFlat::shoot(); // Random number from 0 to 1.
 
@@ -148,12 +148,20 @@ namespace RAT {
 	  double phi = CLHEP::RandFlat::shoot(0.,M_PI);
 	  double cosTheta = CLHEP::RandFlat::shoot(-1.,1.);
 	  double sinTheta = sqrt( 1. - cosTheta*cosTheta );
-	  double px = neutronKE * sinTheta * cos(phi);
-	  double py = neutronKE * sinTheta * sin(phi);
-	  double pz = neutronKE * cosTheta;
-// 	  G4cout << "momen " << px*CLHEP::MeV << " " << py*CLHEP::MeV << " " << pz*CLHEP::MeV << G4endl;
+
+	  // Compute the momentum squared. If it comes out negative
+	  // due to roundoff errors, just set it equal to zero. This
+	  // prevents problems when we take the square root below.
+	  double neutronP2 = std::max(0., energy*energy
+	    - massNeutron*massNeutron);
+
+	  // Compute the momentum components
+	  double neutronP = std::sqrt(neutronP2);
+	  double px = neutronP * sinTheta * cos(phi);
+	  double py = neutronP * sinTheta * sin(phi);
+	  double pz = neutronP * cosTheta;
 #ifdef DEBUG
-	  std::cout << "CfSource::CfSource() - neutron energy " 
+	  std::cout << "CfSource::CfSource() - neutron energy "
 		    << nn << " = " << energy
 		    << ", KE=" << neutronKE
 		    << ", (px,py,pz)=("
@@ -167,7 +175,7 @@ namespace RAT {
 
       /*
 	The total energy in the prompt gammas is a function of the
-	material and the number of prompt neutrons produced; these 
+	material and the number of prompt neutrons produced; these
 	formulae come from T. Valentine's summary
       */
       //double Z = 98.;
@@ -188,7 +196,7 @@ namespace RAT {
       Ngamma = (int) m;
 
 #ifdef DEBUG
-      std::cout << "CfSource::CfSource - " 
+      std::cout << "CfSource::CfSource - "
 		<< "m=" << m << " => "
 		<< Ngamma << " photons" << std::endl;
 #endif
@@ -206,7 +214,7 @@ namespace RAT {
 	  double py = energy * sinTheta * sin(phi);
 	  double pz = energy * cosTheta;
 #ifdef DEBUG
-	  std::cout << "CfSource::CfSource() - gamma energy " 
+	  std::cout << "CfSource::CfSource() - gamma energy "
 		    << nn << " = " << energy
 		    << ", (px,py,pz)=("
 		    << px << "," << py << "," << pz << ")"
@@ -215,7 +223,7 @@ namespace RAT {
 	  CLHEP::HepLorentzVector momentum(px,py,pz,energy);
 	  gammaE.push_back( momentum );
 	  tote += energy;
-	  
+
 	  const size_t len2 = 2;
 	  float rv[len2];
 	  for ( size_t i=0; i<len2; i++ ) rv[i] = CLHEP::RandFlat::shoot();
@@ -255,13 +263,13 @@ namespace RAT {
     Tneutron  = _CfSource.Tneutron;
     gammaE    = _CfSource.gammaE;
     Tgamma    = _CfSource.Tgamma;
-  }    
+  }
 
   CfSource& CfSource::operator=(const CfSource& rhs){
 
     if (this != &rhs)
       {
-	Isotope   = rhs.Isotope;  
+	Isotope   = rhs.Isotope;
 	Nneutron  = rhs.Nneutron;
 	Ngamma    = rhs.Ngamma;
 	neutronE  = rhs.neutronE;
@@ -270,7 +278,7 @@ namespace RAT {
 	Tgamma    = rhs.Tgamma;
       }
     return *this;
-  }    
+  }
 
   float CfSource::Cf252NeutronSpectrum(const float& x){
 
@@ -349,7 +357,7 @@ namespace RAT {
     else{
       N = exponential;
     }
-  
+
     //std::cout << "N " << N << std::endl;
     return N;
   }
