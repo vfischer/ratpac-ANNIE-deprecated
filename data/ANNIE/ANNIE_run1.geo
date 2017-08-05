@@ -1008,7 +1008,8 @@ ncv_center: [-146.1, 0.0, 1597.18], // position 1 (top center) (27-02-2017 to 14
 // ncv_center: [793.7, 0.0, 276.38], // position 3 (center upstream) (24-05-2017 to 08-06-2017)
 // ncv_center: [-146.1, 0.0, 1292.33], // position 4 (top center minus 1 foot) (08-06-2017 to 23-06-2017)
 // ncv_center: [-146.1, 0.0, 987.53], // position 5 (top center minus 2 feet) (23-06-2017 to 30-06-2017)
-// ncv_center: [-146.1, 0.0, 1444.78], // position 6 (top center minus 1/2 feet) (30-06-2017 to ??)
+// ncv_center: [-146.1, 0.0, 1444.78], // position 6 (top center minus 1/2 feet) (30-06-2017 to 03-07-2017)
+// ncv_center: [311.1, 0.0, 276.38], // position 7 between 2 and 3) (03-07-2017 to ??)
 type: "annieNCV", //see the geo factory
 }
 /////////////////////////////////////////////////////////////////////
@@ -1026,7 +1027,7 @@ valid_begin: [0, 0],
 valid_end: [0, 0], 
 mother: "detector", 
 type: "pmtarray", 
-pmt_model: "r5912",
+pmt_model: "r5912_ANNIE",
 pmt_detector_type: "idpmt",
 sensitive_detector: "/mydet/pmt/inner", 
 efficiency_correction: 1.000,  
