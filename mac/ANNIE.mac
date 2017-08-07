@@ -8,7 +8,7 @@
 #/tracking/discardParticleTrajectory e-
 
 /rat/db/set DETECTOR experiment "ANNIE"
-/rat/db/set DETECTOR geo_file "ANNIE/ANNIE_run1.geo"
+/rat/db/set DETECTOR geo_file "ANNIE/ANNIE_run2_config7.geo"
 
 /run/initialize
 /process/inactivate hIoni pi-
