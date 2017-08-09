@@ -80,7 +80,7 @@ int rat2reco(char *filename) {
   // some values about your waveform
   Float_t sigma_noise = 1.*0.001; // in V
   Float_t mean_noise = 0.0*0.001; // in V
-  Float_t pulse_shape[6] = {5*0.001,10*0.001,8*0.001,6*0.001,4*0.001,2*0.001};
+  Float_t pulse_shape[25] = {0.3*0.001,0.6*0.001,0.9*0.001,1.2*0.001,1.5*0.001,1.8*0.001,2.1*0.001,2.4*0.001,2.7*0.001,3.0*0.001,2.8*0.001,2.6*0.001,2.4*0.001,2.2*0.001,2.0*0.001,1.8*0.001,1.6*0.001,1.4*0.001,1.2*0.001,1.0*0.001,0.8*0.001,0.6*0.001,0.4*0.001,0.2*0.001,0.}; //each point is one sample (2 ns)
   const Int_t nb_samples = 40000; // nb points in your waveform
   Int_t trigger_offset = 100; // amount of samples you want to keep free at the beginning of your window 
   
@@ -202,7 +202,7 @@ int rat2reco(char *filename) {
 // 	cout << "Sample: " << ds->GetMC()->GetMCPMT(jPMT)->GetMCPhoton(iPhot)->GetHitTime()*0.5 << endl;
 // 	cout << "Charge: " << ds->GetMC()->GetMCPMT(jPMT)->GetMCPhoton(iPhot)->GetCharge() << endl;
 	if (TMath::FloorNint(ds->GetMC()->GetMCPMT(jPMT)->GetMCPhoton(iPhot)->GetHitTime()*0.5)  < nb_samples-trigger_offset) {
-	  for(Int_t i = 0; i < 6; ++i) {
+	  for(Int_t i = 0; i < 25; ++i) {
 	    Data[trigger_offset + TMath::FloorNint(ds->GetMC()->GetMCPMT(jPMT)->GetMCPhoton(iPhot)->GetHitTime()*0.5)] += pulse_shape[i]*ds->GetMC()->GetMCPMT(jPMT)->GetMCPhoton(iPhot)->GetCharge();
 // 	    cout << pulse_shape[i]*ds->GetMC()->GetMCPMT(jPMT)->GetMCPhoton(iPhot)->GetCharge() << endl;
 	  }

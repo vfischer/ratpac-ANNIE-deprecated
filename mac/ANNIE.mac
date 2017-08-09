@@ -8,7 +8,7 @@
 #/tracking/discardParticleTrajectory e-
 
 /rat/db/set DETECTOR experiment "ANNIE"
-/rat/db/set DETECTOR geo_file "ANNIE/ANNIE_run2_config7.geo"
+/rat/db/set DETECTOR geo_file "ANNIE/ANNIE_run1.geo"
 
 /run/initialize
 /process/inactivate hIoni pi-
@@ -57,13 +57,15 @@
 # Use IO.default_output_filename
 /rat/proclast outroot
 
-/generator/add combo gun:point
-/generator/vtx/set geantino 0 1 0 100
+/generator/add combo gun:regexfill
+/generator/pos/set ^detector*|^ncv*
+/generator/vtx/set geantino 0 0 0 100
 #/generator/pos/set 100.0 1973 1866.0
-/generator/pos/set 0 1465 1724
+#/generator/pos/set 0 1465 1724
+#/generator/pos/set 0 0 1724 #center of tank
 #/generator/pos/set 0 0 -133.3
 
-/run/beamOn 1
+/run/beamOn 100
 
 #END EVENT LOOP
 #####################
