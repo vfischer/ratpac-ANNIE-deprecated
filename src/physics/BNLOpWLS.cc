@@ -22,7 +22,7 @@ BNLOpWLS::BNLOpWLS(const G4String& processName, G4ProcessType type)
   theIntegralTable = NULL;
   theQYTable = NULL;
   wlsData = NULL;
- 
+
   WLSTimeGeneratorProfile =
     new G4WLSTimeGeneratorProfileDelta("WLSTimeGeneratorProfileDelta");
 }
@@ -54,7 +54,7 @@ BNLOpWLS::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep) {
   const G4Material* aMaterial = aTrack.GetMaterial();
 
   G4StepPoint* pPostStepPoint = aStep.GetPostStepPoint();
-    
+
   G4MaterialPropertiesTable* aMaterialPropertiesTable =
     aMaterial->GetMaterialPropertiesTable();
 
@@ -62,8 +62,8 @@ BNLOpWLS::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep) {
     return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
   }
 
-  const G4MaterialPropertyVector* wlsIntensity = 
-    aMaterialPropertiesTable->GetProperty("WLSCOMPONENT"); 
+  const G4MaterialPropertyVector* wlsIntensity =
+    aMaterialPropertiesTable->GetProperty("WLSCOMPONENT");
 
   if (!wlsIntensity) {
     return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
@@ -112,7 +112,7 @@ BNLOpWLS::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep) {
   G4double WLSTime = 0. * CLHEP::ns;
 
   WLSTime = aMaterialPropertiesTable->GetConstProperty("WLSTIMECONSTANT");
-   
+
   for (G4int i=0; i<NumPhotons; i++) {
     //Get the energy of the WLS photon
     G4double sampledEnergy = BNLOpWLS::GetEmEnergy(primaryEnergy);
@@ -124,14 +124,14 @@ BNLOpWLS::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep) {
     G4double phi = twopi * G4UniformRand();
     G4double sinp = std::sin(phi);
     G4double cosp = std::cos(phi);
-    
+
     G4double px = sint * cosp;
     G4double py = sint * sinp;
     G4double pz = cost;
-    
+
     // Create photon momentum direction vector
     G4ParticleMomentum photonMomentum(px, py, pz);
-    
+
     // Determine polarization of new photon
     G4double sx = cost * cosp;
     G4double sy = cost * sinp;
@@ -155,9 +155,9 @@ BNLOpWLS::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep) {
     aWLSPhoton->SetPolarization(photonPolarization.x(),
                                 photonPolarization.y(),
                                 photonPolarization.z());
-    
+
     aWLSPhoton->SetKineticEnergy(sampledEnergy);
-    
+
     // Generate new G4Track object:
     // Must give position of WLS optical photon
     G4double TimeDelay = WLSTimeGeneratorProfile->GenerateTime(WLSTime);
@@ -165,10 +165,10 @@ BNLOpWLS::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep) {
 
     G4ThreeVector aSecondaryPosition = pPostStepPoint->GetPosition();
 
-    G4Track* aSecondaryTrack = 
+    G4Track* aSecondaryTrack =
       new G4Track(aWLSPhoton,aSecondaryTime,aSecondaryPosition);
 
-    aSecondaryTrack->SetTouchableHandle(aTrack.GetTouchableHandle()); 
+    aSecondaryTrack->SetTouchableHandle(aTrack.GetTouchableHandle());
     aSecondaryTrack->SetParentID(aTrack.GetTrackID());
     aParticleChange.AddSecondary(aSecondaryTrack);
   }
@@ -181,20 +181,20 @@ void BNLOpWLS::BuildThePhysicsTable()
   if (theIntegralTable) {
     return;
   }
-  
+
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
   G4int numOfMaterials = G4Material::GetNumberOfMaterials();
-  
+
   // create new physics table
   if (!theIntegralTable) {
     theIntegralTable = new G4PhysicsTable(numOfMaterials);
   }
-  
+
   // loop for materials
   for (G4int i=0; i<numOfMaterials; i++) {
     G4PhysicsOrderedFreeVector* aPhysicsOrderedFreeVector =
       new G4PhysicsOrderedFreeVector();
-      
+
     // Retrieve vector of WLS wavelength intensity for
     // the material from the material's optical properties table.
     G4Material* aMaterial = (*theMaterialTable)[i];
@@ -203,13 +203,13 @@ void BNLOpWLS::BuildThePhysicsTable()
       aMaterial->GetMaterialPropertiesTable();
 
     if (aMaterialPropertiesTable) {
-      G4MaterialPropertyVector* theWLSVector = 
+      G4MaterialPropertyVector* theWLSVector =
         aMaterialPropertiesTable->GetProperty("WLSCOMPONENT");
 
       if (theWLSVector) {
         // Retrieve the first intensity point in vector
         // of (photon energy, intensity) pairs
-    
+
         G4double currentIN = (*theWLSVector)[0];
         if (currentIN >= 0.0) {
           // Create first (photon energy)
@@ -249,13 +249,13 @@ void BNLOpWLS::BuildTheQYTable() {
   if (theQYTable) {
     return;
   }
-  
+
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
   G4int numOfMaterials = G4Material::GetNumberOfMaterials();
-  
+
   // create new physics table
   theQYTable = new G4PhysicsTable(numOfMaterials);
-  
+
   // loop for materials
   for (G4int i=0; i<numOfMaterials; i++) {
     // Retrieve vector of WLS wavelength intensity for
@@ -288,7 +288,7 @@ G4double BNLOpWLS::GetMeanFreePath(const G4Track& aTrack,
 
   G4MaterialPropertiesTable* aMaterialPropertyTable;
   G4MaterialPropertyVector* AttenuationLengthVector;
-  
+
   G4double AttenuationLength = DBL_MAX;
 
   aMaterialPropertyTable = aMaterial->GetMaterialPropertiesTable();
@@ -322,7 +322,7 @@ void BNLOpWLS::UseTimeProfile(const G4String name) {
 
 G4double BNLOpWLS::GetEmEnergy(G4double ExEn) {
   // Convert ExEn to LambEx in nm
-  G4double LambEx = 1239.84187 / (ExEn/eV);  
+  G4double LambEx = 1239.84187 / (ExEn/eV);
 
   // Loop the ExEmData events until a longer wavelength event is found.
   size_t theEvent = 0;
@@ -352,7 +352,7 @@ G4double BNLOpWLS::GetEmEnergy(G4double ExEn) {
     // Don't interpolate beyond bounds.
     interp = false;
   }
-  
+
   double UpperEx = wlsData->ExEmData.at(UpperEvt).at(0).at(0);
   vector<double> UpperInten = wlsData->ExEmData.at(UpperEvt).at(2);
   double LowerEx = 0;
@@ -372,17 +372,17 @@ G4double BNLOpWLS::GetEmEnergy(G4double ExEn) {
   for (size_t i=0; i<UpperInten.size(); i++) {
     if (interp) {
       // This check is because my input data is a bit stupid.
-      if (isnan(UpperInten.at(i))) {
+      if (std::isnan(UpperInten.at(i))) {
         theUpperInten = 0;
       }
       else {
         theUpperInten = UpperInten.at(i);
       }
-      
+
       InterpDist.push_back(
         LowerInten.at(i) +
           (LambEx-LowerEx) *
-            (theUpperInten-LowerInten.at(i)) / 
+            (theUpperInten-LowerInten.at(i)) /
               (UpperEx-LowerEx));
     }
     else {
