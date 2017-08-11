@@ -29,8 +29,8 @@
 
 namespace RAT {
 
-  CfGen::CfGen() : 
-    stateStr(""), 
+  CfGen::CfGen() :
+    stateStr(""),
     isotope(252),
     posGen(0)
   {
@@ -70,7 +70,7 @@ namespace RAT {
 #endif
 
     // For each neutron...
-    for ( int i = 0; i < numberNeutrons; i++ ) 
+    for ( int i = 0; i < numberNeutrons; i++ )
       {
 	// Get the particle's information (momentum and time)
 	CLHEP::HepLorentzVector p = cfSource.GetCfNeutronMomentum(i);
@@ -81,20 +81,12 @@ namespace RAT {
 
 	// generate a vertex with a primary particle
 	G4PrimaryVertex* vertex = new G4PrimaryVertex(position, time);
-	G4PrimaryParticle* particle = 
+	G4PrimaryParticle* particle =
 	  new G4PrimaryParticle(neutron,
-				p.px(), 
-				p.py(), 
-				p.pz(),
-				sqrt(p.px()*p.px() + p.py()*p.py() + p.pz()*p.pz())
- 			      );
+				p.px(),
+				p.py(),
+				p.pz());
 	particle->SetMass(neutron->GetPDGMass()); // Apparently this is useful in IBD code.
-// 	G4cout << "Mass=" << G4BestUnit(neutron->GetPDGMass(),"Energy") << G4endl;
-// 	G4cout << "GenKE= " << G4BestUnit(sqrt(p.px()*p.px() + p.py()*p.py() + p.pz()*p.pz()),"Energy") << G4endl;
-// 	G4cout << "GenMom= " << G4BestUnit(p,"Energy") << G4endl;
-// 	G4cout << "Get GenKE= " << G4BestUnit(particle->GetKineticEnergy(),"Energy") << " Get GenE= " << G4BestUnit(particle->GetTotalEnergy(),"Energy") << G4endl;
-// 	G4cout << "Get GenMass= " << G4BestUnit(particle->GetMass(),"Energy") << " Get GenMom= " << G4BestUnit(particle->GetTotalMomentum(),"Energy") << G4endl;
-// 	G4cout << "Get GenPx= " << G4BestUnit(particle->GetPx(),"Energy") << " Get GenPy= " << G4BestUnit(particle->GetPy(),"Energy") << " Get GenPz= " << G4BestUnit(particle->GetPz(),"Energy") << G4endl;
 	vertex->SetPrimary(particle);
 	event->AddPrimaryVertex(vertex);
 
@@ -110,7 +102,7 @@ namespace RAT {
       } // for each neutron
 
     // For each prompt photon...
-    for ( int i = 0; i < numberGammas; i++ ) 
+    for ( int i = 0; i < numberGammas; i++ )
       {
 	// Get the particle's information (momentum and time)
 	CLHEP::HepLorentzVector p = cfSource.GetCfGammaMomentum(i);
@@ -121,10 +113,10 @@ namespace RAT {
 
 	// generate a vertex with a primary particle
 	G4PrimaryVertex* vertex = new G4PrimaryVertex(position, time);
-	G4PrimaryParticle* particle = 
+	G4PrimaryParticle* particle =
 	  new G4PrimaryParticle(gamma,
-				p.px(), 
-				p.py(), 
+				p.px(),
+				p.py(),
 				p.pz());
 	particle->SetMass(gamma->GetPDGMass()); // Who knows?  Let's do this the same way as the others.
 	vertex->SetPrimary(particle);
@@ -156,7 +148,7 @@ namespace RAT {
 	   << G4endl;
 #endif
   }
- 
+
   void CfGen::SetState(G4String state)
   {
 #ifdef DEBUG
@@ -190,7 +182,7 @@ namespace RAT {
 	  // present, only Cf252 is supported.
 	  isotope = util_to_int( parts[0] );
 
-	  if ( isotope != 252 ) 
+	  if ( isotope != 252 )
 	    {
 	      G4cerr << "RAT::CfGen::SetState: Only cf 252 is supported"
 		     << G4endl;
