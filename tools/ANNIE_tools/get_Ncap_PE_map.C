@@ -70,6 +70,7 @@ void get_Ncap_PE_map(const char* filename, Int_t phase) {
   TH3F *hNeutron_start_point_3D;
   TH3F *hNeutron_cap_point_3D, *hNeutron_cap_point_nH_3D, *hNeutron_cap_point_nGd_3D; 
   TH3F *hNeutron_cap_point_PE_3D, *hNeutron_cap_point_nH_PE_3D, *hNeutron_cap_point_nGd_PE_3D; 
+  TH3F *hNeutron_cap_point_PE_3D_norm, *hNeutron_cap_point_nH_PE_3D_norm, *hNeutron_cap_point_nGd_PE_3D_norm; 
   hNeutron_start_point_3D = new TH3F("hNeutron_start_point_3D","3D plot of the neutron start points; Z [mm]; X [mm]; Y [mm]",25,0,5000,30,-3000,3000,30,-3000,3000);
   hNeutron_cap_point_3D = new TH3F("hNeutron_cap_point_3D","3D plot of the neutron capture points; Z [mm]; X [mm]; Y [mm]",25,0,5000,30,-3000,3000,30,-3000,3000);
   hNeutron_cap_point_nH_3D = new TH3F("hNeutron_cap_point_nH_3D","3D plot of the neutron capture points (nH; Z [mm]; X [mm]; Y [mm])",25,0,5000,30,-3000,3000,30,-3000,3000);
@@ -77,6 +78,9 @@ void get_Ncap_PE_map(const char* filename, Int_t phase) {
   hNeutron_cap_point_PE_3D = new TH3F("hNeutron_cap_point_PE_3D","3D plot of PE deposition; Z [mm]; X [mm]; Y [mm]",25,0,5000,30,-3000,3000,30,-3000,3000);
   hNeutron_cap_point_nH_PE_3D = new TH3F("hNeutron_cap_point_nH_PE_3D","3D plot of PE deposition (nH); Z [mm]; X [mm]; Y [mm]",25,0,5000,30,-3000,3000,30,-3000,3000);
   hNeutron_cap_point_nGd_PE_3D = new TH3F("hNeutron_cap_point_nGd_PE_3D","3D plot of PE deposition (nGd); Z [mm]; X [mm]; Y [mm]",25,0,5000,30,-3000,3000,30,-3000,3000);
+  hNeutron_cap_point_PE_3D_norm = new TH3F("hNeutron_cap_point_PE_3D_norm","3D plot of PE deposition normalized; Z [mm]; X [mm]; Y [mm]",25,0,5000,30,-3000,3000,30,-3000,3000);
+  hNeutron_cap_point_nH_PE_3D_norm = new TH3F("hNeutron_cap_point_nH_PE_3D_norm","3D plot of PE deposition (nH) normalized; Z [mm]; X [mm]; Y [mm]",25,0,5000,30,-3000,3000,30,-3000,3000);
+  hNeutron_cap_point_nGd_PE_3D_norm = new TH3F("hNeutron_cap_point_nGd_PE_3D_norm","3D plot of PE deposition (nGd) normalized; Z [mm]; X [mm]; Y [mm]",25,0,5000,30,-3000,3000,30,-3000,3000);
   
   // Starts the timer
   start = clock();
@@ -169,9 +173,9 @@ void get_Ncap_PE_map(const char* filename, Int_t phase) {
   // ******************* End of loop ******************* //
   
   // Divides the PE maps by the number of events in each bin (to normatlize them)
-  hNeutron_cap_point_PE_3D->Divide(hNeutron_cap_point_PE_3D, hNeutron_cap_point_3D);
-  hNeutron_cap_point_nGd_PE_3D->Divide(hNeutron_cap_point_nGd_PE_3D, hNeutron_cap_point_nGd_3D);
-  hNeutron_cap_point_nH_PE_3D->Divide(hNeutron_cap_point_nH_PE_3D, hNeutron_cap_point_nH_3D);
+  hNeutron_cap_point_PE_3D_norm->Divide(hNeutron_cap_point_PE_3D, hNeutron_cap_point_3D);
+  hNeutron_cap_point_nGd_PE_3D_norm->Divide(hNeutron_cap_point_nGd_PE_3D, hNeutron_cap_point_nGd_3D);
+  hNeutron_cap_point_nH_PE_3D_norm->Divide(hNeutron_cap_point_nH_PE_3D, hNeutron_cap_point_nH_3D);
   
   // Some graphical options
   gROOT->SetStyle("Plain");
@@ -200,12 +204,15 @@ void get_Ncap_PE_map(const char* filename, Int_t phase) {
   gStyle->SetNumberContours(99);
   
   hNeutron_start_point_3D->Write();
-  hNeutron_cap_point_nH_3D->Write();
-  hNeutron_cap_point_nH_PE_3D->Write();
-  hNeutron_cap_point_nGd_3D->Write();
-  hNeutron_cap_point_nGd_PE_3D->Write();
   hNeutron_cap_point_3D->Write();
+  hNeutron_cap_point_nH_3D->Write();
+  hNeutron_cap_point_nGd_3D->Write();
   hNeutron_cap_point_PE_3D->Write();
+  hNeutron_cap_point_nH_PE_3D->Write();
+  hNeutron_cap_point_nGd_PE_3D->Write();
+  hNeutron_cap_point_PE_3D_norm->Write();
+  hNeutron_cap_point_nH_PE_3D_norm->Write();
+  hNeutron_cap_point_nGd_PE_3D_norm->Write();
   
   f_output.Write();
   
