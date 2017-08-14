@@ -121,18 +121,18 @@ void get_Ncap_PE_map(const char* filename, Int_t phase) {
       init_pos  = node->GetEndpoint();
       init_time = node->GetGlobalTime();
       
-//       cout << "INITIAL: position = " << init_pos.x() << " " <<  init_pos.y() << " " << init_pos.z() << ", time = " << init_time << ", energy = " << node->GetKE() << endl;
-//       cout << node->GetPDGCode() << " " << node->GetProcess() << " " << node->GetParticleName() << endl;
-//       cout << node->GetTrackID() << " " << node->GetStepID() << endl;
+      //       cout << "INITIAL: position = " << init_pos.x() << " " <<  init_pos.y() << " " << init_pos.z() << ", time = " << init_time << ", energy = " << node->GetKE() << endl;
+      //       cout << node->GetPDGCode() << " " << node->GetProcess() << " " << node->GetParticleName() << endl;
+      //       cout << node->GetTrackID() << " " << node->GetStepID() << endl;
       
       node->Clear();
       node = cursor->TrackEnd();
       fin_pos   = node->GetEndpoint();	
       fin_time = node->GetGlobalTime();
       
-//       cout << "FINAL: position = " << fin_pos.x() << " " <<  fin_pos.y() << " " << fin_pos.z() << ", time = " << fin_time << ", energy = " << node->GetKE() << endl;
-//       cout << node->GetPDGCode() << " " << node->GetProcess() << " " << node->GetParticleName() << endl;
-//       cout << node->GetTrackID() << " " << node->GetStepID() << endl;
+      //       cout << "FINAL: position = " << fin_pos.x() << " " <<  fin_pos.y() << " " << fin_pos.z() << ", time = " << fin_time << ", energy = " << node->GetKE() << endl;
+      //       cout << node->GetPDGCode() << " " << node->GetProcess() << " " << node->GetParticleName() << endl;
+      //       cout << node->GetTrackID() << " " << node->GetStepID() << endl;
       
       
       hNeutron_start_point_3D->Fill(init_pos.z(),init_pos.x(),init_pos.y());
@@ -150,15 +150,19 @@ void get_Ncap_PE_map(const char* filename, Int_t phase) {
 	if (TPMERegexp("100001[0-9][0-9][0-9][0-9]").Match(nucl_cap_pdg_code)) {
 	  hNeutron_cap_point_nH_3D->Fill(fin_pos.z(),fin_pos.x(),fin_pos.y());
 	  hNeutron_cap_point_nH_PE_3D->Fill(fin_pos.z(),fin_pos.x(),fin_pos.y(),ds->GetMC()->GetNumPE());
-// 	  cout << " ===>  n-H !!\n\n";
+	  hNeutron_cap_point_3D->Fill(fin_pos.z(),fin_pos.x(),fin_pos.y());
+	  hNeutron_cap_point_PE_3D->Fill(fin_pos.z(),fin_pos.x(),fin_pos.y(),ds->GetMC()->GetNumPE());
+	  // 	  cout << " ===>  n-H !!\n\n";
 	} 
 	if (TPMERegexp("100064[0-9][0-9][0-9][0-9]").Match(nucl_cap_pdg_code)) {
 	  hNeutron_cap_point_nGd_3D->Fill(fin_pos.z(),fin_pos.x(),fin_pos.y());
 	  hNeutron_cap_point_nGd_PE_3D->Fill(fin_pos.z(),fin_pos.x(),fin_pos.y(),ds->GetMC()->GetNumPE());
-// 	  cout << " ===>  n-Gd !!\n\n";
+	  hNeutron_cap_point_3D->Fill(fin_pos.z(),fin_pos.x(),fin_pos.y());
+	  hNeutron_cap_point_PE_3D->Fill(fin_pos.z(),fin_pos.x(),fin_pos.y(),ds->GetMC()->GetNumPE());
+	  // 	  cout << " ===>  n-Gd !!\n\n";
 	}
-	hNeutron_cap_point_3D->Fill(fin_pos.z(),fin_pos.x(),fin_pos.y());
-	hNeutron_cap_point_PE_3D->Fill(fin_pos.z(),fin_pos.x(),fin_pos.y(),ds->GetMC()->GetNumPE());
+	// 	hNeutron_cap_point_3D->Fill(fin_pos.z(),fin_pos.x(),fin_pos.y());
+	// 	hNeutron_cap_point_PE_3D->Fill(fin_pos.z(),fin_pos.x(),fin_pos.y(),ds->GetMC()->GetNumPE());
 	cursor->GoParent();
       }
       
