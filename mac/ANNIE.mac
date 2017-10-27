@@ -8,7 +8,7 @@
 /tracking/discardParticleTrajectory e-
 
 /rat/db/set DETECTOR experiment "ANNIE"
-/rat/db/set DETECTOR geo_file "ANNIE/ANNIE_run2_config7.geo"
+/rat/db/set DETECTOR geo_file "ANNIE/ANNIE_run2_configlappd.geo"
 
 /run/initialize
 /process/inactivate hIoni pi-
@@ -59,14 +59,18 @@
 
 #/generator/add combo gun:regexfill
 #/generator/pos/set ^detector*|^ncv*
-/generator/add combo gun:point
-/generator/vtx/set mu- 0 0 0 200
+/generator/add combo pbomb:point
+/generator/vtx/set 10000 385
+/generator/pos/set 0 0 1724 #center of tank
+#/generator/vtx/set mu- 0 0 0 200
 #/generator/pos/set 100.0 1973 1866.0
 #/generator/pos/set 0 1465 1724
 #/generator/pos/set 0 0 1724 #center of tank
 #/generator/pos/set 0 0 -133.3
 
-/run/beamOn 50
+/run/beamOn 10
+/generator/pos/set 0 1465 1724
+/run/beamOn 10
 
 #END EVENT LOOP
 #####################

@@ -31,38 +31,75 @@ Processor::Result SimpleDAQProc::DSEvent(DS::Root *ds) {
   fEventCounter++;
 
   double totalQ = 0.0;
-  double calibQ = 0.0;
+//   double calibQ = 0.0;
+  
   for (int imcpmt=0; imcpmt < mc->GetMCPMTCount(); imcpmt++) {
       DS::MCPMT *mcpmt = mc->GetMCPMT(imcpmt);
       int pmtID = mcpmt->GetID();
 
       if (mcpmt->GetMCPhotonCount() > 0) {
-        // Need at least one photon to trigger
-        DS::PMT* pmt = ev->AddNewPMT();
-        pmt->SetID(pmtID);
-
-        // Create one sample, hit time is determined by first hit,
-        // "infinite" charge integration time
-        // WARNING: gets multiphoton effect right, but not walk correction
-        // Write directly to calibrated waveform branch
-
-        double time = mcpmt->GetMCPhoton(0)->GetFrontEndTime();
-        double charge = 0;
-
-        for (int i=0; i < mcpmt->GetMCPhotonCount(); i++)  {
-          if (time > mcpmt->GetMCPhoton(i)->GetFrontEndTime())
-            time = mcpmt->GetMCPhoton(i)->GetFrontEndTime();
-          charge += mcpmt->GetMCPhoton(i)->GetCharge();
-        }
-        
-        //pmt->SetCalibratedCharge(charge);
-        totalQ += charge;
-
-        //charge *= fSPECharge[pmtID] * 1e12; /* convert to pC */
-        pmt->SetTime(time);
-        pmt->SetCharge(charge);
-        calibQ += charge;
-    }
+      //Get PMT construction type
+      DBLinkPtr lpmt = DB::Get()->GetLink("PMT",mcpmt->GetModelName());
+      std::string constructionType = lpmt->GetS("construction");
+      
+      // Create one sample, hit time is determined by first hit,
+      // "infinite" charge integration time
+      // WARNING: gets multiphoton effect right, but not walk correction
+      // Write directly to calibrated waveform branch
+      
+      // Need at least one photon to trigger
+      
+      //PMTs
+      if(constructionType != "lappd"){
+	
+	DS::PMT* pmt = ev->AddNewPMT();
+	pmt->SetID(pmtID);
+	
+	double time = mcpmt->GetMCPhoton(0)->GetHitTime();
+	double charge = 0;
+//  	std::cout << "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA PMT ADDED\n";
+	for (int i=0; i < mcpmt->GetMCPhotonCount(); i++)  {
+//  	  std::cout << "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA PMT HIT\n";
+	  if (time > mcpmt->GetMCPhoton(i)->GetHitTime())
+	    time = mcpmt->GetMCPhoton(i)->GetHitTime();
+	  charge += mcpmt->GetMCPhoton(i)->GetCharge();
+	}
+	
+	totalQ += charge;
+	
+	pmt->SetTime(time);
+	pmt->SetCharge(charge);
+	
+      }
+      //LAPPDs
+      else{
+	DS::LAPPD* lappd = ev->AddNewLAPPD();
+	lappd->SetID(pmtID);
+	double lappdTime = mcpmt->GetMCPhoton(0)->GetHitTime();
+	double lappdCharge = 0;std::cout << "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA LAPPD ADDED\n";
+	for (int i=0; i < mcpmt->GetMCPhotonCount(); i++) {std::cout << "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA LAPPD HIT\n";
+	  double peCharge = mcpmt->GetMCPhoton(i)->GetCharge();
+	  double peTime = mcpmt->GetMCPhoton(i)->GetHitTime();
+	  TVector3 pePosition = mcpmt->GetMCPhoton(i)->GetPosition();
+	  std::cout << pePosition.X() << " " << pePosition.Y() << " " << pePosition.Z() << std::endl;
+	  
+	  //LAPPD single hits
+	  DS::LAPPDHit* lappdHit = lappd->AddNewHit();
+	  lappdHit->SetCharge(peCharge);
+	  lappdHit->SetTime(peTime);
+	  lappdHit->SetPosition(pePosition);
+	  
+	  //LAPPD absolute values
+	  if (peTime < lappdTime) lappdTime = peTime;
+	  lappdCharge += peCharge;
+	}
+	
+	totalQ += lappdCharge;
+	lappd->SetTotalTime(lappdTime);
+	lappd->SetTotalCharge(lappdCharge);
+	
+	}
+      }
   }
 
   ev->SetTotalCharge(totalQ);

@@ -41,6 +41,9 @@ public:
 
   /** UTC Time of this Monte Carlo event */
   TTimeStamp utc;
+  
+  /** Count of Cherenkov photons in this event */
+  int numCherenPhoton;
 
   /** Count of scintillation photons in this event */
   int numScintPhoton;

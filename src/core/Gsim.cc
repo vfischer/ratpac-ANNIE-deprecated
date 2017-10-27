@@ -319,6 +319,10 @@ void Gsim::PreUserTrackingAction(const G4Track* aTrack)  {
     if (trackInfo && trackInfo->GetCreatorProcess() != "") {
       creatorProcessName = trackInfo->GetCreatorProcess();
     }
+    
+    if (creatorProcessName == "Cherenkov") {
+      eventInfo->numCherenPhoton++;
+    }
 
     if (creatorProcessName == "Scintillation") {
       eventInfo->numScintPhoton++;
@@ -526,7 +530,8 @@ void Gsim::MakeEvent(const G4Event* g4ev, DS::Root* ds) {
     mcpmtObjects[a_pmt->GetID()] = mc->GetMCPMTCount()-1; //the index of the last element represents the index of the PMT we just added
     rat_mcpmt->SetID(a_pmt->GetID());
     rat_mcpmt->SetType(fPMTInfo->GetType(a_pmt->GetID()));
-
+    rat_mcpmt->SetModelName( fPMTInfo->GetModelName( fPMTInfo->GetModel(a_pmt->GetID() ) ) );
+//     std::cout << fPMTInfo->GetModelName( fPMTInfo->GetModel(a_pmt->GetID() ) ) << std::endl;
     numPE += a_pmt->GetEntries();
 
     /** Add "real" hits from actual simulated photons */     

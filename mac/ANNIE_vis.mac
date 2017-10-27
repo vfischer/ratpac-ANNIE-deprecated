@@ -7,7 +7,7 @@
 /tracking/discardParticleTrajectory opticalphoton
 
 /rat/db/set DETECTOR experiment "ANNIE"
-/rat/db/set DETECTOR geo_file "ANNIE/ANNIE_run2_config7.geo"
+/rat/db/set DETECTOR geo_file "ANNIE/ANNIE_run1.geo"
 
 /run/initialize
 
@@ -33,7 +33,7 @@
 #/vis/viewer/set/viewpointThetaPhi 20 20
 #/vis/viewer/set/viewpointVector 0.1 0.2 1.0
 /vis/viewer/set/viewpointVector -0.5 0.1 0.1
-/vis/viewer/zoom 2
+/vis/viewer/zoom 3
 /vis/viewer/pan -0.0 -3.0 m  # this finally works !
 /vis/viewer/set/upVector 0 1 0
 
@@ -51,7 +51,7 @@
 /rat/proclast outroot
 
 /generator/add combo gun:point
-/generator/pos/set  0 0 1724
+/generator/pos/set 0.0 176.2 2149.4
 /generator/vtx/set geantino 0 0 -1 10
 /run/beamOn 1
 

@@ -5,6 +5,8 @@ index: "b76d01",
 valid_begin: [0,0],
 valid_end: [0,0],
 
+construction: "pmt",
+
 dynode_material: "stainless_steel",
 glass_material: "glass",
 pmt_vacuum_material: "pmt_vacuum", // dilute air
@@ -25,6 +27,8 @@ name: "PMT",
 index: "d784kflb",
 valid_begin: [0,0],
 valid_end: [0,0],
+
+construction: "pmt",
 
 dynode_material: "stainless_steel",
 glass_material: "glass",
@@ -49,6 +53,8 @@ index: "r5912_ANNIE",
 valid_begin: [0,0],
 valid_end: [0,0],
 
+construction: "pmt",
+
 dynode_material: "stainless_steel",
 glass_material: "glass",
 pmt_vacuum_material: "pmt_vacuum", // dilute air
@@ -70,6 +76,8 @@ name: "PMT",
 index: "r5912_hqe_ANNIE",
 valid_begin: [0,0],
 valid_end: [0,0],
+
+construction: "pmt",
 
 dynode_material: "stainless_steel",
 glass_material: "glass",
@@ -93,6 +101,8 @@ index: "r7081_ANNIE",
 valid_begin: [0,0],
 valid_end: [0,0],
 
+construction: "pmt",
+
 dynode_material: "stainless_steel",
 glass_material: "glass",
 pmt_vacuum_material: "pmt_vacuum",
@@ -115,6 +125,8 @@ index: "r7081_hqe_ANNIE",
 valid_begin: [0,0],
 valid_end: [0,0],
 
+construction: "pmt",
+
 dynode_material: "stainless_steel",
 glass_material: "glass",
 pmt_vacuum_material: "pmt_vacuum",
@@ -129,5 +141,24 @@ wall_thickness: 3.0, // mm
 z_edge: [ 96.7d, 40.0d, 0.0d, -40.0d, -90.0d, -142.0d ],
 rho_edge: [ 0.0d, 111.0d, 130.0d, 111.0d, 42.25d, 42.25d ],
 z_origin: [ -40.0d, 0.0d, 0.0d, 40.0d, -142.0d ],
+}
+
+{
+name: "PMT",
+index: "lappd_test",
+
+valid_begin: [0,0],
+valid_end: [0,0],
+
+construction: "lappd",
+
+glass_material: "glass",
+lappd_vacuum_material: "pmt_vacuum",
+photocathode_surface: "photocathode_r7081_hqe_ANNIE",
+
+glassThickness: 2.0, // mm
+photocathodeWidth: 1.5, //mm
+width: 2.5, //mm
+thick: 9.25, //mm
 }
 

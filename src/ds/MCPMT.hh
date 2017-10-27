@@ -33,6 +33,10 @@ public:
   /** PMT type */
   virtual Int_t GetType() const { return type; };
   virtual void SetType(Int_t _type) { type = _type; };
+  
+  /** PMT model name */
+  virtual std::string GetModelName() const { return modelName; };
+  virtual void SetModelName(std::string _modelName) { modelName = _modelName; };
 
   /** List of photoelectrons created in this PMT. */
   MCPhoton* GetMCPhoton(Int_t i) { return &photon[i]; }
@@ -48,6 +52,7 @@ public:
 protected:
   Int_t id;
   Int_t type;
+  std::string modelName;
   std::vector<MCPhoton> photon;
 };
 

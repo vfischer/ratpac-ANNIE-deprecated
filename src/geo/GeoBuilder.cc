@@ -11,6 +11,7 @@
 #include <RAT/GeoReflectorFactory.hh>
 #include <RAT/GeoReflectorWaveguideFactory.hh>
 #include <RAT/GeoPMTArrayFactory.hh>
+#include <RAT/GeoLAPPDArrayFactory.hh>
 #include <RAT/GeoPMTCoverageFactory.hh>
 #include <RAT/GeoWaterBoxArrayFactory.hh>
 #include <RAT/GeoBubbleFactory.hh>
@@ -46,6 +47,7 @@ GeoBuilder::GeoBuilder()
   new GeoReflectorFactory();
   new GeoReflectorWaveguideFactory();
   new GeoPMTArrayFactory();
+  new GeoLAPPDArrayFactory();
   new GeoPMTCoverageFactory();
   new GeoWaterBoxArrayFactory();
   new GeoBubbleFactory();
