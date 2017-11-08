@@ -1,6 +1,7 @@
 #include <RAT/PosGen_Radial.hh>
 #include <Randomize.hh>
 #include <RAT/GLG4StringUtil.hh>
+#include <CLHEP/Random/RandFlat.h>
 #include <sstream>
 #include "TMath.h"
 
@@ -16,7 +17,7 @@ PosGen_Radial::PosGen_Radial(const char *arg_dbname)
 void PosGen_Radial::GeneratePosition( G4ThreeVector &argResult )
 {
   fPoint=G4ThreeVector(0,0,0);
-  fPoint.setRThetaPhi(G4UniformRand(),acos(2.*G4UniformRand()-1.),(2.*G4UniformRand()-1.)*TMath::Pi());
+  fPoint.setRThetaPhi(CLHEP::RandFlat::shoot(),acos(2.*CLHEP::RandFlat::shoot()-1.),(2.*CLHEP::RandFlat::shoot()-1.)*TMath::Pi());
 
   argResult = fMaxRadius*fPoint+fCenter;
 }

@@ -19,6 +19,7 @@
 #include <sstream>
 #include "G4GeometryTolerance.hh"
 #include <CLHEP/Units/SystemOfUnits.h>
+#include <CLHEP/Random/RandFlat.h>
 
 #include "GLG4PosGen.hh"
 #include "GLG4VertexGen.hh" // for GLG4VertexGen_HEPEvt
@@ -181,7 +182,7 @@ void GLG4PosGen_Paint::GeneratePosition( G4ThreeVector &argResult )
     // from the same ray; in order to avoid an ever-increasing list size,
     // it is more likely to use an existing intercept as the number of
     // intercepts grows.
-    unsigned iint= (unsigned)((_intercepts.size()+2)*G4UniformRand());
+    unsigned iint= (unsigned)((_intercepts.size()+2)*CLHEP::RandFlat::shoot());
     if (iint >= _intercepts.size()) {
       double Rsphere= 0.50001*sqrt(dx*dx+dy*dy+dz*dz) + surfaceTolerance;
       G4ThreeVector sphere_center(x0+0.5*dx, y0+0.5*dy, z0+0.5*dz);
@@ -208,8 +209,8 @@ void GLG4PosGen_Paint::GeneratePosition( G4ThreeVector &argResult )
 	// the following cute sequence generates a cos(theta) distribution!
 	double u,v,w;
 	do {
-	  u= G4UniformRand()*2.0-1.0;
-	  v= G4UniformRand()*2.0-1.0;
+	  u= CLHEP::RandFlat::shoot()*2.0-1.0;
+	  v= CLHEP::RandFlat::shoot()*2.0-1.0;
 	  w= 1.0- (u*u+v*v);
 	} while (w < 0.0);
 	w= sqrt(w);
@@ -218,9 +219,9 @@ void GLG4PosGen_Paint::GeneratePosition( G4ThreeVector &argResult )
 	G4ThreeVector spos;
 	double r2;
 	do {
-	  spos= G4ThreeVector(G4UniformRand()*2.0-1.0,
-			      G4UniformRand()*2.0-1.0,
-			      G4UniformRand()*2.0-1.0);
+	  spos= G4ThreeVector(CLHEP::RandFlat::shoot()*2.0-1.0,
+			      CLHEP::RandFlat::shoot()*2.0-1.0,
+			      CLHEP::RandFlat::shoot()*2.0-1.0);
 	  r2= spos.mag2();
 	} while (r2 > 1.0 || r2 < 0.0625);
 	spos*= sqrt(1.0/r2);
@@ -250,7 +251,7 @@ void GLG4PosGen_Paint::GeneratePosition( G4ThreeVector &argResult )
 	      _intercepts.push_back(spos);
 	    else
 	      _intercepts.push_back
-		(spos+solid->SurfaceNormal(spos)*G4UniformRand()*_thickness);
+		(spos+solid->SurfaceNormal(spos)*CLHEP::RandFlat::shoot()*_thickness);
 	  }
 	  else {
 	    spos += surfaceTolerance*raydir;
@@ -271,7 +272,7 @@ void GLG4PosGen_Paint::GeneratePosition( G4ThreeVector &argResult )
 	      _intercepts.push_back(spos);
 	    else
 	      _intercepts.push_back
-		(spos+solid->SurfaceNormal(spos)*G4UniformRand()*_thickness);
+		(spos+solid->SurfaceNormal(spos)*CLHEP::RandFlat::shoot()*_thickness);
 	  }
 	  else {
 	    spos += surfaceTolerance*raydir;
@@ -468,9 +469,9 @@ void GLG4PosGen_Fill::GeneratePosition( G4ThreeVector &argResult )
   // look for internal point
   for (int iloop=0, jloop=0; /* test inside */ ; iloop++) {
     do {
-      rpos= G4ThreeVector(x0+dx*G4UniformRand(),
-			  y0+dy*G4UniformRand(),
-			  z0+dz*G4UniformRand()); // uniform in bounding box
+      rpos= G4ThreeVector(x0+dx*CLHEP::RandFlat::shoot(),
+			  y0+dy*CLHEP::RandFlat::shoot(),
+			  z0+dz*CLHEP::RandFlat::shoot()); // uniform in bounding box
       jloop++;
       if ( jloop >= 100000 ) {
 	G4cerr << "GLG4PosGen_PointPaintFill::GeneratePosition(): "
@@ -633,8 +634,8 @@ void GLG4PosGen_Cosmic::GenerateVertexPositions( G4PrimaryVertex *argVertex,
 
   // generate position in rectangle normal to incident direction,
   // offset a suitable distance back along direction from origin outside world
-  G4ThreeVector startPos( e1*(_width*(G4UniformRand()-0.5))
-			  +e2*(_height*(G4UniformRand()-0.5))
+  G4ThreeVector startPos( e1*(_width*(CLHEP::RandFlat::shoot()-0.5))
+			  +e2*(_height*(CLHEP::RandFlat::shoot()-0.5))
 			  -dir*(_width+_height) );
 
   // find entrance point to Geant4 world

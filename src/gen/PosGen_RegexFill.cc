@@ -6,6 +6,7 @@
 #include <G4GeometryTolerance.hh>
 #include <G4TransportationManager.hh>
 #include <Randomize.hh>
+#include <CLHEP/Random/RandFlat.h>
 
 using namespace std;
 
@@ -108,7 +109,7 @@ G4String PosGen_RegexFill::GetState() const {
 }
 
 void PosGen_RegexFill::GeneratePosition(G4ThreeVector& pos) {
-    double randVolume = G4UniformRand() * fVolumeCumu.back();
+    double randVolume = CLHEP::RandFlat::shoot() * fVolumeCumu.back();
     size_t volidx = 0;
     for ( ; volidx < fVolumes.size(); volidx++) {
         if (randVolume <= fVolumeCumu[volidx]) break;
@@ -119,9 +120,9 @@ void PosGen_RegexFill::GeneratePosition(G4ThreeVector& pos) {
     for (;;) {
         //Solid works in "local" coordinates, so generate position, test, then project to global
         G4ThreeVector trial(
-            vol.x0 + G4UniformRand() * (vol.x1 - vol.x0),
-            vol.y0 + G4UniformRand() * (vol.y1 - vol.y0),
-            vol.z0 + G4UniformRand() * (vol.z1 - vol.z0));
+            vol.x0 + CLHEP::RandFlat::shoot() * (vol.x1 - vol.x0),
+            vol.y0 + CLHEP::RandFlat::shoot() * (vol.y1 - vol.y0),
+            vol.z0 + CLHEP::RandFlat::shoot() * (vol.z1 - vol.z0));
         if (solid->Inside(trial)) { // inside the volume but maybe in a daughter
             bool valid = true;
             for (size_t j = 0; j < vol.daughters.size(); j++) {

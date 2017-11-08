@@ -1,6 +1,7 @@
 #include <RAT/PosGen_Line.hh>
 #include <Randomize.hh>
 #include <RAT/GLG4StringUtil.hh>
+#include <CLHEP/Random/RandFlat.h>
 #include <sstream>
 
 namespace RAT {
@@ -15,7 +16,7 @@ PosGen_Line::PosGen_Line(const char *arg_dbname)
 void PosGen_Line::GeneratePosition( G4ThreeVector &argResult )
 {
   G4ThreeVector diff = fPoint2 - fPoint1;
-  G4double scale = G4UniformRand();
+  G4double scale = CLHEP::RandFlat::shoot();
 
   argResult = fPoint1 + scale * diff;
 }

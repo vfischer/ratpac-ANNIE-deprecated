@@ -4,15 +4,15 @@
 /tracking/verbose 0
 /event/verbose 0
 
-/tracking/storeTrajectory 0
+/tracking/storeTrajectory 1
 /tracking/discardParticleTrajectory opticalphoton
 
 /rat/db/set DETECTOR experiment "ANNIE"
 /rat/db/set DETECTOR geo_file "ANNIE/ANNIE_run2_config2.geo"
 
 /run/initialize
-/process/activate Cerenkov
-/glg4scint/on
+/process/inactivate Cerenkov
+/glg4scint/off
 #/glg4scint/reemission on
 
 #/generator/event_window 1e3
@@ -52,11 +52,11 @@
 # Use IO.default_output_filename
 /rat/proclast outroot
 
-/generator/add combo gun:fill:poisson
-/generator/vtx/set neutron 0 0 0 1
-/generator/pos/set 0.0 0.0 -133.3
+/generator/add combo gun:point
+/generator/vtx/set neutron 0 0 0 2.5e-8
+/generator/pos/set 0.0 0.0 1750
 
-/run/beamOn 1
+/run/beamOn 1000
 
 #END EVENT LOOP
 #####################

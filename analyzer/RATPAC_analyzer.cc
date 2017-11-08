@@ -330,8 +330,8 @@ void Analyzer::Loop() {
     //       }
     //     }
     
-//     nav = new RAT::TrackNav(ds);
-//     cursor = new RAT::TrackCursor(nav->RAT::TrackNav::Cursor(false));  //toggle human readable cursor
+    nav = new RAT::TrackNav(ds);
+    cursor = new RAT::TrackCursor(nav->RAT::TrackNav::Cursor(false));  //toggle human readable cursor
     
     //     cout << "Parents = " << ds->GetMC()->GetMCParentCount() << endl;
     //     for(size_t iCh = 0; iCh<ds->GetMC()->GetMCParentCount(); iCh++){ cout << ds->GetMC()->GetMCParent(iCh)->GetParticleName() << endl;}
@@ -796,7 +796,7 @@ void Analyzer::Loop() {
       hNCaptures_perevt->Fill(Ncaptures_perevt);
       hNpCaptures_perevt->Fill(Npcaptures_perevt);
     }
-    
+ */   
     
     ///////////////////////////////////////////////////////
     //=========== Primary neutron search loop ===========//
@@ -902,7 +902,7 @@ void Analyzer::Loop() {
     node->Clear();
     delete cursor;
     nav->Clear(); delete nav;
- */ }
+  }
 }
 
 

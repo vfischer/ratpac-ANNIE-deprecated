@@ -21,6 +21,7 @@
 #include "GLG4VertexGen.hh"
 #include "Randomize.hh"
 #include "GLG4StringUtil.hh"
+#include <CLHEP/Random/RandFlat.h>
 
 #include <string.h>  // for strcmp
 #include <sstream>
@@ -108,8 +109,8 @@ GeneratePrimaryVertex(G4Event *argEvent, G4ThreeVector &dx, G4double dt)
       while (1) {
 	double u,v,q2;
 	// try first circle
-	u= 3.5*G4UniformRand()-1.75;
-	v= 2.0*G4UniformRand()-1.0;
+	u= 3.5*CLHEP::RandFlat::shoot()-1.75;
+	v= 2.0*CLHEP::RandFlat::shoot()-1.0;
 	q2= u*u + v*v;
 	if (q2 < 1.0) {
 	  double rho_over_q= sqrt(2.0-q2);
@@ -149,7 +150,7 @@ GeneratePrimaryVertex(G4Event *argEvent, G4ThreeVector &dx, G4double dt)
       }
       else {
 	// choose random pol
-	G4double phi= (G4UniformRand()*2.0-1.0)*M_PI;
+	G4double phi= (CLHEP::RandFlat::shoot()*2.0-1.0)*M_PI;
 	G4ThreeVector e1= dir.orthogonal().unit();
 	G4ThreeVector e2= dir.cross(e1);
 	rpol= e1*cos(phi)+e2*sin(phi);
@@ -358,15 +359,15 @@ GeneratePrimaryVertex(G4Event *argEvent, G4ThreeVector &dx, G4double dt)
     }
 
 
-    G4double _ke = (_ke2 - _ke1)*G4UniformRand()+_ke1;
+    G4double _ke = (_ke2 - _ke1)*CLHEP::RandFlat::shoot()+_ke1;
 
     G4ThreeVector dir;
     if (_mom.mag2() > 0.0) 
     {
 	if (_mom_theta > 0.0)                 // emission into a cone of angle _mom_theta
 	{
-	    G4double phi= 2.*CLHEP::pi* G4UniformRand();
-	    G4double cosTheta = 1.0 - (1.0 - cos(_mom_theta)) * G4UniformRand();
+	    G4double phi= 2.*CLHEP::pi* CLHEP::RandFlat::shoot();
+	    G4double cosTheta = 1.0 - (1.0 - cos(_mom_theta)) * CLHEP::RandFlat::shoot();
 	    G4double sinTheta = sqrt(1. - cosTheta * cosTheta);
 	    
 	    G4double ux = sinTheta * cos(phi);
@@ -393,8 +394,8 @@ GeneratePrimaryVertex(G4Event *argEvent, G4ThreeVector &dx, G4double dt)
     else {
       // isotropic direction
      
-      G4double phi= 2.*CLHEP::pi* G4UniformRand();
-      G4double cosTheta = -1. + 2. * G4UniformRand();
+      G4double phi= 2.*CLHEP::pi* CLHEP::RandFlat::shoot();
+      G4double cosTheta = -1. + 2. * CLHEP::RandFlat::shoot();
       G4double sinTheta = sqrt(1. - cosTheta * cosTheta);
       
       G4double ux = sinTheta * cos(phi);
@@ -422,7 +423,7 @@ GeneratePrimaryVertex(G4Event *argEvent, G4ThreeVector &dx, G4double dt)
       }
       else {
 	// choose random pol
-	G4double phi= (G4UniformRand()*2.0-1.0)*M_PI;
+	G4double phi= (CLHEP::RandFlat::shoot()*2.0-1.0)*M_PI;
 	G4ThreeVector e1= dir.orthogonal().unit();
 	G4ThreeVector e2= dir.cross(e1);
 	rpol= e1*cos(phi)+e2*sin(phi);
