@@ -14,5 +14,9 @@ clean:
 	scons -c
 	@echo 'You can run "scons -c" directly to clean build.'
 
+clean_log:
+	rm rat.*.log
+	@echo 'Cleaning the rat log files'
+	
 .PHONY: doc clean installdata all
 
