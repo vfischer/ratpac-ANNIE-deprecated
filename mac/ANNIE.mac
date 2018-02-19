@@ -3,22 +3,22 @@
 
 /tracking/verbose 0
 
-/tracking/storeTrajectory 1
+/tracking/storeTrajectory 0
 /tracking/discardParticleTrajectory opticalphoton
 /tracking/discardParticleTrajectory e-
 
 /rat/db/set DETECTOR experiment "ANNIE"
-/rat/db/set DETECTOR geo_file "ANNIE/ANNIE_run2_configlappd.geo"
+/rat/db/set DETECTOR geo_file "ANNIE/ANNIE_run2_config7.geo"
 
 /run/initialize
-/process/inactivate hIoni pi-
-/process/inactivate hIoni pi+
-/process/inactivate muIoni mu+
-/process/inactivate muIoni mu+
-/process/inactivate hIoni proton
-/process/inactivate Cerenkov all
-/process/activate Cerenkov mu-
-/process/activate Cerenkov mu+
+#/process/inactivate hIoni pi-
+#/process/inactivate hIoni pi+
+#/process/inactivate muIoni mu+
+#/process/inactivate muIoni mu+
+#/process/inactivate hIoni proton
+#/process/inactivate Cerenkov all
+/process/activate Cerenkov all
+#/process/activate Cerenkov mu+
 /glg4scint/on
 #/glg4scint/reemission on
 
@@ -57,20 +57,23 @@
 # Use IO.default_output_filename
 /rat/proclast outroot
 
-#/generator/add combo gun:regexfill
+/generator/add combo gun:regexfill
 #/generator/pos/set ^detector*|^ncv*
-/generator/add combo pbomb:point
-/generator/vtx/set 10000 385
-/generator/pos/set 0 0 1724 #center of tank
-#/generator/vtx/set mu- 0 0 0 200
+#/generator/add combo pbomb:point
+/generator/pos/set detector_fiducial
+#/generator/vtx/set 10000 385
+#/generator/pos/set 0 0 1724 #center of tank
+#/generator/vtx/set e- 0 0 0 5
 #/generator/pos/set 100.0 1973 1866.0
 #/generator/pos/set 0 1465 1724
 #/generator/pos/set 0 -133.3 1724 #center of tank
+/generator/vtx/set e- 0 0 0 5
+#/generator/vtx/set 1000 430
 #/generator/pos/set 0 0 -133.3
 
-/run/beamOn 10
-/generator/pos/set 0 1465 1724
-/run/beamOn 10
+/run/beamOn 100
+#/generator/pos/set 0 1465 1724
+#/run/beamOn 10
 
 #END EVENT LOOP
 #####################

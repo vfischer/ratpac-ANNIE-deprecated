@@ -93,29 +93,31 @@ valid_begin: [0, 0],
 valid_end: [0, 0],
 mother: "detector",
 type: "tube",
-r_max: 1150.0,
-size_z: 1500.0,
-position: [0.0, 0.0, 100.0],
-material: "water_gdS_0p2",
+//r_max: 1150.0,
+r_max: 500.0,
+//size_z: 1500.0,
+size_z: 500.0,
+position: [0.0, 0.0, 0.0],
+material: "BGO_scint",
 color: [0.1, 0.4, 0.6, 0.9],
 drawstyle: "solid"
 }
 
-{
-name: "GEO",
-index: "detector_fiducial_muon",
-valid_begin: [0, 0],
-valid_end: [0, 0],
-mother: "detector_fiducial",
-type: "tube",
-r_max: 500.0,
-size_z: 650.0,
-position: [500.0, 0.0, 100.0],
-material: "water_gdS_0p2",
-color: [0.6, 0.4, 0.6, 0.5],
-drawstyle: "solid",
-rotation: [0.0, 90.0, 0.0],
-}
+// {
+// name: "GEO",
+// index: "detector_fiducial_muon",
+// valid_begin: [0, 0],
+// valid_end: [0, 0],
+// mother: "detector_fiducial",
+// type: "tube",
+// r_max: 500.0,
+// size_z: 650.0,
+// position: [500.0, 0.0, 100.0],
+// material: "water_gdS_0p2",
+// color: [0.6, 0.4, 0.6, 0.5],
+// drawstyle: "solid",
+// rotation: [0.0, 90.0, 0.0],
+// }
 /////////////////////////////////////////////////////////////////////
 ///////////********** End of tank volumes ***********////////////////
 /////////////////////////////////////////////////////////////////////
