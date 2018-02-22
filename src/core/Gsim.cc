@@ -20,6 +20,7 @@
 #include <RAT/Coincidence_Gen.hh>
 #include <RAT/VertexFile_Gen.hh>
 #include <RAT/CfGen.hh>
+#include <RAT/AmBeGen.hh>
 #include <RAT/ReacIBDgen.hh>
 #include <RAT/EventInfo.hh>
 #include <RAT/TrackInfo.hh>
@@ -113,6 +114,8 @@ void Gsim::Init() {
                                    new Alloc<GLG4Gen,DecayChain_Gen>);
   GlobalFactory<GLG4Gen>::Register("cf",
                                    new Alloc<GLG4Gen,CfGen>);
+  GlobalFactory<GLG4Gen>::Register("ambe",
+                                   new Alloc<GLG4Gen,AmBeGen>);
   GlobalFactory<GLG4Gen>::Register("led",
                                    new Alloc<GLG4Gen,Gen_LED>);
   GlobalFactory<GLG4Gen>::Register("coincidence",

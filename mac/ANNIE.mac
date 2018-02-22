@@ -1,7 +1,7 @@
 /glg4debug/glg4param omit_muon_processes  0.0
 /glg4debug/glg4param omit_hadronic_processes  0.0
 
-/tracking/verbose 0
+/tracking/verbose 1
 
 /tracking/storeTrajectory 0
 /tracking/discardParticleTrajectory opticalphoton
@@ -17,9 +17,9 @@
 #/process/inactivate muIoni mu+
 #/process/inactivate hIoni proton
 #/process/inactivate Cerenkov all
-/process/activate Cerenkov all
+/process/inactivate Cerenkov all
 #/process/activate Cerenkov mu+
-/glg4scint/on
+/glg4scint/off
 #/glg4scint/reemission on
 
 #/process/inactivate DeferTrackProc all
@@ -57,7 +57,7 @@
 # Use IO.default_output_filename
 /rat/proclast outroot
 
-/generator/add combo gun:regexfill
+/generator/add ambe regexfill
 #/generator/pos/set ^detector*|^ncv*
 #/generator/add combo pbomb:point
 /generator/pos/set detector_fiducial
@@ -71,7 +71,7 @@
 #/generator/vtx/set 1000 430
 #/generator/pos/set 0 0 -133.3
 
-/run/beamOn 100
+/run/beamOn 1
 #/generator/pos/set 0 1465 1724
 #/run/beamOn 10
 
