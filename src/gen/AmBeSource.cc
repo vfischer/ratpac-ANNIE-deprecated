@@ -135,7 +135,17 @@ namespace RAT {
 	  Tneutron.push_back( 0. );
 	}
 
-      Ngamma = 1; //only 1 gamma generated
+      // pick a gamma multiplicity
+      // According to "Progress in Nuclear Science and Technology  - Volume 4 (2014) pp. 345-348 (http://www.aesj.or.jp/publication/pnst004/data/345_348.pdf)
+      // about 25% of Am-Be reactions do not emit a 4.43 MeV gamma (depends on the energy level the carbon atom is excited to after the (alpha,n) reaction)
+      // This probability can be changed here is you desire
+      double prob_gamma_emission = 0.75; //probability of emitted a gamma along with a neutron
+      double prob_gamma = CLHEP::RandFlat::shoot(0.,1.);
+      if (prob_gamma < prob_gamma_emission){
+	Ngamma = 1; //only 1 gamma generated
+      } else {
+	Ngamma = 0; //no gamma generated
+      }
 
 #ifdef DEBUG
       std::cout << "AmBeSource::AmBeSource - "
@@ -147,7 +157,7 @@ namespace RAT {
       double tote = 0.;
       for(int nn=0; nn<Ngamma; nn++)
 	{
-	  double energy = 4.43; //from the C12 firzt excited state
+	  double energy = 4.43; //from the C12 first excited state
 	  // Generate momentum direction uniformly in phi and cos(theta).
 	  double phi = CLHEP::RandFlat::shoot(0.,M_PI);
 	  double cosTheta = CLHEP::RandFlat::shoot(-1.,1.);
@@ -166,18 +176,8 @@ namespace RAT {
 	  gammaE.push_back( momentum );
 	  tote += energy;
 
-	  const size_t len2 = 2;
-	  float rv[len2];
-	  for ( size_t i=0; i<len2; i++ ) rv[i] = CLHEP::RandFlat::shoot();
-	  //
-	  // 80% of gammas have T_1/2 = 0.01 ns and 20% have T_1/2 = 1 ns
-	  //
-	  double halflife;
-	  if(rv[0] < 0.8)
-	    halflife = 0.01;
-	  else
-	    halflife = 1.0;
-	  Tgamma.push_back( halflife*log(1/rv[1]) );
+	  // consider the gammas is emitted instantaneously (10^-15 -ish decay time)
+	  Tgamma.push_back( 0. );
 	}
       //std::cout << "          total energy = " << tote << std::endl;
   }
@@ -221,25 +221,6 @@ namespace RAT {
     float fplus  = exp(-(sqrt(x)+sqrt(0.359))*(sqrt(x)+sqrt(0.359))/1.175);
 
     N = scale*(fminus-fplus);
-
-    //std::cout << "N " << N << std::endl;
-    return N;
-  }
-
-  float AmBeSource::AmBeGammaSpectrum(const float& x){
-
-    // return the gamma spectrum N(x)
-    float N = 0.;
-
-    float gaussian = 1.8367*exp(-0.5*((x-0.45934)/0.31290)*((x-0.45934)/0.31290));
-    float exponential = exp(0.84774-0.89396*x);
-
-    if(x <= 0.744){
-      N = gaussian;
-    }
-    else{
-      N = exponential;
-    }
 
     //std::cout << "N " << N << std::endl;
     return N;

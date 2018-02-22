@@ -83,10 +83,6 @@ namespace RAT {
     /** The probability density of the prompt neutrons from the AmBe 
      *  decay as a function of neutron energy. */
     static float AmBeNeutronSpectrum(const float& x);
-
-    /** The probability density of the prompt gammas from the AmBe 
-     *  decay as a function of gamma energy. */
-    static float AmBeGammaSpectrum(const float& x);
   };
 
 } // namespace RAT
