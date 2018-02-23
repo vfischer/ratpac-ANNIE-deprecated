@@ -98,7 +98,7 @@ r_max: 500.0,
 //size_z: 1500.0,
 size_z: 500.0,
 position: [0.0, 0.0, 0.0],
-material: "BGO_scint",
+material: "water_gdS_0p2",
 color: [0.1, 0.4, 0.6, 0.9],
 drawstyle: "solid"
 }

@@ -71,7 +71,7 @@
 #/generator/vtx/set 1000 430
 #/generator/pos/set 0 0 -133.3
 
-/run/beamOn 2000
+/run/beamOn 20000
 #/generator/pos/set 0 1465 1724
 #/run/beamOn 10
 
