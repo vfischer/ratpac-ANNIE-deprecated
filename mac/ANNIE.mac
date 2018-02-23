@@ -17,9 +17,9 @@
 #/process/inactivate muIoni mu+
 #/process/inactivate hIoni proton
 #/process/inactivate Cerenkov all
-/process/inactivate Cerenkov all
+/process/activate Cerenkov all
 #/process/activate Cerenkov mu+
-/glg4scint/off
+/glg4scint/on
 #/glg4scint/reemission on
 
 #/process/inactivate DeferTrackProc all
@@ -57,7 +57,7 @@
 # Use IO.default_output_filename
 /rat/proclast outroot
 
-/generator/add ambe regexfill
+/generator/add combo gun:regexfill
 #/generator/pos/set ^detector*|^ncv*
 #/generator/add combo pbomb:point
 /generator/pos/set detector_fiducial
@@ -71,7 +71,7 @@
 #/generator/vtx/set 1000 430
 #/generator/pos/set 0 0 -133.3
 
-/run/beamOn 20000
+/run/beamOn 1
 #/generator/pos/set 0 1465 1724
 #/run/beamOn 10
 
