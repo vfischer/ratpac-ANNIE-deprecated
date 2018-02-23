@@ -44,7 +44,7 @@ namespace RAT {
       // Random generators according to probability densities.
       static CLHEP::RandGeneral* fGenerate = 0;
 
-      static const float flow = 0.; static const float fhigh = 50.;
+      static const float flow = 0.; static const float fhigh = 12.;
 
       static bool first = true;
       if (first)
@@ -67,13 +67,16 @@ namespace RAT {
 #ifdef DEBUG
 	  std::cout << "AmBeSource initialization" << std::endl;
 #endif
+	  
+	  
+    
 	  // Find function values at bin centers.
 	  for ( size_t i=0; i != probDensSize; i++ )
 	    {
 	      float value = (float(i) + 0.5) * (fhigh - flow) / (float) probDensSize;
 	      fspace[i] = AmBeNeutronSpectrum(value);
 #ifdef DEBUG
-	      std::cout << "   i=" << i << " f,m,g="
+	      std::cout << "   i=" << i << ", value = " << value << " f,m,g="
 			<< fspace[i] << std::endl;
 #endif
 	    }
@@ -213,16 +216,35 @@ namespace RAT {
 
     // return the neutron spectrum N(x)
     float N = 0.;
+    
+    // Neutron energy spectrum of a AmBe source simulated with MCNP (NIM A Volume 763, 1 November 2014, Pages 547-552)
+    const size_t size_arrays = 93;
+    // Neutron spectrum energy bins
+    double neutron_Espectrum_e[size_arrays] = {0.01, 0.012, 0.015, 0.019, 0.023, 0.03, 0.037, 0.046, 0.058, 0.074, 0.093, 0.109, 0.144, 0.213, 0.284, 0.351, 0.417, 0.485, 0.551, 0.626, 0.685, 0.756, 0.821, 0.892, 0.955, 1.029, 1.085, 1.152, 1.233, 1.3, 1.36, 1.423, 1.489, 1.593, 1.692, 1.77, 1.824, 1.894, 1.952, 2.042, 2.089, 2.169, 2.252, 2.321, 2.374, 2.447, 2.502, 2.54, 2.638, 2.698, 2.78, 2.844, 2.887, 2.952, 3.02, 3.112, 3.135, 3.207, 3.33, 3.51, 3.728, 4.02, 4.174, 4.501, 4.781, 5.04, 5.273, 5.476, 5.816, 6.039, 6.177, 6.511, 6.66, 7.127, 7.569, 8.162, 8.54, 8.935, 9.349, 9.278, 9.563, 9.784, 10.01, 10.241, 10.478, 10.721, 10.726, 10.894, 10.901, 11.002, 10.927, 11.017, 11.026};
+    
+    // Neutron spectrum probability
+    double neutron_Espectrum_p[size_arrays] = {0, 0, 0, 0.001, 0.001, 0.001, 0.001, 0.002, 0.002, 0.003, 0.004, 0.005, 0.007, 0.011, 0.016, 0.024, 0.033, 0.042, 0.05, 0.055, 0.066, 0.075, 0.081, 0.088, 0.096, 0.098, 0.103, 0.109, 0.111, 0.114, 0.116, 0.111, 0.113, 0.111, 0.118, 0.134, 0.153, 0.162, 0.174, 0.177, 0.191, 0.202, 0.214, 0.218, 0.234, 0.243, 0.262, 0.267, 0.293, 0.316, 0.353, 0.395, 0.442, 0.476, 0.503, 0.563, 0.595, 0.606, 0.629, 0.641, 0.653, 0.653, 0.653, 0.677, 0.69, 0.629, 0.552, 0.512, 0.531, 0.484, 0.458, 0.531, 0.583, 0.628, 0.652, 0.594, 0.541, 0.531, 0.449, 0.502, 0.379, 0.252, 0.158, 0.111, 0.067, 0.038, 0.015, 0.007, 0.002, 0, 0, 0, 0, };
 
-    float scale = 1/(2*M_PI*0.359);
-    //std::cout << "scale " << scale << std::endl;
+    for( size_t i=0; i != size_arrays; i++ ){
+      
+      // No extrapolation, the PDF goes to 0 at those boundaries anyway
+      if ( x < neutron_Espectrum_e[0] || x > neutron_Espectrum_e[size_arrays-1] ) {
+	N = 0;
+	break;
+      }
+      // If the requested value is exactly equal to a value present in the arrays
+      if ( x == neutron_Espectrum_e[i] ) {
+	N = neutron_Espectrum_p[i];
+	break;
+      } 
+      // Now the interpolation part
+      if (x > neutron_Espectrum_e[i] && x < neutron_Espectrum_e[i+1]) {
+	N = neutron_Espectrum_p[i] + (x - neutron_Espectrum_e[i])*(neutron_Espectrum_p[i+1] - neutron_Espectrum_p[i])/(neutron_Espectrum_e[i+1] - neutron_Espectrum_e[i]);
+	break;
+      }
+      
+    }
 
-    float fminus = exp(-(sqrt(x)-sqrt(0.359))*(sqrt(x)-sqrt(0.359))/1.175);
-    float fplus  = exp(-(sqrt(x)+sqrt(0.359))*(sqrt(x)+sqrt(0.359))/1.175);
-
-    N = scale*(fminus-fplus);
-
-    //std::cout << "N " << N << std::endl;
     return N;
   }
 
