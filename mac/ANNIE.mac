@@ -9,6 +9,7 @@
 
 /rat/db/set DETECTOR experiment "ANNIE"
 /rat/db/set DETECTOR geo_file "ANNIE/ANNIE_run2_config7.geo"
+/rat/db/load ANNIE/ANNIE_AmBesource.geo
 
 /run/initialize
 #/process/inactivate hIoni pi-
@@ -60,18 +61,18 @@
 /generator/add combo gun:regexfill
 #/generator/pos/set ^detector*|^ncv*
 #/generator/add combo pbomb:point
-/generator/pos/set detector_fiducial
+/generator/pos/set AmBe_source
 #/generator/vtx/set 10000 385
 #/generator/pos/set 0 0 1724 #center of tank
 #/generator/vtx/set e- 0 0 0 5
 #/generator/pos/set 100.0 1973 1866.0
 #/generator/pos/set 0 1465 1724
 #/generator/pos/set 0 -133.3 1724 #center of tank
-/generator/vtx/set e- 0 0 0 5
+/generator/vtx/set gamma 0 0 0 4.43
 #/generator/vtx/set 1000 430
 #/generator/pos/set 0 0 -133.3
 
-/run/beamOn 1
+/run/beamOn 100
 #/generator/pos/set 0 1465 1724
 #/run/beamOn 10
 
