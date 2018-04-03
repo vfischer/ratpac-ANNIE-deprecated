@@ -1,6 +1,19 @@
+G4VERSION := $(shell eval geant4-config --version)
+
 all:
-	scons
-	@echo 'You can run "scons" directly to compile RAT.'
+ifeq ($(G4VERSION), 10.1.2)
+	@echo 'Your geant4 version is $(G4VERSION). Using "scons" to build'
+	scons -j4
+	@echo 'You can run "scons" to build RAT'
+else 
+ifeq ($(G4VERSION), 10.2.3)
+	@echo 'Your geant4 version is $(G4VERSION). Using "scons" with extra arguments to build'
+	scons -j4 -Q cppjailbreak="" -Q CXXFLAGS="-std=c++11 -w -O3"
+	@echo 'You can run "scons -Q cppjailbreak="" -Q CXXFLAGS="-std=c++11 -w -O3"" to build RAT'
+else
+	@echo '**** Your geant4 version $(G4VERSION) is unsupported ****'
+endif
+endif
 
 installdata:
 	scons installdata
