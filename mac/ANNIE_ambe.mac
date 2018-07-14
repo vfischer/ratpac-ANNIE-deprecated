@@ -3,13 +3,13 @@
 
 /tracking/verbose 0
 
-/tracking/storeTrajectory 0
+/tracking/storeTrajectory 1
 /tracking/discardParticleTrajectory opticalphoton
 /tracking/discardParticleTrajectory e-
 
 /rat/db/set DETECTOR experiment "ANNIE"
 /rat/db/set DETECTOR geo_file "ANNIE/ANNIE_run2_config8.geo"
-/rat/db/load ANNIE/ANNIE_AmBesource.geo
+#/rat/db/load ANNIE/ANNIE_AmBesource.geo
 
 /run/initialize
 
@@ -53,11 +53,15 @@
 # Use IO.default_output_filename
 /rat/proclast outroot
 
-/generator/add ambe regexfill
-/generator/pos/set AmBe_source
+#/generator/add ambe regexfill
+#/generator/pos/set AmBe_source
 #/generator/pos/set 0 -133.3 1724 #center of tank
+/generator/add combo gun:point
+#/generator/pos/set ^detector*|^ncv*
+/generator/pos/set 0 -133.3 1724 #center of tank
+/generator/vtx/set neutron 0 0 0 2.5e-8
 
-/run/beamOn 1
+/run/beamOn 100
 
 #END EVENT LOOP
 #####################

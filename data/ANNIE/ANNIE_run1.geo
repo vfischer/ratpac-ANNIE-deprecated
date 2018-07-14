@@ -109,8 +109,8 @@ valid_begin: [0, 0],
 valid_end: [0, 0],
 mother: "detector",
 type: "sphere",
-r_max: 1500.0,
-position: [0.0, 0.0, -133.3],
+r_max: 500.0,
+position: [-146.1, 0.0, 276.38],
 material: "water",
 color: [0.4, 0.4, 0.6, 0.3],
 drawstyle: "solid"
@@ -1025,11 +1025,11 @@ valid_end: [0, 0],
 mother: "detector_virtual",
 enable_ncv: 1,
 // ncv_center: [793.7, 0.0, 1609.7], // top upstream position (May 2016 to 06-02-2017) (in dd-mm-yyyy system)
-//ncv_center: [1117.55, 0.0, -562.0], // bottom upstream position (06-02-2017 to 27-02-2017)
+// ncv_center: [1117.55, 0.0, -562.0], // bottom upstream position (06-02-2017 to 27-02-2017)
 // ncv_center: [-146.1, 0.0, 1597.18], // position 1 (top center) (27-02-2017 to 14-04-2017) 
-// ncv_center: [-146.1, 0.0, 276.38], // position 2 (center center) (14-04-2017 to 24-05-2017)
-ncv_center: [0.0, 0.0, 0.0], // position 2 (center center) (14-04-2017 to 24-05-2017)
-//  ncv_center: [793.7, 0.0, 276.38], // position 3 (center upstream) (24-05-2017 to 08-06-2017)
+ncv_center: [-146.1, 0.0, 276.38], // position 2 (center center) (14-04-2017 to 24-05-2017)
+// ncv_center: [0.0, 0.0, 0.0], // position 2 (center center) (14-04-2017 to 24-05-2017)
+// ncv_center: [793.7, 0.0, 276.38], // position 3 (center upstream) (24-05-2017 to 08-06-2017)
 // ncv_center: [-146.1, 0.0, 1292.33], // position 4 (top center minus 1 foot) (08-06-2017 to 23-06-2017)
 // ncv_center: [-146.1, 0.0, 987.53], // position 5 (top center minus 2 feet) (23-06-2017 to 30-06-2017)
 // ncv_center: [-146.1, 0.0, 1444.78], // position 6 (top center minus 1/2 feet) (30-06-2017 to 03-07-2017)

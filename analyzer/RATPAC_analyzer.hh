@@ -204,7 +204,9 @@ private:
   TH1F *hTrackAngle_mu;
   TH1F *hTrackAngle_mu_MRD;
   TH1F *hTime_nCap_muTrack;
-  TH1F *hNeutronCap_proj_x, *hNeutronCap_proj_y, *hNeutronCap_proj_z, *hNeutronCap_disp_x, *hNeutronCap_disp_y, *hNeutronCap_disp_z;
+  TH1D *hNeutronCap_proj_x, *hNeutronCap_proj_y, *hNeutronCap_proj_z;
+  TH2D *hNeutronCap_proj_xy, *hNeutronCap_proj_xz;
+  TH1F *hNeutronCap_disp_x, *hNeutronCap_disp_y, *hNeutronCap_disp_z;
   TH1F *hMuVertex_proj_x, *hMuVertex_proj_y, *hMuVertex_proj_z;
   
   // Counting histos
@@ -229,7 +231,7 @@ private:
   TH3F *hNeutronMu_cap_point_3D, *hNeutronMu_cap_point_Edep_3D, *hNeutronMu_cap_point_NPE_3D, *hNeutronMu_cap_point_NPE_noMuCap_3D;
   TH3F *hNeutronMu_start_point_3D, *hNeutronMu_start_point_noMuCap_3D;
   TH3F *hNeutronMu_eff_tank_3D, *hNeutronMu_eff_tank_Edep_3D, *hNeutronMu_eff_tank_NPE_3D, *hNeutronMu_eff_tank_NPE_noMuCap_3D;
-
+  TH3D *hNeutron_cap_tank_3D;
   
   // Variables
   Double_t init_time, fin_time;

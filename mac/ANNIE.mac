@@ -1,14 +1,14 @@
-/glg4debug/glg4param omit_muon_processes  0.0
+/glg4debug/glg4param omit_muon_processes  1.0
 /glg4debug/glg4param omit_hadronic_processes  0.0
 
-/tracking/verbose 0
+/tracking/verbose 1
 
-/tracking/storeTrajectory 0
+/tracking/storeTrajectory 1
 /tracking/discardParticleTrajectory opticalphoton
 /tracking/discardParticleTrajectory e-
 
 /rat/db/set DETECTOR experiment "ANNIE"
-/rat/db/set DETECTOR geo_file "ANNIE/ANNIE_run2_config8.geo"
+/rat/db/set DETECTOR geo_file "ANNIE/ANNIE_run1.geo"
 
 /run/initialize
 #/process/inactivate hIoni pi-
@@ -19,7 +19,7 @@
 #/process/inactivate Cerenkov all
 /process/activate Cerenkov all
 #/process/activate Cerenkov mu+
-/glg4scint/on
+/glg4scint/off
 #/glg4scint/reemission on
 
 #/process/inactivate DeferTrackProc all
@@ -58,9 +58,9 @@
 /rat/proclast outroot
 
 /generator/add combo gun:regexfill
-/generator/pos/set ^detector*|^ncv*
+/generator/pos/set ^detector_virtual*|^ncv*
 #/generator/pos/set 0 -133.3 1724 #center of tank
-/generator/vtx/set gamma 0 0 0 4.43
+/generator/vtx/set geantino 0 0 0 2.5e-8
 
 /run/beamOn 100
 
