@@ -71,12 +71,12 @@ void Analyzer::Initialization(){
   hNCaptures_perevt = new TH1F("hNCaptures_perevt","Nb of neutron capture (after muon track) per muon track",20,0,20);
   hNpCaptures_perevt = new TH1F("hNpCaptures_perevt","Nb of primary neutron capture (after muon track) per muon track",20,0,20);
   
-  hNeutronCap_proj_x = new TH1D("hNeutronCap_proj_x","Projection of neutron capture point on x axis (mm)",1000,-10000,10000);
-  hNeutronCap_proj_y = new TH1D("hNeutronCap_proj_y","Projection of neutron capture point on y axis (mm)",1000,-10000,10000);
-  hNeutronCap_proj_z = new TH1D("hNeutronCap_proj_z","Projection of neutron capture point on z axis (mm)",1000,-10000,10000);
-  hNeutronCap_proj_xy = new TH2D("hNeutronCap_proj_xy","Projection of neutron capture point on xy axis (mm)",1000,-10000,10000,1000,-10000,10000);
-  hNeutronCap_proj_xz = new TH2D("hNeutronCap_proj_xz","Projection of neutron capture point on xz axis (mm)",1000,-10000,10000,1000,-10000,10000);
-  hNeutron_cap_tank_3D = new TH3D("hNeutron_cap_tank_3D","3D plot of the number of neutrons captures in the tank",1000,-10000,10000,1000,-10000,10000,1000,-10000,10000);
+  hNeutronCap_proj_x = new TH1F("hNeutronCap_proj_x","Projection of neutron capture point on x axis (mm)",1000,-10000,10000);
+  hNeutronCap_proj_y = new TH1F("hNeutronCap_proj_y","Projection of neutron capture point on y axis (mm)",1000,-10000,10000);
+  hNeutronCap_proj_z = new TH1F("hNeutronCap_proj_z","Projection of neutron capture point on z axis (mm)",1000,-10000,10000);
+  hNeutronCap_proj_xy = new TH2F("hNeutronCap_proj_xy","Projection of neutron capture point on xy axis (mm)",1000,-10000,10000,1000,-10000,10000);
+  hNeutronCap_proj_xz = new TH2F("hNeutronCap_proj_xz","Projection of neutron capture point on xz axis (mm)",1000,-10000,10000,1000,-10000,10000);
+  hNeutron_cap_tank_3D = new TH3F("hNeutron_cap_tank_3D","3D plot of the number of neutrons captures in the tank",100,-10000,10000,100,-10000,10000,100,-10000,10000);
   
   hNeutronCap_disp_x = new TH1F("hNeutronCap_disp_x","Displacement of neutron capture point on x axis (mm)",600,-3000,3000);
   hNeutronCap_disp_y = new TH1F("hNeutronCap_disp_y","Displacement of neutron capture point on y axis (mm)",600,-3000,3000);
@@ -238,7 +238,7 @@ void Analyzer::Loop() {
     //     chain->GetEntry(entry);
     
     ds = dsReader->GetEvent(entry);
-    
+
     // kind of progress bar...
     if (NbEntries > 10) {
       if ( entry%(NbEntries/10) == 0 ) { 
@@ -254,65 +254,66 @@ void Analyzer::Loop() {
     is_nGd = false, is_nH = false, is_mu_tag = false, is_cut_mu_track = false, is_cut_cap_edep = false, is_cut_mu_cap_DT = false, is_cut_mu_cap_DR = false, is_mu_fiducial = false, MRD_hit = false, has_pion = false;
     vMuTrack.clear(), vMuTrack_Edep.clear(), vMuTrack_volume.clear(), pparticles_trackID.clear();
     IDVector.clear(), TrackVector.clear(), NeutronTrackVector.clear(), NeutronPEMap.clear();
-    
+
     // Analysis part
     //     cout << entry << " " << ds->GetMC()->GetMCSummary()->GetTotalScintEdep()  << " " << ds->GetMC()->GetNumPE() <<  endl;
     
     //PMT loop
-//     for( size_t iPMT = 0; iPMT < ds->GetMC()->GetMCPMTCount(); iPMT++ ){
-//       if (!binary_search(broken_pmt_vec.begin(), broken_pmt_vec.end(), ds->GetMC()->GetMCPMT(iPMT)->GetID()+1)){
-// 	// 	if (job_run1 && (ds->GetMC()->GetMCPMT(iPMT)->GetID()+1 == 61 || ds->GetMC()->GetMCPMT(iPMT)->GetID()+1 == 62)) { continue;}
-// 	
-// 	hPMTID->Fill(ds->GetMC()->GetMCPMT(iPMT)->GetID()+1);
-// 	
-// 	if (job_run1){ 
-// 	  if (ds->GetMC()->GetMCPMT(iPMT)->GetID()+1 != 61 && ds->GetMC()->GetMCPMT(iPMT)->GetID()+1 != 62) {
-// 	    hPMTx->Fill(pmt_x_array_run1[ds->GetMC()->GetMCPMT(iPMT)->GetID()]);
-// 	    hPMTy->Fill(0); 
-// 	    hPMTz->Fill(pmt_z_array_run1[ds->GetMC()->GetMCPMT(iPMT)->GetID()]); 
-// 	    hPMTcard->Fill(pmt_card_array_run1[ds->GetMC()->GetMCPMT(iPMT)->GetID()]); 
-// 	    hPMTchannel->Fill(pmt_channel_array_run1[ds->GetMC()->GetMCPMT(iPMT)->GetID()]); 
-// 	    hCharge_XZ->Fill(pmt_x_array_run1[ds->GetMC()->GetMCPMT(iPMT)->GetID()],pmt_z_array_run1[ds->GetMC()->GetMCPMT(iPMT)->GetID()]);
-// 	  }
-// 	  hCharge_perPMT_run1[ds->GetMC()->GetMCPMT(iPMT)->GetID()]->Fill(ds->GetMC()->GetMCPMT(iPMT)->GetCharge());
-// 	  if (ds->GetMC()->GetMCPMT(iPMT)->GetID()+1 == 61) {
-// 	    cout << "aaa\n";
-// 	    hNumPE_NCV1->Fill(ds->GetMC()->GetMCPMT(iPMT)->GetMCPhotonCount());
-// 	    for(size_t iPhot = 0; iPhot < ds->GetMC()->GetMCPMT(iPMT)->GetMCPhotonCount(); iPhot++){
-// 	      cout << ds->GetMC()->GetMCPMT(iPMT)->GetMCPhoton(iPhot)->GetPosition().X() << " "
-// 	      << ds->GetMC()->GetMCPMT(iPMT)->GetMCPhoton(iPhot)->GetPosition().Y() << " "
-// 	      << ds->GetMC()->GetMCPMT(iPMT)->GetMCPhoton(iPhot)->GetPosition().Z() << endl;
-// 	    }
-// 	  }
-// 	  if (ds->GetMC()->GetMCPMT(iPMT)->GetID()+1 == 62) {
-// 	    cout << "bbb\n";
-// 	    hNumPE_NCV2->Fill(ds->GetMC()->GetMCPMT(iPMT)->GetMCPhotonCount());
-// 	  }
-// 	}
-// 	
-// 	if (job_run2){ 
-// 	  hCharge_perPMT_run2[ds->GetMC()->GetMCPMT(iPMT)->GetID()]->Fill(ds->GetMC()->GetMCPMT(iPMT)->GetCharge());
-// 	}
-// 	
-// 	hCharge->Fill(ds->GetMC()->GetMCPMT(iPMT)->GetCharge());
-// 	charge_tot += ds->GetMC()->GetMCPMT(iPMT)->GetCharge();
-// 	
-// 	hNHit->Fill(ds->GetMC()->GetMCPMT(iPMT)->GetMCPhotonCount());
-//       }   
-//     }
+    for( size_t iPMT = 0; iPMT < ds->GetMC()->GetMCPMTCount(); iPMT++ ){
+      if (!binary_search(broken_pmt_vec.begin(), broken_pmt_vec.end(), ds->GetMC()->GetMCPMT(iPMT)->GetID()+1)){
+	// 	if (job_run1 && (ds->GetMC()->GetMCPMT(iPMT)->GetID()+1 == 61 || ds->GetMC()->GetMCPMT(iPMT)->GetID()+1 == 62)) { continue;}
+	
+	hPMTID->Fill(ds->GetMC()->GetMCPMT(iPMT)->GetID()+1);
+	
+	if (job_run1){ 
+	  if (ds->GetMC()->GetMCPMT(iPMT)->GetID()+1 != 61 && ds->GetMC()->GetMCPMT(iPMT)->GetID()+1 != 62) {
+	    hPMTx->Fill(pmt_x_array_run1[ds->GetMC()->GetMCPMT(iPMT)->GetID()]);
+	    hPMTy->Fill(0); 
+	    hPMTz->Fill(pmt_z_array_run1[ds->GetMC()->GetMCPMT(iPMT)->GetID()]); 
+	    hPMTcard->Fill(pmt_card_array_run1[ds->GetMC()->GetMCPMT(iPMT)->GetID()]); 
+	    hPMTchannel->Fill(pmt_channel_array_run1[ds->GetMC()->GetMCPMT(iPMT)->GetID()]); 
+	    hCharge_XZ->Fill(pmt_x_array_run1[ds->GetMC()->GetMCPMT(iPMT)->GetID()],pmt_z_array_run1[ds->GetMC()->GetMCPMT(iPMT)->GetID()]);
+	  }
+	  hCharge_perPMT_run1[ds->GetMC()->GetMCPMT(iPMT)->GetID()]->Fill(ds->GetMC()->GetMCPMT(iPMT)->GetCharge());
+	  if (ds->GetMC()->GetMCPMT(iPMT)->GetID()+1 == 61) {
+	    cout << "aaa\n";
+	    hNumPE_NCV1->Fill(ds->GetMC()->GetMCPMT(iPMT)->GetMCPhotonCount());
+	    for(size_t iPhot = 0; iPhot < ds->GetMC()->GetMCPMT(iPMT)->GetMCPhotonCount(); iPhot++){
+	      cout << ds->GetMC()->GetMCPMT(iPMT)->GetMCPhoton(iPhot)->GetPosition().X() << " "
+	      << ds->GetMC()->GetMCPMT(iPMT)->GetMCPhoton(iPhot)->GetPosition().Y() << " "
+	      << ds->GetMC()->GetMCPMT(iPMT)->GetMCPhoton(iPhot)->GetPosition().Z() << endl;
+	    }
+	  }
+	  if (ds->GetMC()->GetMCPMT(iPMT)->GetID()+1 == 62) {
+	    cout << "bbb\n";
+	    hNumPE_NCV2->Fill(ds->GetMC()->GetMCPMT(iPMT)->GetMCPhotonCount());
+	  }
+	}
+	
+	if (job_run2){ 
+	  hCharge_perPMT_run2[ds->GetMC()->GetMCPMT(iPMT)->GetID()]->Fill(ds->GetMC()->GetMCPMT(iPMT)->GetCharge());
+	}
+	
+	hCharge->Fill(ds->GetMC()->GetMCPMT(iPMT)->GetCharge());
+	charge_tot += ds->GetMC()->GetMCPMT(iPMT)->GetCharge();
+	
+	hNHit->Fill(ds->GetMC()->GetMCPMT(iPMT)->GetMCPhotonCount());
+      }   
+    }
     
-//     hNbPMThit->Fill(ds->GetMC()->GetMCPMTCount());
+    hNbPMThit->Fill(ds->GetMC()->GetMCPMTCount());
     
-//     for (int iTr = 0; iTr < ds->GetMC()->GetMCTrackCount(); iTr++){
-//       if (ds->GetMC()->GetMCTrack(iTr)->GetParticleName() == "neutron" && 
-// 	ds->GetMC()->GetMCTrack(iTr)->GetLastMCTrackStep()->GetProcess() == "nCapture" && 
-// 	Abs(ds->GetMC()->GetMCTrack(iTr)->GetLastMCTrackStep()->GetEndpoint().Y()) < 1150 &&
-// 	Hypot(ds->GetMC()->GetMCTrack(iTr)->GetLastMCTrackStep()->GetEndpoint().X(),ds->GetMC()->GetMCTrack(iTr)->GetLastMCTrackStep()->GetEndpoint().Z()-1724) < 1500 ) {
-// 	  hNumPE->Fill(ds->GetMC()->GetNumPE());
-//       }
-//     }
-   /* hNumPE->Fill(ds->GetMC()->GetNumPE());
+    for (int iTr = 0; iTr < ds->GetMC()->GetMCTrackCount(); iTr++){
+      if (ds->GetMC()->GetMCTrack(iTr)->GetParticleName() == "neutron" && 
+	ds->GetMC()->GetMCTrack(iTr)->GetLastMCTrackStep()->GetProcess() == "nCapture" && 
+	Abs(ds->GetMC()->GetMCTrack(iTr)->GetLastMCTrackStep()->GetEndpoint().Y()) < 1150 &&
+	Hypot(ds->GetMC()->GetMCTrack(iTr)->GetLastMCTrackStep()->GetEndpoint().X(),ds->GetMC()->GetMCTrack(iTr)->GetLastMCTrackStep()->GetEndpoint().Z()-1724) < 1500 ) {
+	  hNumPE->Fill(ds->GetMC()->GetNumPE());
+      }
+    }
     
+    hNumPE->Fill(ds->GetMC()->GetNumPE());
+
     hCharge_tot->Fill(charge_tot);
     hScintEdep->Fill(ds->GetMC()->GetMCSummary()->GetTotalScintEdep());
     hScintEdepQuen->Fill(ds->GetMC()->GetMCSummary()->GetTotalScintEdepQuenched());
@@ -321,8 +322,8 @@ void Analyzer::Loop() {
     hScintEdep_z->Fill(ds->GetMC()->GetMCSummary()->GetTotalScintCentroid().z());
     hEdep_x->Fill(ds->GetMC()->GetMCSummary()->GetEnergyCentroid().x());
     hEdep_y->Fill(ds->GetMC()->GetMCSummary()->GetEnergyCentroid().y());
-    hEdep_z->Fill(ds->GetMC()->GetMCSummary()->GetEnergyCentroid().z());*/
-    
+    hEdep_z->Fill(ds->GetMC()->GetMCSummary()->GetEnergyCentroid().z());
+
     //     cout << ds->GetMC()->GetMCSummary()->GetEnergyLossByVolume("detector") << endl;
     
     //     for(size_t iCh = 0; iCh<ds->GetMC()->GetMCParentCount(); iCh++){ // loop on parents to get neutrino energy
@@ -336,7 +337,7 @@ void Analyzer::Loop() {
     
     nav = new RAT::TrackNav(ds);
     cursor = new RAT::TrackCursor(nav->RAT::TrackNav::Cursor(false));  //toggle human readable cursor
-    
+
     //     cout << "Parents = " << ds->GetMC()->GetMCParentCount() << endl;
     //     for(size_t iCh = 0; iCh<ds->GetMC()->GetMCParentCount(); iCh++){ cout << ds->GetMC()->GetMCParent(iCh)->GetParticleName() << endl;}
     //     cout << "Particles = " << ds->GetMC()->GetMCParticleCount() << endl;
@@ -828,7 +829,7 @@ void Analyzer::Loop() {
 	    // 	    cout << "Primary -- " << node->GetPDGCode() << endl;
 	    nucl_cap_pdg_code = to_string(node->GetPDGCode());
 	    if (ds->GetMC()->GetMCSummary()->GetTotalScintEdep() > 2) {
-// 	      hTrackDuration->Fill(node->GetGlobalTime());
+	      hTrackDuration->Fill(node->GetGlobalTime());
 	    }
 	    hTrackLength->Fill(n_end.Mag() - n_start.Mag());
 // 	    cout << nucl_cap_pdg_code << endl;
@@ -843,8 +844,8 @@ void Analyzer::Loop() {
 	    }
 	    if (TPMERegexp("100001[0-9][0-9][0-9][0-9]").Match(nucl_cap_pdg_code)) {
 	      Npcaptures_h++;
-// 	      hTrackDuration_nH->Fill(node->GetGlobalTime());
-// 	      hTrackLength_nH->Fill(n_end.Mag() - n_start.Mag());
+	      hTrackDuration_nH->Fill(node->GetGlobalTime());
+	      hTrackLength_nH->Fill(n_end.Mag() - n_start.Mag());
 	      for( Int_t jPMT = 0; jPMT < ds->GetMC()->GetMCPMTCount(); ++jPMT ){
 		if (ds->GetMC()->GetMCPMT(jPMT)->GetID()+1 == 61 || ds->GetMC()->GetMCPMT(jPMT)->GetID()+1 == 62) {
 // 		  hNHit_H->Fill(ds->GetMC()->GetMCPMT(jPMT)->GetMCPhotonCount());
@@ -853,14 +854,15 @@ void Analyzer::Loop() {
 	    } 
 	    if (TPMERegexp("100064[0-9][0-9][0-9][0-9]").Match(nucl_cap_pdg_code)) {
 	      Npcaptures_gd++;
-// 	      hTrackDuration_nGd->Fill(node->GetGlobalTime()); 
-// 	      hTrackLength_nGd->Fill(n_end.Mag() - n_start.Mag());
+	      hTrackDuration_nGd->Fill(node->GetGlobalTime()); 
+	      hTrackLength_nGd->Fill(n_end.Mag() - n_start.Mag());
 	      for( Int_t jPMT = 0; jPMT < ds->GetMC()->GetMCPMTCount(); ++jPMT ){
 		if (ds->GetMC()->GetMCPMT(jPMT)->GetID()+1 == 61 || ds->GetMC()->GetMCPMT(jPMT)->GetID()+1 == 62) {
 // 		  hNHit_Gd->Fill(ds->GetMC()->GetMCPMT(jPMT)->GetMCPhotonCount());
 		}
 	      }
-// 	      hNeutron_captured_tank->Fill(Hypot(n_start.X(),n_start.Z()-1724)*Hypot(n_start.X(),n_start.Z()-1724),n_start.Y());
+	      // Use only if you wanna see Gd captures
+	      hNeutron_captured_tank->Fill(Hypot(n_start.X(),n_start.Z()-1724)*Hypot(n_start.X(),n_start.Z()-1724),n_start.Y());
 // 	      if (ds->GetMC()->GetNumPE() > cut_cap_npe) {
 // 		hNeutron_captured_tank_NPE->Fill(Hypot(n_start.X(),n_start.Z()-1724)*Hypot(n_start.X(),n_start.Z()-1724),n_start.Y());
 // 		hNeutron_captured_tank_NPE_3D->Fill(n_start.Z(),n_start.X(),n_start.Y());
@@ -877,8 +879,8 @@ void Analyzer::Loop() {
 	    }
 // 	    hNeutron_captured_tank->Fill(Hypot(n_end.X(),n_end.Z()-1724)*Hypot(n_end.X(),n_end.Z()-1724),n_end.Y());
 	      if (ds->GetMC()->GetNumPE() > cut_cap_npe) {
-// 		hNeutron_captured_tank_NPE->Fill(Hypot(n_end.X(),n_end.Z()-1724)*Hypot(n_end.X(),n_end.Z()-1724),n_end.Y());
-// 		hNeutron_captured_tank_NPE_3D->Fill(n_end.Z(),n_end.X(),n_end.Y());
+		hNeutron_captured_tank_NPE->Fill(Hypot(n_end.X(),n_end.Z()-1724)*Hypot(n_end.X(),n_end.Z()-1724),n_end.Y());
+		hNeutron_captured_tank_NPE_3D->Fill(n_end.Z(),n_end.X(),n_end.Y());
 	      }
 	    cursor->GoParent();
 	    Npcaptures++;
@@ -904,15 +906,15 @@ void Analyzer::Loop() {
 	  //       cout << ds->GetMC()->GetMCSummary()->GetEnergyLossByVolume("ncv_liquid") << endl;
 	  //       cout << ds->GetMC()->GetMCTrack(0)->GetMCTrackStep(0)->GetVolume() << endl;
 	  
-// 	  hNeutron_shot_tank->Fill(Hypot(n_end.X(),n_end.Z()-1724)*Hypot(n_end.X(),n_end.Z()-1724),n_end.Y());
-// 	  hNeutron_shot_tank_3D->Fill(n_end.Z(),n_end.X(),n_end.Y());
+	  hNeutron_shot_tank->Fill(Hypot(n_end.X(),n_end.Z()-1724)*Hypot(n_end.X(),n_end.Z()-1724),n_end.Y());
+	  hNeutron_shot_tank_3D->Fill(n_end.Z(),n_end.X(),n_end.Y());
 	  
 	} // end of tracking loop
 	cursor->GoParent();
       }
     }
     
-    // Cleaning to avoid memory leak (because of the nav size)
+//     Cleaning to avoid memory leak (because of the nav size)
     node->Clear();
     delete cursor;
     nav->Clear(); delete nav;
@@ -926,7 +928,7 @@ void Analyzer::Loop() {
 
 // ============================================  FINALIZATION ===================================
 void Analyzer::Finalize(){
-  
+
   // Some graphical options
   gROOT->SetStyle("Plain");
   gStyle->SetTitleBorderSize(0);
@@ -953,39 +955,39 @@ void Analyzer::Finalize(){
   gStyle->SetPalette(1);
   gStyle->SetNumberContours(99);
   
-//   hNeutron_eff_tank->Divide(hNeutron_captured_tank,hNeutron_shot_tank);
-//   hNeutron_eff_tank_NPE->Divide(hNeutron_captured_tank_NPE,hNeutron_shot_tank);
-//   hNeutron_eff_tank_NPE_3D->Divide(hNeutron_captured_tank_NPE_3D,hNeutron_shot_tank_3D);
-//   hNeutronMu_eff_tank->Divide(hNeutronMu_cap_point,hNeutronMu_start_point);
-//   hNeutronMu_eff_tank_Edep->Divide(hNeutronMu_cap_point_Edep,hNeutronMu_start_point);
-//   hNeutronMu_eff_tank_NPE->Divide(hNeutronMu_cap_point_NPE,hNeutronMu_start_point);
-//   hNeutronMu_eff_tank_NPE_RhoY->Divide(hNeutronMu_cap_point_NPE_RhoY,hNeutronMu_start_point_RhoY);
-//   hNeutronMu_eff_tank_NPE_noMuCap->Divide(hNeutronMu_cap_point_NPE_noMuCap,hNeutronMu_start_point_noMuCap);
-//   hNeutronMu_eff_tank_3D->Divide(hNeutronMu_cap_point_3D,hNeutronMu_start_point_3D);
-//   hNeutronMu_eff_tank_Edep_3D->Divide(hNeutronMu_cap_point_Edep_3D,hNeutronMu_start_point_3D);
-//   hNeutronMu_eff_tank_NPE_3D->Divide(hNeutronMu_cap_point_NPE_3D,hNeutronMu_start_point_3D);
-//   hNeutronMu_eff_tank_NPE_noMuCap_3D->Divide(hNeutronMu_cap_point_NPE_noMuCap_3D,hNeutronMu_start_point_noMuCap_3D);
-//   
-  // Plotting  
-  c1 = new TCanvas("c1", "Charge and amp infos", 0,0, 1200, 1000);
-  c1->Divide(2,2);
-  c1->cd(1);
-  hCharge->DrawCopy();
-  c1->Write(); 
-  delete c1;
+  hNeutron_eff_tank->Divide(hNeutron_captured_tank,hNeutron_shot_tank);
+  hNeutron_eff_tank_NPE->Divide(hNeutron_captured_tank_NPE,hNeutron_shot_tank);
+  hNeutron_eff_tank_NPE_3D->Divide(hNeutron_captured_tank_NPE_3D,hNeutron_shot_tank_3D);
+  hNeutronMu_eff_tank->Divide(hNeutronMu_cap_point,hNeutronMu_start_point);
+  hNeutronMu_eff_tank_Edep->Divide(hNeutronMu_cap_point_Edep,hNeutronMu_start_point);
+  hNeutronMu_eff_tank_NPE->Divide(hNeutronMu_cap_point_NPE,hNeutronMu_start_point);
+  hNeutronMu_eff_tank_NPE_RhoY->Divide(hNeutronMu_cap_point_NPE_RhoY,hNeutronMu_start_point_RhoY);
+  hNeutronMu_eff_tank_NPE_noMuCap->Divide(hNeutronMu_cap_point_NPE_noMuCap,hNeutronMu_start_point_noMuCap);
+  hNeutronMu_eff_tank_3D->Divide(hNeutronMu_cap_point_3D,hNeutronMu_start_point_3D);
+  hNeutronMu_eff_tank_Edep_3D->Divide(hNeutronMu_cap_point_Edep_3D,hNeutronMu_start_point_3D);
+  hNeutronMu_eff_tank_NPE_3D->Divide(hNeutronMu_cap_point_NPE_3D,hNeutronMu_start_point_3D);
+  hNeutronMu_eff_tank_NPE_noMuCap_3D->Divide(hNeutronMu_cap_point_NPE_noMuCap_3D,hNeutronMu_start_point_noMuCap_3D);
   
-  c2 = new TCanvas("c2", "PMT infos", 0,0, 1200, 1000);
-  c2->Divide(3,2);
-  c2->cd(1);
-  hPMTx->DrawCopy();
-  c2->cd(2);
-  hPMTy->DrawCopy();
-  c2->cd(3);
-  hPMTz->DrawCopy();
-  c2->cd(4);
-  hPMTID->DrawCopy();
-  c2->Write(); 
-  delete c2;
+  // Plotting  
+//   c1 = new TCanvas("c1", "Charge and amp infos", 0,0, 1200, 1000);
+//   c1->Divide(2,2);
+//   c1->cd(1);
+//   hCharge->DrawCopy();
+//   c1->Write(); 
+//   delete c1;
+//   
+//   c2 = new TCanvas("c2", "PMT infos", 0,0, 1200, 1000);
+//   c2->Divide(3,2);
+//   c2->cd(1);
+//   hPMTx->DrawCopy();
+//   c2->cd(2);
+//   hPMTy->DrawCopy();
+//   c2->cd(3);
+//   hPMTz->DrawCopy();
+//   c2->cd(4);
+//   hPMTID->DrawCopy();
+//   c2->Write(); 
+//   delete c2;
   
   f_output->Write();
   
