@@ -7,9 +7,8 @@
 /tracking/discardParticleTrajectory opticalphoton
 
 /rat/db/set DETECTOR experiment "ANNIE"
-/rat/db/set DETECTOR geo_file "ANNIE/ANNIE_run1.geo"
-/rat/db/load ANNIE/ANNIE_NCV.geo
-/rat/db/load ANNIE/ANNIE_run1_InnerStructure.geo
+/rat/db/set DETECTOR geo_file "ANNIE/ANNIE_run2_config10.geo"
+/rat/db/load ANNIE/ANNIE_run2_InnerStructure.geo
 
 /run/initialize
 
