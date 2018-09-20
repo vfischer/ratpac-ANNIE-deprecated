@@ -105,7 +105,7 @@ void GLG4PMTSD::SimpleHit( G4int ipmt,
 			      (double)hit_polarization.y(),
 			      (double)hit_polarization.z()
 			      );
-  hit_photon->SetCount( iHitPhotonCount ); std::cout << "AA " << ipmt << " " << iHitPhotonCount << std::endl;
+  hit_photon->SetCount( iHitPhotonCount );
   hit_photon->SetTrackID( trackID );
   hit_photon->SetPrepulse( prepulse );
 
@@ -126,8 +126,6 @@ void GLG4PMTSD::EndOfEvent(G4HCofThisEvent*)
       n_hit_pmts++;
     }
   }
- std::cout << max_pmts << std::endl; 
-std::cout << "EEEEEND" << std::endl;
 }
 
 

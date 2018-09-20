@@ -60,7 +60,7 @@ GLG4PMTOpticalModel::GLG4PMTOpticalModel (G4String modelName,
   // get material properties vectors
   // ... material properties of glass
   G4MaterialPropertiesTable* glass_pt=
-    envelope_log->GetMaterial()->GetMaterialPropertiesTable(); std::cout << "\n\n\n\n\n\n\n " << envelope_log->GetDaughter(0)->GetName() << std::endl;
+    envelope_log->GetMaterial()->GetMaterialPropertiesTable();
   if (glass_pt == NULL)
     G4Exception(__FILE__, "Bad Properties", FatalException, "GLG4PMTOpticalModel: glass lacks a properties table!");
   
@@ -239,7 +239,7 @@ GLG4PMTOpticalModel::DoIt(const G4FastTrack& fastTrack, G4FastStep& fastStep)
   G4double n_glass;
   G4VSolid *envelope_solid = fastTrack.GetEnvelopeSolid();
   G4VSensitiveDetector* detector=
-    fastTrack.GetEnvelopeLogicalVolume()->GetSensitiveDetector(); //std::cout << fastTrack.GetEnvelopeSolid()->GetName() << " " << fastTrack.GetEnvelopeLogicalVolume()->GetSensitiveDetector() << std::endl;
+    fastTrack.GetEnvelopeLogicalVolume()->GetSensitiveDetector();
   enum EWhereAmI { kInGlass, kInVacuum } whereAmI;
   int ipmt= -1;
 
@@ -257,7 +257,7 @@ GLG4PMTOpticalModel::DoIt(const G4FastTrack& fastTrack, G4FastStep& fastStep)
 
   // get n_glass, _n2, _k2, etc., for this wavelength
   energy= fastTrack.GetPrimaryTrack()->GetKineticEnergy();
-//   std::cout << "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA " << ipmt << " " << pos.x() << " " << pos.y() << " " << pos.z() << " " << time << " " << 1e6*CLHEP::twopi*CLHEP::hbarc / energy << std::endl;
+  
   if ( energy == _photon_energy ) // equal to last energy?
     {
       // use old values
@@ -277,7 +277,7 @@ GLG4PMTOpticalModel::DoIt(const G4FastTrack& fastTrack, G4FastStep& fastStep)
       _n3= 1.0;     // just in case we exit before setting _n3
       _efficiency= _efficiency_photocathode->Value( energy ) * _efficiency_correction;
     }
-if(fastTrack.GetPrimaryTrack()->GetVolume() == _inner1_phys){std::cout << "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA " << ipmt << " " << pos.x() << " " << pos.y() << " " << pos.z() << " " << time << " " << 1e6*CLHEP::twopi*CLHEP::hbarc / energy << std::endl;}
+if(fastTrack.GetPrimaryTrack()->GetVolume() == _inner1_phys){
   // initialize "whereAmI"
   // we must check to see if we are in ANY of the vacuum regions
   if ( (fastTrack.GetPrimaryTrack()->GetVolume() == _inner1_phys) 
@@ -436,9 +436,6 @@ if(fastTrack.GetPrimaryTrack()->GetVolume() == _inner1_phys){std::cout << "AAAAA
 	  pos = posAtDynodeZ;
 	}
     }
-//     std::cout << fastTrack.GetPrimaryTrack()->GetVolume()->GetName() << std::endl;
-//     if(detector == NULL){std::cout << "BBBBBBBBBBBBB" << std::endl;}
-// if(detector->isActive()){std::cout << "AAAAAAAAAAAAAAA" << std::endl;}
 
     if (N_pe > 0) {
       if ( detector != NULL && detector->isActive() )
