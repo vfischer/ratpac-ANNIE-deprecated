@@ -9,6 +9,7 @@
 #define __RAT_DS_Run__
 
 #include <RAT/DS/PMTInfo.hh>
+#include <RAT/DS/LAPPDInfo.hh>
 #include <TObject.h>
 #include <vector>
 #include <time.h>
@@ -48,6 +49,22 @@ public:
   }
   virtual bool ExistPMTInfo() { return !pmtinfo.empty(); }
   virtual void PrunePMTInfo() { pmtinfo.resize(0); }
+  
+  /** LAPPD information */
+  virtual LAPPDInfo* GetLAPPDInfo() {
+    if (lappdinfo.empty()) {
+      lappdinfo.resize(1);
+    }
+    return &lappdinfo[0];
+  }
+  virtual void SetLAPPDInfo(const LAPPDInfo *_lappdinfo) {
+    if (lappdinfo.empty()) {
+      lappdinfo.resize(1);
+    }
+    lappdinfo[0] = *_lappdinfo;
+  }
+  virtual bool ExistLAPPDInfo() { return !lappdinfo.empty(); }
+  virtual void PruneLAPPDInfo() { lappdinfo.resize(0); }
 
   ClassDef(Run, 1)
 
@@ -56,6 +73,7 @@ protected:
   ULong64_t type;
   time_t startTime;
   std::vector<PMTInfo> pmtinfo;
+  std::vector<LAPPDInfo> lappdinfo;
 };
 
   } // namespace DS

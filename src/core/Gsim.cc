@@ -40,6 +40,7 @@
 #include <RAT/Config.hh>
 
 #include <RAT/GeoPMTFactoryBase.hh>
+#include <RAT/GeoLAPPDFactoryBase.hh>
 
 #include <Randomize.hh>
 #include <CLHEP/Units/SystemOfUnits.h>
@@ -512,7 +513,8 @@ void Gsim::MakeEvent(const G4Event* g4ev, DS::Root* ds) {
   summary->SetNumReemitPhoton(exinfo->numReemitPhoton);
 
   /** PMT and noise simulation */
-  GLG4HitPMTCollection* hitpmts = GLG4VEventAction::GetTheHitPMTCollection();
+  std::cout << "PIF" << std::endl;
+  GLG4HitPMTCollection* hitpmts = GLG4VEventAction::GetTheHitPMTCollection();std::cout << "PAF" << std::endl;
   int numPE = 0;
  
   double firsthittime = std::numeric_limits<double>::max();
@@ -523,20 +525,20 @@ void Gsim::MakeEvent(const G4Event* g4ev, DS::Root* ds) {
   //Map ID-INDEX for later noise calculation
   std::map<int, int> mcpmtObjects;
 
-  for (int ipmt=0; ipmt<hitpmts->GetEntries(); ipmt++) {
+  for (int ipmt=0; ipmt<hitpmts->GetEntries(); ipmt++) {std::cout << ipmt << " " << hitpmts->GetEntries() << std::endl;
     GLG4HitPMT* a_pmt= hitpmts->GetPMT(ipmt);
     a_pmt->SortTimeAscending();
-
+std::cout << "A" << std::endl;
     // Create and initialize a RAT DS::MCPMT 
     // note that GLG4HitPMTs are given IDs which are their index
-    DS::MCPMT* rat_mcpmt = mc->AddNewMCPMT();
+    DS::MCPMT* rat_mcpmt = mc->AddNewMCPMT();std::cout << "B" << std::endl;
     mcpmtObjects[a_pmt->GetID()] = mc->GetMCPMTCount()-1; //the index of the last element represents the index of the PMT we just added
-    rat_mcpmt->SetID(a_pmt->GetID());
-    rat_mcpmt->SetType(fPMTInfo->GetType(a_pmt->GetID()));
-    rat_mcpmt->SetModelName( fPMTInfo->GetModelName( fPMTInfo->GetModel(a_pmt->GetID() ) ) );
+    rat_mcpmt->SetID(a_pmt->GetID());std::cout << "B1" << std::endl;std::cout << a_pmt->GetID() << std::endl;std::cout << fPMTInfo->GetType(a_pmt->GetID()) << std::endl;
+    rat_mcpmt->SetType(fPMTInfo->GetType(a_pmt->GetID()));std::cout << "B2" << std::endl;
+    rat_mcpmt->SetModelName( fPMTInfo->GetModelName( fPMTInfo->GetModel(a_pmt->GetID() ) ) );std::cout << "B3" << std::endl;
 //     std::cout << fPMTInfo->GetModelName( fPMTInfo->GetModel(a_pmt->GetID() ) ) << std::endl;
     numPE += a_pmt->GetEntries();
-
+std::cout << "C" << std::endl;
     /** Add "real" hits from actual simulated photons */     
     for (int i=0; i<a_pmt->GetEntries(); i++) {
       if (StoreOpticalTrackID) {
@@ -545,7 +547,7 @@ void Gsim::MakeEvent(const G4Event* g4ev, DS::Root* ds) {
       else {
         AddMCPhoton(rat_mcpmt, a_pmt->GetPhoton(i), false, NULL);
       }
-
+std::cout << "D" << std::endl;
       /** Update event start and end time */
       double hittime = a_pmt->GetPhoton(i)->GetTime();
       if (hittime < firsthittime) {
@@ -560,7 +562,7 @@ void Gsim::MakeEvent(const G4Event* g4ev, DS::Root* ds) {
       }
     }
   }
-  mc->SetNumPE(numPE);
+  mc->SetNumPE(numPE);std::cout << "POUF" << std::endl;
   
   /**
    * Add noise hits

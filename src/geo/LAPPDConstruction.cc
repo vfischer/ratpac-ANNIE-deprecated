@@ -45,36 +45,40 @@ namespace RAT {
     G4LogicalVolume *body_log, *vacuum_log;
     
     body_log = new G4LogicalVolume( body_solid, fParams.glass, prefix + "_body_logic" );
+    body_log->SetSensitiveDetector(fParams.detector);
+    
     vacuum_log = new G4LogicalVolume( vacuum_solid, fParams.vacuum, prefix + "_vacuum_logic" );
-
+    vacuum_log->SetSensitiveDetector(fParams.detector);
+    
     // ------------ Physical Volumes -------------
     G4ThreeVector noTranslation(0., 0., 0.);
     
     // Place the inner solids in the glass solid to produce the physical volumes
-    vacuum_phys= new G4PVPlacement
+    inner1_phys= new G4PVPlacement
       ( 0,                   // no rotation
 	noTranslation,       // must share the same origin than the mother volume
 	                     // if we want the LAPPD optical model working properly
 	vacuum_log,          // the logical volume
-	prefix+"_vacuum_phys",         // a name for this physical volume
+	prefix+"_inner1_phys",         // a name for this physical volume
 	body_log,           // the mother volume
 	false,               // no boolean ops
 	0 );                 // copy number
 
     // Go ahead and place the cathode optical surface---this can always be done at this point
-     body_phys=0;
-//      G4LogicalBorderSurface *pc_log_surface = 
-//             new G4LogicalBorderSurface(prefix+"_photocathode_logsurf1",
-//                                vacuum_phys, body_phys,
-//                                fParams.photocathode);
+     body_phys = 0; 
+      
+      G4LogicalBorderSurface *pc_log_surface = 
+             new G4LogicalBorderSurface(prefix+"_photocathode_logsurf1",
+                                inner1_phys, body_phys,
+                                fParams.photocathode);
     // ------------ FastSimulationModel -------------
     // 28-Jul-2006 WGS: Must define a G4Region for Fast Simulations
     // (change from Geant 4.7 to Geant 4.8).
-//      G4Region* body_region = new G4Region(prefix+"_GLG4_PMTOpticalRegion");
-//      body_region->AddRootLogicalVolume(body_log);
-//      new GLG4PMTOpticalModel(prefix+"_optical_model", body_region, body_log,
-// 			    pc_log_surface, fParams.efficiencyCorrection,
-// 			     0.0, 0.0, 0.0 /*prepusling handled after absorption*/);
+     G4Region* body_region = new G4Region(prefix+"_GLG4_PMTOpticalRegion");
+     body_region->AddRootLogicalVolume(body_log);
+     new GLG4PMTOpticalModel(prefix+"_optical_model", body_region, body_log,
+			    pc_log_surface, fParams.efficiencyCorrection,
+			     0.0, 0.0, 0.0 /*prepusling handled after absorption*/);
      
     // ------------ Vis Attributes -------------
      G4VisAttributes * visAtt;
@@ -113,13 +117,13 @@ namespace RAT {
             bool booleanSolid, int copyNo) {
 
     body_phys = new G4PVPlacement(lappdrot, lappdpos, name, logi_lappd, mother_phys,  booleanSolid, copyNo);
-
+    
     // photocathode surface
-    new G4LogicalBorderSurface(name+"_photocathode_logsurf1", vacuum_phys, body_phys, fParams.photocathode);
+    //new G4LogicalBorderSurface(name+"_photocathode_logsurf1", inner1_phys, body_phys, fParams.photocathode);
 
          G4LogicalBorderSurface *pc_log_surface = 
             new G4LogicalBorderSurface(name+"_photocathode_logsurf1",
-                               vacuum_phys, body_phys,
+                               inner1_phys, body_phys,
                                fParams.photocathode);
      G4Region* body_region = new G4Region(name+"_GLG4_PMTOpticalRegion");
      body_region->AddRootLogicalVolume(body_phys->GetLogicalVolume());

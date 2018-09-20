@@ -2,6 +2,7 @@
 
 #pragma link C++ class RAT::DS::Root+;
 #pragma link C++ class RAT::DS::PMTInfo+;
+#pragma link C++ class RAT::DS::LAPPDInfo+;
 
 #pragma link C++ class RAT::DS::MC+;
 #pragma link C++ class RAT::DS::MCParticle+;
@@ -56,6 +57,7 @@
 
 #pragma link C++ class vector<RAT::DS::Root>;
 #pragma link C++ class vector<RAT::DS::PMTInfo>;
+#pragma link C++ class vector<RAT::DS::LAPPDInfo>;
 
 #pragma link C++ class vector<RAT::DS::MC>;
 #pragma link C++ class vector<RAT::DS::MCParticle>;

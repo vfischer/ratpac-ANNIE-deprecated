@@ -61,7 +61,7 @@ public:
   // physical volumes
   G4PVPlacement* body_phys;
   G4PVPlacement* glass_phys;
-  G4PVPlacement* vacuum_phys;
+  G4PVPlacement* inner1_phys;
   
   G4LogicalVolume *log_lappd;
   LAPPDConstructionParams fParams;

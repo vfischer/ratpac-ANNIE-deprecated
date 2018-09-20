@@ -159,6 +159,6 @@ photocathode_surface: "photocathode_r7081_hqe_ANNIE",
 glassThickness: 2.0, // mm
 photocathodeWidth: 200., //mm
 width: 200., //mm
-thick: 9.25, //mm
+thick: 9.25, //mm, half-z
 }
 
