@@ -57,9 +57,8 @@ Processor::Result SimpleDAQProc::DSEvent(DS::Root *ds) {
 	
 	double time = mcpmt->GetMCPhoton(0)->GetHitTime();
 	double charge = 0;
-//  	std::cout << "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA PMT ADDED\n";
+
 	for (int i=0; i < mcpmt->GetMCPhotonCount(); i++)  {
-//  	  std::cout << "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA PMT HIT\n";
 	  if (time > mcpmt->GetMCPhoton(i)->GetHitTime())
 	    time = mcpmt->GetMCPhoton(i)->GetHitTime();
 	  charge += mcpmt->GetMCPhoton(i)->GetCharge();
@@ -76,12 +75,11 @@ Processor::Result SimpleDAQProc::DSEvent(DS::Root *ds) {
 	DS::LAPPD* lappd = ev->AddNewLAPPD();
 	lappd->SetID(pmtID);
 	double lappdTime = mcpmt->GetMCPhoton(0)->GetHitTime();
-	double lappdCharge = 0;std::cout << "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA LAPPD ADDED\n";
-	for (int i=0; i < mcpmt->GetMCPhotonCount(); i++) {std::cout << "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA LAPPD HIT\n";
+	double lappdCharge = 0;
+	for (int i=0; i < mcpmt->GetMCPhotonCount(); i++) {
 	  double peCharge = mcpmt->GetMCPhoton(i)->GetCharge();
 	  double peTime = mcpmt->GetMCPhoton(i)->GetHitTime();
 	  TVector3 pePosition = mcpmt->GetMCPhoton(i)->GetPosition();
-	  std::cout << pePosition.X() << " " << pePosition.Y() << " " << pePosition.Z() << std::endl;
 	  
 	  //LAPPD single hits
 	  DS::LAPPDHit* lappdHit = lappd->AddNewHit();
