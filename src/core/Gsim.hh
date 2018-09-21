@@ -73,6 +73,8 @@ protected:
   void Init(); // the real constructor
   void AddMCPhoton(DS::MCPMT* rat_mcpmt, const GLG4HitPhoton* photon,
                    bool isDarkHit=false, EventInfo* exinfo=NULL);
+  void AddMCPhoton_lappd(DS::MCLAPPD* rat_mclappd, const GLG4HitPhoton* photon,
+                   bool isDarkHit=false, EventInfo* exinfo=NULL);
   
     /* Storing optical creation track ID and step */
   void PhotonRecurse(std::vector<int> &PhotonIDs, int trackID, int &parentID, int &firstCreatedID);

@@ -36,7 +36,7 @@ env.Default(copy_headers)
 
 #### Target: CINT dictionary for data structure classes
 cint_cls= Split('DS/Root DS/MC DS/EV DS/MCParticle DS/MCPhoton '
-                'DS/MCPMT DS/MCSummary DS/PMT '
+                'DS/MCPMT DS/MCLAPPD DS/MCSummary DS/PMT '
                 'DS/LAPPD DS/LAPPDHit '
                 'DS/RunStore DS/Run '
                 'DS/PosFit DS/PMTInfo '
@@ -65,7 +65,7 @@ env.Default(ratbin)
 
 #### Target: Shared library for ROOT
 cint_source = Split('ds/Root io/DSReader io/TrackNav io/TrackCursor '
-                    'ds/MCPMT '
+                    'ds/MCPMT ds/MCLAPPD '
                     'io/DSWriter '
                     'db/DB db/DBLink db/DBTextLoader db/DBTable '
                     'db/DBJsonLoader util/ReadFile db/HTTPDownloader '

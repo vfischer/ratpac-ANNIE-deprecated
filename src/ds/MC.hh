@@ -21,6 +21,7 @@
 #include <RAT/DS/MCTrack.hh>
 #include <RAT/DS/MCSummary.hh>
 #include <RAT/DS/MCPMT.hh>
+#include <RAT/DS/MCLAPPD.hh>
 
 namespace RAT {
   namespace DS {
@@ -95,16 +96,25 @@ public:
 
   /** List of PMTs which had at least one photoelectron generated */
   virtual MCPMT* GetMCPMT(int i) { return &pmt[i]; }
+  virtual MCLAPPD* GetMCLAPPD(int i) { return &lappd[i]; }
   virtual int GetMCPMTCount() const { return pmt.size(); }
+  virtual int GetMCLAPPDCount() const { return lappd.size(); }
   virtual MCPMT* AddNewMCPMT() {
     pmt.resize(pmt.size() + 1);
     return &pmt.back();
   };
+  virtual MCLAPPD* AddNewMCLAPPD() {
+    lappd.resize(lappd.size() + 1);
+    return &lappd.back();
+  };
   virtual void PrunePMT() { pmt.resize(0); }
+  virtual void PruneLAPPD() { lappd.resize(0); }
 
   /** Total number of photoelectrons generated in this event */
   virtual int GetNumPE() const { return numPE; }
   virtual void SetNumPE(int _numPE) { numPE = _numPE; }
+  virtual int GetNumPE_lappd() const { return numPE_lappd; }
+  virtual void SetNumPE_lappd(int _numPE_lappd) { numPE_lappd = _numPE_lappd; }
 
   /** Total number of "dark" photoelectrons generated in this event */
   virtual int GetNumDark() const { return numDarkHits; }
@@ -125,6 +135,7 @@ public:
 protected:
   int id;
   int numPE;
+  int numPE_lappd;
   int numDarkHits;
   TTimeStamp utc;
   std::vector<MCSummary> summary;
@@ -132,6 +143,7 @@ protected:
   std::vector<MCParticle> parent;
   std::vector<MCTrack> track;
   std::vector<MCPMT> pmt;
+  std::vector<MCLAPPD> lappd;
 };
 
   } // namespace DS

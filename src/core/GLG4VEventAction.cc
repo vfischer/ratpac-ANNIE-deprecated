@@ -30,6 +30,7 @@
 
 //GLG4HitPhotonCollection GLG4VEventAction :: theHitPhotons= GLG4HitPhotonCollection();
 GLG4HitPMTCollection GLG4VEventAction :: theHitPMTCollection= GLG4HitPMTCollection();
+GLG4HitPMTCollection GLG4VEventAction :: theHitLAPPDCollection= GLG4HitPMTCollection();
 G4bool GLG4VEventAction :: flagFullOutputMode = false;
 G4bool GLG4VEventAction :: fgDoParameterizedScintillation = true;
 
@@ -134,6 +135,7 @@ void GLG4VEventAction::BeginOfEventAction(const G4Event* )
   GLG4Scint::ResetTotEdep();
   // clearing theHitPMTCollection clears away the HitPhotons and HitPMTs
   theHitPMTCollection.Clear(); 
+  theHitLAPPDCollection.Clear();
   Clear();  
 }
 

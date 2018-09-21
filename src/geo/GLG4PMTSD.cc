@@ -113,6 +113,56 @@ void GLG4PMTSD::SimpleHit( G4int ipmt,
   GLG4VEventAction::GetTheHitPMTCollection()->DetectPhoton(hit_photon);
 }
 
+// Same SimpleHit function but for LAPPD hits
+void GLG4PMTSD::SimpleHit_LAPPD( G4int ilappd,
+			   G4double time,
+			   G4double kineticEnergy,
+			   const G4ThreeVector &hit_position,
+			   const G4ThreeVector &hit_momentum,
+			   const G4ThreeVector &hit_polarization,
+			   G4int iHitPhotonCount,
+			   G4int trackID,
+			   G4bool prepulse )
+{
+  G4int lappd_index = ilappd - pmt_no_offset;
+  if (lappd_index < 0 || lappd_index >= max_pmts)
+    {
+      G4cerr << "Error: GLG4PMTSD::SimpleHit [" << GetName() << "] passed ilappd="
+	     << ilappd << ", but max_pmts=" << max_pmts
+	     << " and offset=" << pmt_no_offset << " !" << G4endl;
+      return;
+    }
+  
+  hit_sum[lappd_index]+= iHitPhotonCount;
+
+  // create new GLG4HitPhoton, the way of recording photo hits on PMTs
+  GLG4HitPhoton* hit_photon = new GLG4HitPhoton();
+  hit_photon->SetPMTID((int)ilappd);
+  hit_photon->SetTime((double) time );
+  hit_photon->SetKineticEnergy((double) kineticEnergy );
+  hit_photon->SetPosition( 
+			  (double)hit_position.x(),
+			  (double)hit_position.y(),
+			  (double)hit_position.z()
+			  );
+  hit_photon->SetMomentum( 
+			  (double)hit_momentum.x(),
+			  (double)hit_momentum.y(),
+			  (double)hit_momentum.z()
+			  );
+  hit_photon->SetPolarization( 
+			      (double)hit_polarization.x(),
+			      (double)hit_polarization.y(),
+			      (double)hit_polarization.z()
+			      );
+  hit_photon->SetCount( iHitPhotonCount );
+  hit_photon->SetTrackID( trackID );
+  hit_photon->SetPrepulse( prepulse );
+
+  //  GLG4VEventAction::GetTheHitPhotons()->AddHitPhoton(hit_photon);
+  GLG4VEventAction::GetTheHitLAPPDCollection()->DetectPhoton(hit_photon);
+}
+
 
 void GLG4PMTSD::EndOfEvent(G4HCofThisEvent*)
 {

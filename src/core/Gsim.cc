@@ -591,6 +591,87 @@ void Gsim::MakeEvent(const G4Event* g4ev, DS::Root* ds) {
     }
     AddMCPhoton(mc->GetMCPMT(mcpmtObjects[pmtid]), hit, true, (StoreOpticalTrackID ? exinfo : NULL));
   }
+  
+  
+  /** LAPPD and noise simulation */
+  GLG4HitPMTCollection* hitlappds = GLG4VEventAction::GetTheHitLAPPDCollection();
+  int numPE_lappd = 0;
+ 
+  double firsthittime_lappd = std::numeric_limits<double>::max();
+  double lasthittime_lappd = std::numeric_limits<double>::min();
+
+  // Get the PMT type for IDPMTs. Then in the loop,
+  // increment numPE only when the PE is in an IDPMT.
+  //Map ID-INDEX for later noise calculation
+  std::map<int, int> mclappdObjects;
+
+  for (int ilappd=0; ilappd<hitlappds->GetEntries(); ilappd++) {
+    GLG4HitPMT* a_lappd= hitlappds->GetPMT(ilappd);
+    a_lappd->SortTimeAscending();
+
+    // Create and initialize a RAT DS::MCPMT 
+    // note that GLG4HitPMTs are given IDs which are their index
+    DS::MCLAPPD* rat_mclappd = mc->AddNewMCLAPPD();
+    mclappdObjects[a_lappd->GetID()] = mc->GetMCPMTCount()-1; //the index of the last element represents the index of the lappd we just added
+    rat_mclappd->SetID(a_lappd->GetID());
+    rat_mclappd->SetType(fPMTInfo->GetType(a_lappd->GetID()));
+    rat_mclappd->SetModelName( fPMTInfo->GetModelName( fPMTInfo->GetModel(a_lappd->GetID() ) ) );
+    numPE_lappd += a_lappd->GetEntries();
+
+    /** Add "real" hits from actual simulated photons */     
+    for (int i=0; i<a_lappd->GetEntries(); i++) {
+      if (StoreOpticalTrackID) {
+        AddMCPhoton_lappd(rat_mclappd, a_lappd->GetPhoton(i), false, exinfo);
+      }
+      else {
+        AddMCPhoton_lappd(rat_mclappd, a_lappd->GetPhoton(i), false, NULL);
+      }
+
+      /** Update event start and end time */
+      double hittime_lappd = a_lappd->GetPhoton(i)->GetTime();
+      if (hittime_lappd < firsthittime_lappd) {
+        firsthittime_lappd = hittime_lappd;
+        if (i != 0) {
+          detail << "Gsim: " << i
+                 << "th photon has earliest hit time" << newline;
+        }
+      }
+      if (hittime_lappd > lasthittime_lappd) {
+        lasthittime_lappd = hittime_lappd;
+      }
+    }
+  }
+  mc->SetNumPE_lappd(numPE_lappd);
+  
+  /**
+   * Add noise hits
+   *
+   * Generate noise hits in a `noise window' which extends from the first
+   * to last photon hits.
+   */
+//   double noiseWindowWidth = lasthittime - firsthittime;
+//   size_t pmtcount = fPMTInfo->GetPMTCount();
+//   double channelRate = noiseRate * noiseWindowWidth;
+//   double detectorWideRate = channelRate * pmtcount / channelEfficiency;
+//   int noiseHits = static_cast<int>(floor(CLHEP::RandPoisson::shoot(detectorWideRate)));
+// 
+//   for (int ihit=0; ihit<noiseHits; ihit++) {
+//     GLG4HitPhoton* hit = new GLG4HitPhoton();
+//     int lappdid = static_cast<int>(G4UniformRand() * pmtcount);
+//     hit->SetPMTID(lappdid);
+//     hit->SetTime(firsthittime + G4UniformRand() * noiseWindowWidth);
+//     hit->SetCount(1);
+//     //hit->SetIsNoise();
+//     // Add the PMT if it did not register a "real" hit
+//     if (!mclappdObjects.count(lappdid)) {
+//       DS::MCLAPPD* rat_mclappd = mc->AddNewMCPMT();
+//       mclappdObjects[lappdid] = mc->GetMCPMTCount()-1; //at this point the size represent the index
+//       rat_mclappd->SetID(lappdid);
+//       rat_mclappd->SetType(fPMTInfo->GetType(lappdid));
+//     }
+//     AddMCPhoton(mc->GetMCPMT(mclappdObjects[lappdid]), hit, true, (StoreOpticalTrackID ? exinfo : NULL));
+//   }
+  
 }
 
 void Gsim::AddMCPhoton(DS::MCPMT* rat_mcpmt, const GLG4HitPhoton* photon,
@@ -621,6 +702,36 @@ void Gsim::AddMCPhoton(DS::MCPMT* rat_mcpmt, const GLG4HitPhoton* photon,
   rat_mcphoton->SetHitTime(photon->GetTime());
   rat_mcphoton->SetFrontEndTime(fPMTTime[fPMTInfo->GetModel(rat_mcpmt->GetID())]->PickTime(photon->GetTime()));
   rat_mcphoton->SetCharge(fPMTCharge[fPMTInfo->GetModel(rat_mcpmt->GetID())]->PickCharge());
+}
+
+void Gsim::AddMCPhoton_lappd(DS::MCLAPPD* rat_mclappd, const GLG4HitPhoton* photon,
+                       bool isDarkHit, EventInfo* /*exinfo*/) {
+  DS::MCPhoton* rat_mcphoton = rat_mclappd->AddNewMCPhoton();
+  rat_mcphoton->SetDarkHit(isDarkHit);
+
+  // parameters relevant only for actual photon hits, not noise hits
+  if (!isDarkHit) {
+    rat_mcphoton->SetLambda(photon->GetWavelength());
+    float x,y,z;
+    photon->GetPosition(x,y,z);
+    rat_mcphoton->SetPosition(TVector3(x,y,z));
+    photon->GetMomentum(x,y,z);
+    rat_mcphoton->SetMomentum(TVector3(x,y,z));
+    photon->GetPolarization(x,y,z);
+    rat_mcphoton->SetPolarization(TVector3(x,y,z));
+    rat_mcphoton->SetTrackID(photon->GetTrackID());
+  }
+  else {
+    // default values
+    rat_mcphoton->SetLambda(0.0);
+    rat_mcphoton->SetPosition(TVector3(0,0,0));
+    rat_mcphoton->SetMomentum(TVector3(0,0,0));
+    rat_mcphoton->SetPolarization(TVector3(0,0,0));
+    rat_mcphoton->SetTrackID(-1);
+  }
+  rat_mcphoton->SetHitTime(photon->GetTime());
+  rat_mcphoton->SetFrontEndTime(fPMTTime[fPMTInfo->GetModel(rat_mclappd->GetID())]->PickTime(photon->GetTime()));
+  rat_mcphoton->SetCharge(fPMTCharge[fPMTInfo->GetModel(rat_mclappd->GetID())]->PickCharge());
 }
 
 void Gsim::SetStoreParticleTraj(const G4String& particleName,

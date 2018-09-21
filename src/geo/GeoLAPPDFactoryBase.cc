@@ -157,8 +157,7 @@ G4VPhysicalVolume *GeoLAPPDFactoryBase::ConstructLAPPDs(DBLinkPtr table,
 
 //   // LAPPD sensitive detector
   G4SDManager* fSDman = G4SDManager::GetSDMpointer();  
-  GLG4PMTSD* lappdSDInner= new GLG4PMTSD(sensitive_detector_name, end_idx-start_idx+1, lappdinfo.GetPMTCount(), -1 /* evidently unused? */);
-  
+  GLG4PMTSD* lappdSDInner= new GLG4PMTSD(sensitive_detector_name, end_idx-start_idx+1, lappdinfo.GetPMTCount(), -1 /* evidently unused? */);  
   fSDman->AddNewDetector(lappdSDInner);
   lappdParam.detector = lappdSDInner;
   

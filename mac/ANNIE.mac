@@ -60,8 +60,8 @@
 
 /generator/add combo pbomb:point
 #/generator/pos/set ^detector_virtual*|^ncv*
-/generator/vtx/set 1000 400
-/generator/pos/set 0 0 1724 #center of tank
+/generator/vtx/set 100 400
+/generator/pos/set 0 1500 1724 #center of tank
 #/generator/vtx/set e- 0 0 0 5
 
 /run/beamOn 100

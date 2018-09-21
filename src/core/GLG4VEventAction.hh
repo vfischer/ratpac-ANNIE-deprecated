@@ -58,11 +58,13 @@ public:
 
   //  static GLG4HitPhotonCollection*  GetTheHitPhotons() { return &theHitPhotons; }
   static GLG4HitPMTCollection*  GetTheHitPMTCollection() { return &theHitPMTCollection; }
+  static GLG4HitPMTCollection*  GetTheHitLAPPDCollection() { return &theHitLAPPDCollection; }
   static G4bool GetDoParameterizedScintillation() { return fgDoParameterizedScintillation; }
 
 protected:
   //  static GLG4HitPhotonCollection theHitPhotons;
   static GLG4HitPMTCollection theHitPMTCollection;
+  static GLG4HitPMTCollection theHitLAPPDCollection;
   
   static G4bool flagFullOutputMode;
   G4String drawFlag;

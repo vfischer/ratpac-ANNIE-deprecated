@@ -277,7 +277,7 @@ GLG4PMTOpticalModel::DoIt(const G4FastTrack& fastTrack, G4FastStep& fastStep)
       _n3= 1.0;     // just in case we exit before setting _n3
       _efficiency= _efficiency_photocathode->Value( energy ) * _efficiency_correction;
     }
-if(fastTrack.GetPrimaryTrack()->GetVolume() == _inner1_phys){
+
   // initialize "whereAmI"
   // we must check to see if we are in ANY of the vacuum regions
   if ( (fastTrack.GetPrimaryTrack()->GetVolume() == _inner1_phys) 
@@ -438,8 +438,9 @@ if(fastTrack.GetPrimaryTrack()->GetVolume() == _inner1_phys){
     }
 
     if (N_pe > 0) {
-      if ( detector != NULL && detector->isActive() )
-	((GLG4PMTSD *)detector)->SimpleHit( ipmt,
+      if ( detector != NULL && detector->isActive() ) {
+	if (detector->GetFullPathName().contains("lappd")) {
+	  ((GLG4PMTSD *)detector)->SimpleHit_LAPPD( ipmt,
 					    time,
 					    energy,
 					    pos,
@@ -448,6 +449,18 @@ if(fastTrack.GetPrimaryTrack()->GetVolume() == _inner1_phys){
 					    N_pe,
 					    fastTrack.GetPrimaryTrack()->GetTrackID(),
 					    prepulse);
+	} else {
+	  ((GLG4PMTSD *)detector)->SimpleHit( ipmt,
+					    time,
+					    energy,
+					    pos,
+					    dir,
+					    pol,
+					    N_pe,
+					    fastTrack.GetPrimaryTrack()->GetTrackID(),
+					    prepulse); 
+	}
+      }
       if(prepulse)
 	break;
       if (_verbosity >= 2) {
