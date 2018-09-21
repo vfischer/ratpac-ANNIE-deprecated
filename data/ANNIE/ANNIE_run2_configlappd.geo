@@ -130,25 +130,25 @@ orientation: "manual",
 } 
 
 // Side ring 7
-{ 
-name: "GEO", 
-index: "side_ring_7_lappd", 
-enable: 1,
-valid_begin: [0, 0], 
-valid_end: [0, 0], 
-mother: "detector", 
-type: "lappdarray", 
-lappd_model: "lappd_test", 
-lappd_detector_type: "idlappd",
-sensitive_detector: "/mydet/pmt/inner_lappd", 
-efficiency_correction: 1.000,  
-pos_table: "LAPPDINFO_test", //generated on the fly
-start_idx: 0, //index of first inner pmt
-end_idx: 8, //index of last inner pmt
-orientation: "point",
-orient_point: [0.0, 0.0, 1375.4],
-// orient_point: [0.0, 0.0, -133.3],  
-} 
+// { 
+// name: "GEO", 
+// index: "side_ring_7_lappd", 
+// enable: 1,
+// valid_begin: [0, 0], 
+// valid_end: [0, 0], 
+// mother: "detector", 
+// type: "lappdarray", 
+// lappd_model: "lappd_test", 
+// lappd_detector_type: "idlappd",
+// sensitive_detector: "/mydet/pmt/inner_lappd", 
+// efficiency_correction: 1.000,  
+// pos_table: "LAPPDINFO_test", //generated on the fly
+// start_idx: 0, //index of first inner pmt
+// end_idx: 8, //index of last inner pmt
+// orientation: "point",
+// orient_point: [0.0, 0.0, 1375.4],
+// // orient_point: [0.0, 0.0, -133.3],  
+// } 
 
 /////////////////////////////////////////////////////////////////////
 ///////////********** End of PMT arrays ***********//////////////////

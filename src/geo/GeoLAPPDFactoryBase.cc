@@ -30,7 +30,7 @@ using namespace std;
 
 namespace RAT {
 
-DS::PMTInfo GeoLAPPDFactoryBase::lappdinfo;
+DS::LAPPDInfo GeoLAPPDFactoryBase::lappdinfo;
 
 G4VPhysicalVolume *GeoLAPPDFactoryBase::ConstructLAPPDs(DBLinkPtr table, 
                        std::vector<double> lappd_x, std::vector<double> lappd_y, std::vector<double> lappd_z)
@@ -157,7 +157,7 @@ G4VPhysicalVolume *GeoLAPPDFactoryBase::ConstructLAPPDs(DBLinkPtr table,
 
 //   // LAPPD sensitive detector
   G4SDManager* fSDman = G4SDManager::GetSDMpointer();  
-  GLG4PMTSD* lappdSDInner= new GLG4PMTSD(sensitive_detector_name, end_idx-start_idx+1, lappdinfo.GetPMTCount(), -1 /* evidently unused? */);  
+  GLG4PMTSD* lappdSDInner= new GLG4PMTSD(sensitive_detector_name, end_idx-start_idx+1, lappdinfo.GetLAPPDCount(), -1 /* evidently unused? */);  
   fSDman->AddNewDetector(lappdSDInner);
   lappdParam.detector = lappdSDInner;
   
@@ -327,7 +327,7 @@ G4VPhysicalVolume *GeoLAPPDFactoryBase::ConstructLAPPDs(DBLinkPtr table,
   // Place physical LAPPDs
   // idx - the element of the particular set of arrays we are reading
   // id - the nth lappd that GeoLAPPDFactoryBase has built
-  for (int idx = start_idx, id = lappdinfo.GetPMTCount(); idx <= end_idx; idx++, id++) {
+  for (int idx = start_idx, id = lappdinfo.GetLAPPDCount(); idx <= end_idx; idx++, id++) {
 
     string lappdname = volume_name + ::to_string(id); //internally LAPPDs are represented by the nth lappd built, not lappdid
     
@@ -348,7 +348,7 @@ G4VPhysicalVolume *GeoLAPPDFactoryBase::ConstructLAPPDs(DBLinkPtr table,
 
     // Write the real (perhaps calculated) LAPPD positions and directions.
     // This goes into the DS by way of Gsim
-    lappdinfo.AddPMT(
+    lappdinfo.AddLAPPD(
         TVector3(lappdpos.x(), lappdpos.y(), lappdpos.z()),
         TVector3(lappddir.x(), lappddir.y(), lappddir.z()),
         lappd_type[idx],

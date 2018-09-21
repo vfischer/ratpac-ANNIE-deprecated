@@ -181,10 +181,15 @@ void Gsim::BeginOfRunAction(const G4Run* /*aRun*/) {
 
   DS::Run* run = DS::RunStore::GetRun(runID);
   fPMTInfo = run->GetPMTInfo();
+  fLAPPDInfo = run->GetLAPPDInfo();
   
   for (size_t i = 0; i < fPMTTime.size(); i++) {
     delete fPMTTime[i];
     delete fPMTCharge[i];
+  }
+  for (size_t i = 0; i < fLAPPDTime.size(); i++) {
+    delete fLAPPDTime[i];
+    delete fLAPPDCharge[i];
   }
   
   const size_t numModels = fPMTInfo->GetModelCount();
@@ -203,6 +208,25 @@ void Gsim::BeginOfRunAction(const G4Run* /*aRun*/) {
     } catch (DBNotFoundError& e) {
       //fallback to MiniCleanPMTCharge if nothing else avaliable
       fPMTCharge[i] = new RAT::MiniCleanPMTCharge();
+    }
+  }
+  
+  const size_t numModels_lappd = fLAPPDInfo->GetModelCount();
+  fLAPPDTime.resize(numModels_lappd);
+  fLAPPDCharge.resize(numModels_lappd);  
+  for (size_t i = 0; i < numModels_lappd; i++) {
+    const std::string modelName_lappd = fLAPPDInfo->GetModelName(i);
+    try {
+      fLAPPDTime[i] = new RAT::PDFPMTTime(modelName_lappd);
+    } catch (DBNotFoundError& e) {
+      //fallback to default table if model is not available
+      fLAPPDTime[i] = new RAT::PDFPMTTime();
+    }
+    try {
+      fLAPPDCharge[i] = new RAT::PDFPMTCharge(modelName_lappd);
+    } catch (DBNotFoundError& e) {
+      //fallback to MiniCleanPMTCharge if nothing else avaliable
+      fLAPPDCharge[i] = new RAT::MiniCleanPMTCharge();
     }
   }
 
@@ -413,6 +437,7 @@ void Gsim::MakeRun(int _runID) {
   run->SetType((unsigned) lrun->GetI("runtype"));
 
   run->SetPMTInfo(&GeoPMTFactoryBase::GetPMTInfo());
+  run->SetLAPPDInfo(&GeoLAPPDFactoryBase::GetLAPPDInfo());
 
   DS::RunStore::AddNewRun(run);
 }
@@ -614,8 +639,8 @@ void Gsim::MakeEvent(const G4Event* g4ev, DS::Root* ds) {
     DS::MCLAPPD* rat_mclappd = mc->AddNewMCLAPPD();
     mclappdObjects[a_lappd->GetID()] = mc->GetMCPMTCount()-1; //the index of the last element represents the index of the lappd we just added
     rat_mclappd->SetID(a_lappd->GetID());
-    rat_mclappd->SetType(fPMTInfo->GetType(a_lappd->GetID()));
-    rat_mclappd->SetModelName( fPMTInfo->GetModelName( fPMTInfo->GetModel(a_lappd->GetID() ) ) );
+    rat_mclappd->SetType(fLAPPDInfo->GetType(a_lappd->GetID()));
+    rat_mclappd->SetModelName( fLAPPDInfo->GetModelName( fLAPPDInfo->GetModel(a_lappd->GetID() ) ) );
     numPE_lappd += a_lappd->GetEntries();
 
     /** Add "real" hits from actual simulated photons */     
@@ -650,7 +675,7 @@ void Gsim::MakeEvent(const G4Event* g4ev, DS::Root* ds) {
    * to last photon hits.
    */
 //   double noiseWindowWidth = lasthittime - firsthittime;
-//   size_t pmtcount = fPMTInfo->GetPMTCount();
+//   size_t pmtcount = fLAPPDInfo->GetPMTCount();
 //   double channelRate = noiseRate * noiseWindowWidth;
 //   double detectorWideRate = channelRate * pmtcount / channelEfficiency;
 //   int noiseHits = static_cast<int>(floor(CLHEP::RandPoisson::shoot(detectorWideRate)));
@@ -667,7 +692,7 @@ void Gsim::MakeEvent(const G4Event* g4ev, DS::Root* ds) {
 //       DS::MCLAPPD* rat_mclappd = mc->AddNewMCPMT();
 //       mclappdObjects[lappdid] = mc->GetMCPMTCount()-1; //at this point the size represent the index
 //       rat_mclappd->SetID(lappdid);
-//       rat_mclappd->SetType(fPMTInfo->GetType(lappdid));
+//       rat_mclappd->SetType(fLAPPDInfo->GetType(lappdid));
 //     }
 //     AddMCPhoton(mc->GetMCPMT(mclappdObjects[lappdid]), hit, true, (StoreOpticalTrackID ? exinfo : NULL));
 //   }
