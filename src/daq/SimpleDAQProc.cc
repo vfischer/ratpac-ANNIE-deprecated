@@ -48,10 +48,7 @@ Processor::Result SimpleDAQProc::DSEvent(DS::Root *ds) {
       // Write directly to calibrated waveform branch
       
       // Need at least one photon to trigger
-      
-      //PMTs
-      if(constructionType != "lappd"){
-	
+
 	DS::PMT* pmt = ev->AddNewPMT();
 	pmt->SetID(pmtID);
 	
@@ -68,35 +65,41 @@ Processor::Result SimpleDAQProc::DSEvent(DS::Root *ds) {
 	
 	pmt->SetTime(time);
 	pmt->SetCharge(charge);
-	
       }
-      //LAPPDs
-      else{
+  }
+  
+  for (int imclappd=0; imclappd < mc->GetMCLAPPDCount(); imclappd++) {
+      DS::MCLAPPD *mclappd = mc->GetMCLAPPD(imclappd);
+      int lappdID = mclappd->GetID();
+
+      if (mclappd->GetMCPhotonCount() > 0) {
+      //Get PMT construction type
+      DBLinkPtr llappd = DB::Get()->GetLink("PMT",mclappd->GetModelName());
+      std::string constructionType = llappd->GetS("construction");
+      
+      // Create one sample, hit time is determined by first hit,
+      // "infinite" charge integration time
+      // WARNING: gets multiphoton effect right, but not walk correction
+      // Write directly to calibrated waveform branch
+      
+      // Need at least one photon to trigger
+
 	DS::LAPPD* lappd = ev->AddNewLAPPD();
-	lappd->SetID(pmtID);
-	double lappdTime = mcpmt->GetMCPhoton(0)->GetHitTime();
-	double lappdCharge = 0;
-	for (int i=0; i < mcpmt->GetMCPhotonCount(); i++) {
-	  double peCharge = mcpmt->GetMCPhoton(i)->GetCharge();
-	  double peTime = mcpmt->GetMCPhoton(i)->GetHitTime();
-	  TVector3 pePosition = mcpmt->GetMCPhoton(i)->GetPosition();
-	  
-	  //LAPPD single hits
-	  DS::LAPPDHit* lappdHit = lappd->AddNewHit();
-	  lappdHit->SetCharge(peCharge);
-	  lappdHit->SetTime(peTime);
-	  lappdHit->SetPosition(pePosition);
-	  
-	  //LAPPD absolute values
-	  if (peTime < lappdTime) lappdTime = peTime;
-	  lappdCharge += peCharge;
+	lappd->SetID(lappdID);
+	
+	double time = mclappd->GetMCPhoton(0)->GetHitTime();
+	double charge = 0;
+
+	for (int i=0; i < mclappd->GetMCPhotonCount(); i++)  {
+	  if (time > mclappd->GetMCPhoton(i)->GetHitTime())
+	    time = mclappd->GetMCPhoton(i)->GetHitTime();
+	  charge += mclappd->GetMCPhoton(i)->GetCharge();
 	}
 	
-	totalQ += lappdCharge;
-	lappd->SetTotalTime(lappdTime);
-	lappd->SetTotalCharge(lappdCharge);
+	totalQ += charge;
 	
-	}
+	lappd->SetTotalTime(time);
+	lappd->SetTotalCharge(charge);
       }
   }
 

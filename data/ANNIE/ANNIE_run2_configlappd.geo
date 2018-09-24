@@ -93,62 +93,62 @@ drawstyle: "solid"
 /////////////////////////////////////////////////////////////////////
 ///////////////********** PMT arrays ***********/////////////////////
 /////////////////////////////////////////////////////////////////////
-{ 
-name: "GEO", 
-index: "bottom_pmts", 
-enable: 1,
-valid_begin: [0, 0], 
-valid_end: [0, 0], 
-mother: "detector", 
-type: "pmtarray", 
-pmt_model: "r7081_ANNIE", // LUX 10inch
-pmt_detector_type: "idpmt",
-sensitive_detector: "/mydet/pmt/inner", 
-efficiency_correction: 1.000,  
-pos_table: "PMTINFO_run2_bottomgrid", //generated on the fly
-// start_idx: 0, //index of first inner pmt
-// end_idx: 19, //index of last inner pmt
-orientation: "manual",
-} 
-
-{ 
-name: "GEO", 
-index: "top_pmts", 
-enable: 1,
-valid_begin: [0, 0], 
-valid_end: [0, 0], 
-mother: "detector", 
-type: "pmtarray", 
-pmt_model: "d784kflb", //ETEL 11inch
-pmt_detector_type: "idpmt",
-sensitive_detector: "/mydet/pmt/inner_pmt", 
-efficiency_correction: 1.000,  
-pos_table: "PMTINFO_run2_topgrid", //generated on the fly
-start_idx: 0, //index of first inner pmt
-end_idx: 21, //index of last inner pmt
-orientation: "manual",
-} 
-
-// Side ring 7
 // { 
 // name: "GEO", 
-// index: "side_ring_7_lappd", 
+// index: "bottom_pmts", 
 // enable: 1,
 // valid_begin: [0, 0], 
 // valid_end: [0, 0], 
 // mother: "detector", 
-// type: "lappdarray", 
-// lappd_model: "lappd_test", 
-// lappd_detector_type: "idlappd",
-// sensitive_detector: "/mydet/pmt/inner_lappd", 
+// type: "pmtarray", 
+// pmt_model: "r7081_ANNIE", // LUX 10inch
+// pmt_detector_type: "idpmt",
+// sensitive_detector: "/mydet/pmt/inner", 
 // efficiency_correction: 1.000,  
-// pos_table: "LAPPDINFO_test", //generated on the fly
+// pos_table: "PMTINFO_run2_bottomgrid", //generated on the fly
+// // start_idx: 0, //index of first inner pmt
+// // end_idx: 19, //index of last inner pmt
+// orientation: "manual",
+// } 
+// 
+// { 
+// name: "GEO", 
+// index: "top_pmts", 
+// enable: 1,
+// valid_begin: [0, 0], 
+// valid_end: [0, 0], 
+// mother: "detector", 
+// type: "pmtarray", 
+// pmt_model: "d784kflb", //ETEL 11inch
+// pmt_detector_type: "idpmt",
+// sensitive_detector: "/mydet/pmt/inner", 
+// efficiency_correction: 1.000,  
+// pos_table: "PMTINFO_run2_topgrid", //generated on the fly
+// // start_idx: 0, //index of first inner pmt
+// // end_idx: 21, //index of last inner pmt
+// orientation: "manual",
+// } 
+
+// Side ring 7
+{ 
+name: "GEO", 
+index: "side_ring_7_lappd", 
+enable: 1,
+valid_begin: [0, 0], 
+valid_end: [0, 0], 
+mother: "detector", 
+type: "lappdarray", 
+lappd_model: "lappd_test", 
+lappd_detector_type: "idlappd",
+sensitive_detector: "/mydet/pmt/inner_lappd", 
+efficiency_correction: 1.000,  
+pos_table: "LAPPDINFO_test", //generated on the fly
 // start_idx: 0, //index of first inner pmt
 // end_idx: 8, //index of last inner pmt
-// orientation: "point",
-// orient_point: [0.0, 0.0, 1375.4],
-// // orient_point: [0.0, 0.0, -133.3],  
-// } 
+orientation: "point",
+orient_point: [0.0, 0.0, 1375.4],
+// orient_point: [0.0, 0.0, -133.3],  
+} 
 
 /////////////////////////////////////////////////////////////////////
 ///////////********** End of PMT arrays ***********//////////////////

@@ -755,8 +755,8 @@ void Gsim::AddMCPhoton_lappd(DS::MCLAPPD* rat_mclappd, const GLG4HitPhoton* phot
     rat_mcphoton->SetTrackID(-1);
   }
   rat_mcphoton->SetHitTime(photon->GetTime());
-  rat_mcphoton->SetFrontEndTime(fPMTTime[fPMTInfo->GetModel(rat_mclappd->GetID())]->PickTime(photon->GetTime()));
-  rat_mcphoton->SetCharge(fPMTCharge[fPMTInfo->GetModel(rat_mclappd->GetID())]->PickCharge());
+  rat_mcphoton->SetFrontEndTime(fLAPPDTime[fLAPPDInfo->GetModel(rat_mclappd->GetID())]->PickTime(photon->GetTime()));
+  rat_mcphoton->SetCharge(fLAPPDCharge[fLAPPDInfo->GetModel(rat_mclappd->GetID())]->PickCharge());
 }
 
 void Gsim::SetStoreParticleTraj(const G4String& particleName,
