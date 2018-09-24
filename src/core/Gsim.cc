@@ -674,28 +674,28 @@ void Gsim::MakeEvent(const G4Event* g4ev, DS::Root* ds) {
    * Generate noise hits in a `noise window' which extends from the first
    * to last photon hits.
    */
-//   double noiseWindowWidth = lasthittime - firsthittime;
-//   size_t pmtcount = fLAPPDInfo->GetPMTCount();
-//   double channelRate = noiseRate * noiseWindowWidth;
-//   double detectorWideRate = channelRate * pmtcount / channelEfficiency;
-//   int noiseHits = static_cast<int>(floor(CLHEP::RandPoisson::shoot(detectorWideRate)));
-// 
-//   for (int ihit=0; ihit<noiseHits; ihit++) {
-//     GLG4HitPhoton* hit = new GLG4HitPhoton();
-//     int lappdid = static_cast<int>(G4UniformRand() * pmtcount);
-//     hit->SetPMTID(lappdid);
-//     hit->SetTime(firsthittime + G4UniformRand() * noiseWindowWidth);
-//     hit->SetCount(1);
-//     //hit->SetIsNoise();
-//     // Add the PMT if it did not register a "real" hit
-//     if (!mclappdObjects.count(lappdid)) {
-//       DS::MCLAPPD* rat_mclappd = mc->AddNewMCPMT();
-//       mclappdObjects[lappdid] = mc->GetMCPMTCount()-1; //at this point the size represent the index
-//       rat_mclappd->SetID(lappdid);
-//       rat_mclappd->SetType(fLAPPDInfo->GetType(lappdid));
-//     }
-//     AddMCPhoton(mc->GetMCPMT(mclappdObjects[lappdid]), hit, true, (StoreOpticalTrackID ? exinfo : NULL));
-//   }
+  double noiseWindowWidth_lappd = lasthittime_lappd - firsthittime_lappd;
+  size_t lappdcount = fLAPPDInfo->GetLAPPDCount();
+  double channelRate_lappd = noiseRate * noiseWindowWidth_lappd;
+  double detectorWideRate_lappd = channelRate_lappd * lappdcount / channelEfficiency;
+  int noiseHits_lappd = static_cast<int>(floor(CLHEP::RandPoisson::shoot(detectorWideRate_lappd)));
+
+  for (int ihit=0; ihit<noiseHits_lappd; ihit++) {
+    GLG4HitPhoton* hit = new GLG4HitPhoton();
+    int lappdid = static_cast<int>(G4UniformRand() * lappdcount);
+    hit->SetPMTID(lappdid);
+    hit->SetTime(firsthittime_lappd + G4UniformRand() * noiseWindowWidth_lappd);
+    hit->SetCount(1);
+    //hit->SetIsNoise();
+    // Add the PMT if it did not register a "real" hit
+    if (!mclappdObjects.count(lappdid)) {
+      DS::MCLAPPD* rat_mclappd = mc->AddNewMCLAPPD();
+      mclappdObjects[lappdid] = mc->GetMCLAPPDCount()-1; //at this point the size represent the index
+      rat_mclappd->SetID(lappdid);
+      rat_mclappd->SetType(fLAPPDInfo->GetType(lappdid));
+    }
+    AddMCPhoton_lappd(mc->GetMCLAPPD(mclappdObjects[lappdid]), hit, true, (StoreOpticalTrackID ? exinfo : NULL));
+  }
   
 }
 
