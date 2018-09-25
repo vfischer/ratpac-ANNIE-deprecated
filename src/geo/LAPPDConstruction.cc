@@ -17,11 +17,15 @@ namespace RAT {
   {
     assert(fParams.glass);
     assert(fParams.vacuum);
+//     assert(fParams.window);
+//     assert(fParams.housing);
     assert(fParams.photocathode);
     assert(fParams.glassThickness);
     assert(fParams.width);
     assert(fParams.photocathodeWidth);
     assert(fParams.thick);
+//     assert(fParams.constructHousing);
+//     assert(fParams.windowThickness);
     // Do not assert fParams.detector.  If detector==0, then do not associate LAPPD
     // with sensitive volume
     //assert(fParams.detector);
@@ -40,9 +44,25 @@ namespace RAT {
     const double vacuumWidth = fParams.width - fParams.glassThickness;
     const double vacuumThick = fParams.thick - fParams.glassThickness;
     G4Box* vacuum_solid = new G4Box( prefix + "_vacuum_solid", vacuumWidth, vacuumWidth, vacuumThick);
+    
+//     if (fParams.constructHousing) {
+//       const double housingThick = fParams.thick + 2.*fParams.windowThickness;
+//       const double housingWidth = fParams.width + 2.*fParams.windowThickness;
+//       
+//       const double windowThick = fParams.windowThickness;
+//       const double windowWidth = fParams.width;
+//       
+//       G4Box* housing_solid = new G4Box( prefix + "_housing_solid", housingWidth, housingWidth, housingThick);
+//       G4Box* window_solid = new G4Box( prefix + "_window_solid", windowWidth, windowWidth, windowThick);
+//     }
 
     // ------------ Logical Volumes -------------
     G4LogicalVolume *body_log, *vacuum_log;
+    
+//     if (fParams.constructHousing) {
+//       housing_log = new G4LogicalVolume( housing_solid, fParams.housing, prefix + "_housing_logic" );
+//       window_log = new G4LogicalVolume( window_solid, fParams.window, prefix + "_window_logic" );
+//     }
     
     body_log = new G4LogicalVolume( body_solid, fParams.glass, prefix + "_body_logic" );
     body_log->SetSensitiveDetector(fParams.detector);

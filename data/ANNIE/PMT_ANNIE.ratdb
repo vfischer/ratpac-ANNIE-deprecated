@@ -145,20 +145,25 @@ z_origin: [ -40.0d, 0.0d, 0.0d, 40.0d, -142.0d ],
 
 {
 name: "PMT",
-index: "lappd_test",
+index: "lappd_basic",
 
 valid_begin: [0,0],
 valid_end: [0,0],
 
 construction: "lappd",
 
+//construct_housing: 1.0, // used to build a pvc housing around the LAPPDs, NOT WORKING YET
+
 glass_material: "glass",
 lappd_vacuum_material: "pmt_vacuum",
+//window_material: "acrylic", // NOT WORKING YET
+//housing_material: "pvc",// NOT WORKING YET
 photocathode_surface: "photocathode_r7081_hqe_ANNIE",
 
-glassThickness: 2.0, // mm
-photocathodeWidth: 200., //mm
-width: 200., //mm
-thick: 9.25, //mm, half-z
+acrylicThickness: 2.5, // mm, half z
+glassThickness: 2.5, // mm, real thickness (no half z)
+photocathodeWidth: 100., //mm, half z
+width: 102.5., //mm, half z
+thick: 5.0, //mm, half z
 }
 

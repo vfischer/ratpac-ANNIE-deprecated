@@ -90,8 +90,20 @@ G4VPhysicalVolume *GeoLAPPDFactoryBase::ConstructLAPPDs(DBLinkPtr table,
   // Materials
   lappdParam.glass = G4Material::GetMaterial(llappd->GetS("glass_material"));
   lappdParam.vacuum = G4Material::GetMaterial(llappd->GetS("lappd_vacuum_material")); 
+//   lappdParam.window = G4Material::GetMaterial(llappd->GetS("window_material"));
+//   lappdParam.housing = G4Material::GetMaterial(llappd->GetS("housing_material"));
   string pc_surface_name = llappd->GetS("photocathode_surface");
   lappdParam.photocathode = Materials::optical_surface[pc_surface_name];
+    
+    // constructs a housing around the LAPPD
+//   int constructHousing = 0;
+//   try { 
+//     constructHousing = table->GetI("constructHousing");
+//     lappdParam.constructHousing = llappd->GetI("constructHousing");
+//     lappdParam.windowThickness = llappd->GetD("windowThickness");
+//   }
+//   catch (DBNotFoundError &e) { }
+  
   
   if (lappdParam.photocathode == 0)
     Log::Die("GeoLAPPDFactoryBase error: Photocathode surface \""

@@ -25,8 +25,10 @@ struct LAPPDConstructionParams {
   
   bool invisible;
   bool useEnvelope;
+//   bool constructHousing;
   
   // Body
+//   double windowThickness; // mm
   double glassThickness; // mm
   double width; // mm
   double photocathodeWidth; // mm
@@ -34,6 +36,8 @@ struct LAPPDConstructionParams {
   
   G4Material *glass;
   G4Material *vacuum;
+//   G4Material *window;
+//   G4Material *housing;
   
   G4OpticalSurface *photocathode;
   

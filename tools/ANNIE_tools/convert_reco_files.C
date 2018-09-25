@@ -72,6 +72,7 @@ void convert_reco_files(const char* filename) {
   
   RAT::DS::Run* run;
   RAT::DS::PMTInfo* pmtInfo;
+  RAT::DS::LAPPDInfo* lappdInfo;
   
   std::clock_t start;
   double duration;
@@ -111,6 +112,11 @@ void convert_reco_files(const char* filename) {
   TBranch* DigitChargesBranch = vertexTree->Branch("DigitCharges", &digitcharges); 
   TBranch* DigitWhichDetBranch = vertexTree->Branch("DigitWhichDet", &digitwhichdet); 
   
+  //Only used in the code
+  TVector3 sensor_position; sensor_position.SetXYZ(0.,0.,0.);
+  TVector3 hit_position; hit_position.SetXYZ(0.,0.,0.);
+  TVector3 sensor_direction; sensor_direction.SetXYZ(0.,0.,0.);
+  
   //   vector<double> DigitCharges, DigitWhichDet; 
   //   DigitCharges.clear(), DigitWhichDet.clear();
   //   
@@ -136,7 +142,7 @@ void convert_reco_files(const char* filename) {
   
   tri = new TChain("T");
   runtri = new TChain("runT");
-  cout << "aa\n";
+
   if (TString(filename).MaybeWildcard()) {
     // Assume there is a runT in all files
     runtri->Add(filename);
@@ -152,7 +158,7 @@ void convert_reco_files(const char* filename) {
     delete ftemp;
   }
   
-  cout << "bb\n";
+
   RAT::DS::Root *branchDS = new RAT::DS::Root();
   tri->SetBranchAddress("ds", &branchDS);
   RAT::DS::RunStore::GetRun(branchDS);
@@ -166,7 +172,7 @@ void convert_reco_files(const char* filename) {
   TH1::SetDefaultSumw2(kTRUE);
   
   // Analysis loop over all the events
-  for (ULong64_t entry=0; entry<NbEntries; ++entry) {
+  for (ULong64_t entry=0; entry<10; ++entry) {
     ds = dsReader->GetEvent(entry);
     
     muon_found = false;
@@ -213,13 +219,24 @@ void convert_reco_files(const char* filename) {
     run = RAT::DS::RunStore::Get()->GetRun(ds);
     
     pmtInfo = run->GetPMTInfo();
+    lappdInfo = run->GetLAPPDInfo();
     
-    //PMT loop
+    //PMT loop (WhichDet is 1)
     for( size_t iPMT = 0; iPMT < ds->GetMC()->GetMCPMTCount(); iPMT++ ){
       for(size_t iPhot = 0; iPhot < ds->GetMC()->GetMCPMT(iPMT)->GetMCPhotonCount(); iPhot++){
 	// 	new(DigitVertices_p[muon_number]) TLorentzVector(ds->GetMC()->GetMCPMT(iPMT)->GetMCPhoton(iPhot)->GetPosition().X(),ds->GetMC()->GetMCPMT(iPMT)->GetMCPhoton(iPhot)->GetPosition().Y(),ds->GetMC()->GetMCPMT(iPMT)->GetMCPhoton(iPhot)->GetPosition().Z(),ds->GetMC()->GetMCPMT(iPMT)->GetMCPhoton(iPhot)->GetHitTime());
 	
+	hit_position.SetXYZ(ds->GetMC()->GetMCPMT(iPMT)->GetMCPhoton(iPhot)->GetPosition().X(),
+			   ds->GetMC()->GetMCPMT(iPMT)->GetMCPhoton(iPhot)->GetPosition().Y(),
+			   ds->GetMC()->GetMCPMT(iPMT)->GetMCPhoton(iPhot)->GetPosition().Z());
+	sensor_position.SetXYZ(pmtInfo->GetPosition(ds->GetMC()->GetMCPMT(iPMT)->GetID()).X(), 
+			       pmtInfo->GetPosition(ds->GetMC()->GetMCPMT(iPMT)->GetID()).Y(), 
+			       pmtInfo->GetPosition(ds->GetMC()->GetMCPMT(iPMT)->GetID()).Z());
+	sensor_direction.SetXYZ(pmtInfo->GetDirection(ds->GetMC()->GetMCPMT(iPMT)->GetID()).X(), 
+				pmtInfo->GetDirection(ds->GetMC()->GetMCPMT(iPMT)->GetID()).Y(), 
+				pmtInfo->GetDirection(ds->GetMC()->GetMCPMT(iPMT)->GetID()).Z());
 	
+	hit_position.RotateUz(sensor_direction);
 	// 	cout << "Pos POMT " << ds->GetMC()->GetMCPMT(iPMT)->GetMCPhoton(iPhot)->GetPosition().X()<< " " <<
 	// 	ds->GetMC()->GetMCPMT(iPMT)->GetMCPhoton(iPhot)->GetPosition().Y() << " " <<
 	// 			   ds->GetMC()->GetMCPMT(iPMT)->GetMCPhoton(iPhot)->GetPosition().Z() << endl;
@@ -227,14 +244,51 @@ void convert_reco_files(const char* filename) {
 	// 			   ds->GetMC()->GetMCPMT(iPMT)->GetMCPhoton(iPhot)->GetPosition().Y() + pmtInfo->GetPosition(ds->GetMC()->GetMCPMT(iPMT)->GetID()).Y()<< " " <<
 	// 			   ds->GetMC()->GetMCPMT(iPMT)->GetMCPhoton(iPhot)->GetPosition().Z() + pmtInfo->GetPosition(ds->GetMC()->GetMCPMT(iPMT)->GetID()).Z()<< endl;
 	
-	digit_vect.SetXYZT(ds->GetMC()->GetMCPMT(iPMT)->GetMCPhoton(iPhot)->GetPosition().X() + pmtInfo->GetPosition(ds->GetMC()->GetMCPMT(iPMT)->GetID()).X(),
-			   ds->GetMC()->GetMCPMT(iPMT)->GetMCPhoton(iPhot)->GetPosition().Y() + pmtInfo->GetPosition(ds->GetMC()->GetMCPMT(iPMT)->GetID()).Y(),
-			   ds->GetMC()->GetMCPMT(iPMT)->GetMCPhoton(iPhot)->GetPosition().Z() + pmtInfo->GetPosition(ds->GetMC()->GetMCPMT(iPMT)->GetID()).Z(),
+	digit_vect.SetXYZT(hit_position.X() + pmtInfo->GetPosition(ds->GetMC()->GetMCPMT(iPMT)->GetID()).X(),
+			   hit_position.Y() + pmtInfo->GetPosition(ds->GetMC()->GetMCPMT(iPMT)->GetID()).Y(),
+			   hit_position.Z() + pmtInfo->GetPosition(ds->GetMC()->GetMCPMT(iPMT)->GetID()).Z(),
 			   ds->GetMC()->GetMCPMT(iPMT)->GetMCPhoton(iPhot)->GetHitTime());
 	filedigitverticesp->push_back(digit_vect);
 	digitcharges.push_back(ds->GetMC()->GetMCPMT(iPMT)->GetMCPhoton(iPhot)->GetCharge());
 	digitwhichdet.push_back(1);
 	
+      }
+    }
+    
+    //LAPPD loop (WhichDet is 2)
+    for( size_t iLAPPD = 0; iLAPPD < ds->GetMC()->GetMCLAPPDCount(); iLAPPD++ ){
+      for(size_t iPhot = 0; iPhot < ds->GetMC()->GetMCLAPPD(iLAPPD)->GetMCPhotonCount(); iPhot++){
+	// 	new(DigitVertices_p[muon_number]) TLorentzVector(ds->GetMC()->GetMCLAPPD(iLAPPD)->GetMCPhoton(iPhot)->GetPosition().X(),ds->GetMC()->GetMCLAPPD(iLAPPD)->GetMCPhoton(iPhot)->GetPosition().Y(),ds->GetMC()->GetMCLAPPD(iLAPPD)->GetMCPhoton(iPhot)->GetPosition().Z(),ds->GetMC()->GetMCLAPPD(iLAPPD)->GetMCPhoton(iPhot)->GetHitTime());
+	
+	hit_position.SetXYZ(ds->GetMC()->GetMCLAPPD(iLAPPD)->GetMCPhoton(iPhot)->GetPosition().X(),
+			   ds->GetMC()->GetMCLAPPD(iLAPPD)->GetMCPhoton(iPhot)->GetPosition().Y(),
+			   ds->GetMC()->GetMCLAPPD(iLAPPD)->GetMCPhoton(iPhot)->GetPosition().Z());
+	sensor_position.SetXYZ(lappdInfo->GetPosition(ds->GetMC()->GetMCLAPPD(iLAPPD)->GetID()).X(), 
+			       lappdInfo->GetPosition(ds->GetMC()->GetMCLAPPD(iLAPPD)->GetID()).Y(), 
+			       lappdInfo->GetPosition(ds->GetMC()->GetMCLAPPD(iLAPPD)->GetID()).Z());
+	sensor_direction.SetXYZ(lappdInfo->GetDirection(ds->GetMC()->GetMCLAPPD(iLAPPD)->GetID()).X(), 
+				lappdInfo->GetDirection(ds->GetMC()->GetMCLAPPD(iLAPPD)->GetID()).Y(), 
+				lappdInfo->GetDirection(ds->GetMC()->GetMCLAPPD(iLAPPD)->GetID()).Z());
+	
+	hit_position.RotateUz(sensor_direction);
+	// 	cout << "Pos POMT " << ds->GetMC()->GetMCLAPPD(iLAPPD)->GetMCPhoton(iPhot)->GetPosition().X()<< " " <<
+	// 	ds->GetMC()->GetMCLAPPD(iLAPPD)->GetMCPhoton(iPhot)->GetPosition().Y() << " " <<
+	// 			   ds->GetMC()->GetMCLAPPD(iLAPPD)->GetMCPhoton(iPhot)->GetPosition().Z() << endl;
+	// 	cout << "Pos glob " << ds->GetMC()->GetMCLAPPD(iLAPPD)->GetMCPhoton(iPhot)->GetPosition().X() + pmtInfo->GetPosition(ds->GetMC()->GetMCLAPPD(iLAPPD)->GetID()).X() << " " <<
+	// 			   ds->GetMC()->GetMCLAPPD(iLAPPD)->GetMCPhoton(iPhot)->GetPosition().Y() + pmtInfo->GetPosition(ds->GetMC()->GetMCLAPPD(iLAPPD)->GetID()).Y()<< " " <<
+	// 			   ds->GetMC()->GetMCLAPPD(iLAPPD)->GetMCPhoton(iPhot)->GetPosition().Z() + pmtInfo->GetPosition(ds->GetMC()->GetMCLAPPD(iLAPPD)->GetID()).Z()<< endl;
+	
+//  	digit_vect.SetXYZT(ds->GetMC()->GetMCLAPPD(iLAPPD)->GetMCPhoton(iPhot)->GetPosition().X(),
+// 			   ds->GetMC()->GetMCLAPPD(iLAPPD)->GetMCPhoton(iPhot)->GetPosition().Y(),
+// 			   ds->GetMC()->GetMCLAPPD(iLAPPD)->GetMCPhoton(iPhot)->GetPosition().Z(),
+// 			   ds->GetMC()->GetMCLAPPD(iLAPPD)->GetMCPhoton(iPhot)->GetHitTime());
+			   digit_vect.SetXYZT(hit_position.X() + lappdInfo->GetPosition(ds->GetMC()->GetMCLAPPD(iLAPPD)->GetID()).X(), 
+			   hit_position.Y() + lappdInfo->GetPosition(ds->GetMC()->GetMCLAPPD(iLAPPD)->GetID()).Y(),
+			   hit_position.Z() + lappdInfo->GetPosition(ds->GetMC()->GetMCLAPPD(iLAPPD)->GetID()).Z(),
+			   ds->GetMC()->GetMCLAPPD(iLAPPD)->GetMCPhoton(iPhot)->GetHitTime());
+	filedigitverticesp->push_back(digit_vect);
+	digitcharges.push_back(ds->GetMC()->GetMCLAPPD(iLAPPD)->GetMCPhoton(iPhot)->GetCharge());
+	digitwhichdet.push_back(2);
       }
     }
     
@@ -252,7 +306,7 @@ void convert_reco_files(const char* filename) {
   
   f_output.Write();
   
-  delete run, pmtInfo;
+  delete run, pmtInfo, lappdInfo;
   delete tri, runtri, branchDS;
   delete dsReader;
   f_output.Close();

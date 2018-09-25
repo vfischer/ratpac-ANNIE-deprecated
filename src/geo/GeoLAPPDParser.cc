@@ -104,8 +104,19 @@ namespace RAT {
     //////////// LAPPD Materials
     fParam.glass = G4Material::GetMaterial(llappd->GetS("glass_material"));
     fParam.vacuum = G4Material::GetMaterial(llappd->GetS("lappd_vacuum_material"));
+//     fParam.window = G4Material::GetMaterial(llappd->GetS("window_material"));
+//     fParam.housing = G4Material::GetMaterial(llappd->GetS("housing_material"));
     string pc_surface_name = llappd->GetS("photocathode_surface");
     fParam.photocathode = Materials::optical_surface[pc_surface_name];
+    
+    // constructs a housing around the LAPPD
+//     int constructHousing = 0;
+//     try { 
+//       constructHousing = table->GetI("constructHousing");
+//       fParam.constructHousing = llappd->GetI("constructHousing");
+//       fParam.windowThickness = llappd->GetD("windowThickness");
+//     }
+//     catch (DBNotFoundError &e) { }
 
     // LAPPD sensitive detector
     if (useSD) {
