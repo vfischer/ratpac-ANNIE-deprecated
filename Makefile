@@ -8,7 +8,7 @@ ifeq ($(G4VERSION), 10.1.2)
 else 
 ifeq ($(G4VERSION), 10.2.3)
 	@echo 'Your geant4 version is $(G4VERSION). Using "scons" with extra arguments to build'
-	scons -j4 -Q cppjailbreak="" -Q CXXFLAGS="-std=c++11 -w -O3"
+	scons -j4 -Q cppjailbreak="" -Q CXXFLAGS="-std=c++11 -w -O3 -lxerces-c"
 	@echo 'You can run "scons -Q cppjailbreak="" -Q CXXFLAGS="-std=c++11 -w -O3"" to build RAT'
 else
 	@echo '**** Your geant4 version $(G4VERSION) is unsupported ****'

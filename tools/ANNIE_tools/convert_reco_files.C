@@ -158,7 +158,6 @@ void convert_reco_files(const char* filename) {
     delete ftemp;
   }
   
-
   RAT::DS::Root *branchDS = new RAT::DS::Root();
   tri->SetBranchAddress("ds", &branchDS);
   RAT::DS::RunStore::GetRun(branchDS);
@@ -172,7 +171,7 @@ void convert_reco_files(const char* filename) {
   TH1::SetDefaultSumw2(kTRUE);
   
   // Analysis loop over all the events
-  for (ULong64_t entry=0; entry<10; ++entry) {
+  for (ULong64_t entry=0; entry<NbEntries; ++entry) {
     ds = dsReader->GetEvent(entry);
     
     muon_found = false;
@@ -244,9 +243,9 @@ void convert_reco_files(const char* filename) {
 	// 			   ds->GetMC()->GetMCPMT(iPMT)->GetMCPhoton(iPhot)->GetPosition().Y() + pmtInfo->GetPosition(ds->GetMC()->GetMCPMT(iPMT)->GetID()).Y()<< " " <<
 	// 			   ds->GetMC()->GetMCPMT(iPMT)->GetMCPhoton(iPhot)->GetPosition().Z() + pmtInfo->GetPosition(ds->GetMC()->GetMCPMT(iPMT)->GetID()).Z()<< endl;
 	
-	digit_vect.SetXYZT(hit_position.X() + pmtInfo->GetPosition(ds->GetMC()->GetMCPMT(iPMT)->GetID()).X(),
-			   hit_position.Y() + pmtInfo->GetPosition(ds->GetMC()->GetMCPMT(iPMT)->GetID()).Y(),
-			   hit_position.Z() + pmtInfo->GetPosition(ds->GetMC()->GetMCPMT(iPMT)->GetID()).Z(),
+	digit_vect.SetXYZT(hit_position.X() + sensor_position.X(),
+			   hit_position.Y() + sensor_position.Y(),
+			   hit_position.Z() + sensor_position.Z(),
 			   ds->GetMC()->GetMCPMT(iPMT)->GetMCPhoton(iPhot)->GetHitTime());
 	filedigitverticesp->push_back(digit_vect);
 	digitcharges.push_back(ds->GetMC()->GetMCPMT(iPMT)->GetMCPhoton(iPhot)->GetCharge());
@@ -282,9 +281,9 @@ void convert_reco_files(const char* filename) {
 // 			   ds->GetMC()->GetMCLAPPD(iLAPPD)->GetMCPhoton(iPhot)->GetPosition().Y(),
 // 			   ds->GetMC()->GetMCLAPPD(iLAPPD)->GetMCPhoton(iPhot)->GetPosition().Z(),
 // 			   ds->GetMC()->GetMCLAPPD(iLAPPD)->GetMCPhoton(iPhot)->GetHitTime());
-			   digit_vect.SetXYZT(hit_position.X() + lappdInfo->GetPosition(ds->GetMC()->GetMCLAPPD(iLAPPD)->GetID()).X(), 
-			   hit_position.Y() + lappdInfo->GetPosition(ds->GetMC()->GetMCLAPPD(iLAPPD)->GetID()).Y(),
-			   hit_position.Z() + lappdInfo->GetPosition(ds->GetMC()->GetMCLAPPD(iLAPPD)->GetID()).Z(),
+	digit_vect.SetXYZT(hit_position.X() + sensor_position.X(), 
+			   hit_position.Y() + sensor_position.Y(),
+			   hit_position.Z() + sensor_position.Z(),
 			   ds->GetMC()->GetMCLAPPD(iLAPPD)->GetMCPhoton(iPhot)->GetHitTime());
 	filedigitverticesp->push_back(digit_vect);
 	digitcharges.push_back(ds->GetMC()->GetMCLAPPD(iLAPPD)->GetMCPhoton(iPhot)->GetCharge());
