@@ -56,17 +56,22 @@ int main(int argc, char ** argv)
 
     // get the GENIE event
     genie::EventRecord &event = *(eventbranch->event);
+    genie::Interaction *interaction = event.Summary(); // loads interaction type (CC, NC, RES, etc..)
+    const genie::ProcessInfo & proc = interaction->ProcInfo();
+    
     double x = 1000.0*event.Vertex()->X(); // distances from GENIE are in meters
     double y = 1000.0*event.Vertex()->Y(); // distances from GENIE are in meters
     double z = 1000.0*event.Vertex()->Z(); // distances from GENIE are in meters
 
     RAT::DS::Root *ds = new RAT::DS::Root();
     RAT::DS::MC *mc = ds->GetMC();
+    RAT::DS::MCSummary *mcsummary = mc->GetMCSummary();
 
     TTimeStamp utc(time,0);
     mc->SetUTC(utc); // GENIE does not give global time, so we just add arbitrary times for RAT 
     mc->SetID(i);
-
+    mcsummary->SetInteractionName(TString(proc.InteractionTypeAsString()) + TString(proc.ScatteringTypeAsString()));
+    
     // Loop over all particles in this event
 
     genie::GHepParticle *genieparticle;

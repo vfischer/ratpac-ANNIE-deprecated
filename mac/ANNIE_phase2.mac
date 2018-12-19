@@ -8,7 +8,7 @@
 /tracking/discardParticleTrajectory opticalphoton
 
 /rat/db/set DETECTOR experiment "ANNIE"
-/rat/db/set DETECTOR geo_file "ANNIE/ANNIE_run2_config2.geo"
+/rat/db/set DETECTOR geo_file "ANNIE/ANNIE_run2_config11.geo"
 
 /run/initialize
 /process/inactivate Cerenkov
@@ -52,11 +52,11 @@
 # Use IO.default_output_filename
 /rat/proclast outroot
 
-/generator/add combo gun:fill:poisson
-/generator/vtx/set e- 0 0 0 5
-/generator/pos/set 0.0 0.0 -133.3
+/generator/add combo pbomb:point
+/generator/vtx/set 1000 365
+/generator/pos/set 0.0 -133.3 1724
 
-/run/beamOn 1
+/run/beamOn 100
 
 #END EVENT LOOP
 #####################

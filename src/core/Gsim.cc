@@ -264,7 +264,8 @@ void Gsim::BeginOfEventAction(const G4Event* anEvent) {
   GLG4Scint::ResetTotEdep();
 
   // Clearing theHitPMTCollection clears away the HitPhotons and HitPMTs
-  GLG4VEventAction::GetTheHitPMTCollection()->Clear();  
+  GLG4VEventAction::GetTheHitPMTCollection()->Clear();
+  GLG4VEventAction::GetTheHitLAPPDCollection()->Clear();   
   
   EventInfo* eventInfo =
     dynamic_cast<EventInfo* >(anEvent->GetUserInformation()); 

@@ -13,6 +13,7 @@
 
 #include <TObject.h>
 #include <TVector3.h>
+#include <TString.h>
 #include <map>
 #include <string>
 
@@ -96,6 +97,12 @@ public:
   virtual void SetNumReemitPhoton(Int_t _numReemitPhoton) {
     numReemitPhoton = _numReemitPhoton;
   }
+  
+  /** Interaction type (for GENIE-generated events) */
+  virtual const TString& GetInteractionName() const { return interactionName; }
+  virtual void SetInteractionName(const TString& _interactionName) {
+    interactionName = _interactionName;
+  }
 
   ClassDef(MCSummary, 1)
     
@@ -111,6 +118,7 @@ protected:
   TVector3 opticalRMS;
   TVector3 totalScintCentroid;
   StringDoubleMap energyLoss;
+  TString interactionName;
 };
 
   } // namespace DS

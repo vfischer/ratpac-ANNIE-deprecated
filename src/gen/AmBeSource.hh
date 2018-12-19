@@ -1,7 +1,7 @@
 /** \file AmBeSource.hh
  *  AmBeSource header file.
  *
- *  Author: Matthew Worcester
+ *  Author: Vincent Fischer
  */
 #ifndef __RAT_AmBeSource__
 #define __RAT_AmBeSource__
