@@ -163,7 +163,6 @@ void simple_event_display(const char* filename, ULong64_t entry) {
       sensor_position.SetXYZ(pmtInfo->GetPosition(ds->GetMC()->GetMCPMT(iPMT)->GetID()).X(), 
 			     pmtInfo->GetPosition(ds->GetMC()->GetMCPMT(iPMT)->GetID()).Y(), 
 			     pmtInfo->GetPosition(ds->GetMC()->GetMCPMT(iPMT)->GetID()).Z());
-      cout << pmtInfo->GetPosition(ds->GetMC()->GetMCPMT(iPMT)->GetID()).X() << " " << pmtInfo->GetPosition(ds->GetMC()->GetMCPMT(iPMT)->GetID()).Y() << " " << pmtInfo->GetPosition(ds->GetMC()->GetMCPMT(iPMT)->GetID()).Z() << endl;
       sensor_direction.SetXYZ(pmtInfo->GetDirection(ds->GetMC()->GetMCPMT(iPMT)->GetID()).X(), 
 			      pmtInfo->GetDirection(ds->GetMC()->GetMCPMT(iPMT)->GetID()).Y(), 
 			      pmtInfo->GetDirection(ds->GetMC()->GetMCPMT(iPMT)->GetID()).Z());	
