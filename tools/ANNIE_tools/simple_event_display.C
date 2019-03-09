@@ -163,6 +163,7 @@ void simple_event_display(const char* filename, ULong64_t entry) {
       sensor_position.SetXYZ(pmtInfo->GetPosition(ds->GetMC()->GetMCPMT(iPMT)->GetID()).X(), 
 			     pmtInfo->GetPosition(ds->GetMC()->GetMCPMT(iPMT)->GetID()).Y(), 
 			     pmtInfo->GetPosition(ds->GetMC()->GetMCPMT(iPMT)->GetID()).Z());
+      cout << pmtInfo->GetPosition(ds->GetMC()->GetMCPMT(iPMT)->GetID()).X() << " " << pmtInfo->GetPosition(ds->GetMC()->GetMCPMT(iPMT)->GetID()).Y() << " " << pmtInfo->GetPosition(ds->GetMC()->GetMCPMT(iPMT)->GetID()).Z() << endl;
       sensor_direction.SetXYZ(pmtInfo->GetDirection(ds->GetMC()->GetMCPMT(iPMT)->GetID()).X(), 
 			      pmtInfo->GetDirection(ds->GetMC()->GetMCPMT(iPMT)->GetID()).Y(), 
 			      pmtInfo->GetDirection(ds->GetMC()->GetMCPMT(iPMT)->GetID()).Z());	
@@ -189,12 +190,12 @@ void simple_event_display(const char* filename, ULong64_t entry) {
   for( Int_t iLAPPD = 0; iLAPPD < ds->GetMC()->GetMCLAPPDCount(); iLAPPD++ ){
     for(Int_t iPhot = 0; iPhot < ds->GetMC()->GetMCLAPPD(iLAPPD)->GetMCPhotonCount(); iPhot++){
       
-      hit_position.SetXYZ(ds->GetMC()->GetMCLAPPD(iLAPPD)->GetMCPhoton(iPhot)->GetPosition().X() - ANNIE_center.X(),
-			  ds->GetMC()->GetMCLAPPD(iLAPPD)->GetMCPhoton(iPhot)->GetPosition().Y() - ANNIE_center.Y(),
-			  ds->GetMC()->GetMCLAPPD(iLAPPD)->GetMCPhoton(iPhot)->GetPosition().Z() - ANNIE_center.Z());
-      sensor_position.SetXYZ(lappdInfo->GetPosition(ds->GetMC()->GetMCLAPPD(iLAPPD)->GetID()).X() - ANNIE_center.X(), 
-			     lappdInfo->GetPosition(ds->GetMC()->GetMCLAPPD(iLAPPD)->GetID()).Y() - ANNIE_center.Y(), 
-			     lappdInfo->GetPosition(ds->GetMC()->GetMCLAPPD(iLAPPD)->GetID()).Z() - ANNIE_center.Z());
+      hit_position.SetXYZ(ds->GetMC()->GetMCLAPPD(iLAPPD)->GetMCPhoton(iPhot)->GetPosition().X(),
+			  ds->GetMC()->GetMCLAPPD(iLAPPD)->GetMCPhoton(iPhot)->GetPosition().Y(),
+			  ds->GetMC()->GetMCLAPPD(iLAPPD)->GetMCPhoton(iPhot)->GetPosition().Z());
+      sensor_position.SetXYZ(lappdInfo->GetPosition(ds->GetMC()->GetMCLAPPD(iLAPPD)->GetID()).X(), 
+			     lappdInfo->GetPosition(ds->GetMC()->GetMCLAPPD(iLAPPD)->GetID()).Y(), 
+			     lappdInfo->GetPosition(ds->GetMC()->GetMCLAPPD(iLAPPD)->GetID()).Z());
       sensor_direction.SetXYZ(lappdInfo->GetDirection(ds->GetMC()->GetMCLAPPD(iLAPPD)->GetID()).X(), 
 			      lappdInfo->GetDirection(ds->GetMC()->GetMCLAPPD(iLAPPD)->GetID()).Y(), 
 			      lappdInfo->GetDirection(ds->GetMC()->GetMCLAPPD(iLAPPD)->GetID()).Z());
