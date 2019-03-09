@@ -54,7 +54,7 @@ position: [431.8, -4038.6, -714.4,],
 material: "stainless_steel",
 color: [1.0, 0.0, 0.0, 0.1],
 drawstyle: "solid",
-rotation: [90.0, 0.0, -90.0],
+rotation: [90.0, 0.0, 90.0],
 }
 
 {
@@ -104,20 +104,20 @@ drawstyle: "solid"
 // drawstyle: "solid"
 // }
 
-{
-name: "GEO",
-index: "detector_fiducial_muon",
-valid_begin: [0, 0],
-valid_end: [0, 0],
-mother: "detector",
-type: "box",
-size: [1000.0, 600.0, 500], // mm
-position: [600.0, 0.0, 0.0],
-material: "water_gdS_0p2",
-color: [0.6, 0.4, 0.6, 0.5],
-drawstyle: "solid",
-rotation: [0.0, 90.0, 0.0],
-}
+// {
+// name: "GEO",
+// index: "detector_fiducial_muon",
+// valid_begin: [0, 0],
+// valid_end: [0, 0],
+// mother: "detector",
+// type: "box",
+// size: [1000.0, 600.0, 500], // mm
+// position: [600.0, 0.0, 0.0],
+// material: "water_gdS_0p2",
+// color: [0.6, 0.4, 0.6, 0.5],
+// drawstyle: "solid",
+// rotation: [0.0, 90.0, 0.0],
+// }
 /////////////////////////////////////////////////////////////////////
 ///////////********** End of tank volumes ***********////////////////
 /////////////////////////////////////////////////////////////////////
