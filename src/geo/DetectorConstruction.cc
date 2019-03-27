@@ -37,6 +37,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
 
   string glg4data = "";
   string experiment = "";
+  bool from_gdml = false;
+  string gdml_file = "";
   if (getenv("GLG4DATA") != NULL) {
     glg4data = string(getenv("GLG4DATA")) + "/";
   }
@@ -64,7 +66,13 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
         Log::Die("DetectorConstruction: Could not open detector geometry");
       }
     } catch (DBNotFoundError &_e) {
-        Log::Die("DetectorConstruction: Could not open geo_file or detector_factory");
+	try {
+	gdml_file = ldetector->GetS("gdml_file");
+	info << "Loading detector geometry from " << gdml_file << newline;
+	from_gdml = true;
+	  } catch (DBNotFoundError &__e) {
+	    Log::Die("DetectorConstruction: Could not open geo_file or detector_factory or gdml_file");
+      }
     }
   }
 
@@ -85,13 +93,16 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
 
   // Setup photon thinning parameters
   PhotonThinning::Init();
-
-  GeoBuilder geo;
-  fWorldPhys = geo.ConstructAll();
   
-  G4GDMLParser parser;
-  parser.Read("annie_v04.gdml");
-  fWorldPhys = parser.GetWorldVolume();
+  if (!from_gdml) {
+      GeoBuilder geo;
+      fWorldPhys = geo.ConstructAll();
+  } else {  
+      G4GDMLParser parser;
+      parser.Read(gdml_file);
+      fWorldPhys = parser.GetWorldVolume();
+  }
+ 
 
   return fWorldPhys;
 }

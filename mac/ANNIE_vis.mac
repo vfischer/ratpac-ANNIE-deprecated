@@ -7,7 +7,8 @@
 /tracking/discardParticleTrajectory opticalphoton
 
 /rat/db/set DETECTOR experiment "ANNIE"
-/rat/db/set DETECTOR geo_file "ANNIE/ANNIE_run2_config11.geo"
+#/rat/db/set DETECTOR geo_file "ANNIE/ANNIE_run2_config11.geo"
+/rat/db/set DETECTOR gdml_file "annie_v04.gdml"
 #/rat/db/load ANNIE/ANNIE_run2_InnerStructure.geo
 
 /run/initialize
@@ -32,7 +33,7 @@
 /vis/drawVolume
 
 #/vis/viewer/set/viewpointThetaPhi 20 20
-/vis/viewer/set/viewpointVector 0.5 0.005 0.0
+/vis/viewer/set/viewpointVector 0.5 0.2 0.0
 #/vis/viewer/set/viewpointVector -0.5 0.1 0.1
 /vis/viewer/zoom 2.0
 /vis/viewer/pan -0.0 -3.0 m  # this finally works !
