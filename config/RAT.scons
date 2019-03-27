@@ -133,6 +133,9 @@ if gcc_combo >= 402 and int(ARGUMENTS.get('openmp', default_openmp)):
 if gcc_combo >= 403:
     env.Append(CXXFLAGS='-Wno-unused-result')
 
+# Xerces library for GDML parsing    
+env.Append(LIBS='-lxerces-c')
+    
 # Add flags from the shell environment
 user_controlled_vars = ['CPPFLAGS', 'CXXFLAGS', 'LDFLAGS']
 envdict = {}
